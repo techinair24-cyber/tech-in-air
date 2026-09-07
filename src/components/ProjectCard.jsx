@@ -12,17 +12,7 @@ function fallbackFor(image){
 }
 
 export default function ProjectCard({p, onOpen}){
-  const filename = (()=>{
-    try{
-      const f = p.image.split('/').pop()
-      const base = f.replace(/\.[^.]+$/, '')
-      return `${base}.png` // map to public/Projects PNG as requested
-    }catch(e){
-      return ''
-    }
-  })()
-
-  const src = filename ? `/Projects/${filename}` : fallbackFor(p.image)
+  const src = p.image || fallbackFor(p.image)
 
   const handleError = (e)=>{
     e.currentTarget.onerror = null

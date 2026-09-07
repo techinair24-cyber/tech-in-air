@@ -10,7 +10,7 @@ export default function ProjectModal({project, onClose}){
         <button onClick={onClose} className="absolute top-4 right-4 p-2"><X/></button>
         <div className="grid md:grid-cols-2 gap-4">
           <div>
-            <img src={project.image} alt={project.title} onError={(e)=>{e.currentTarget.onerror=null;e.currentTarget.src='/src/assets/projects/placeholder.svg'}} className="w-full h-64 object-cover rounded-md"/>
+            <img src={project.image} alt={project.title} onError={(e)=>{e.currentTarget.onerror=null;e.currentTarget.src=new URL('../assets/projects/placeholder.svg', import.meta.url).href}} className="w-full h-64 object-cover rounded-md"/>
           </div>
           <div>
             <h3 className="text-2xl font-semibold text-slate-900 dark:text-white">{project.title}</h3>

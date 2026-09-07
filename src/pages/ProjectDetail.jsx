@@ -7,8 +7,7 @@ export default function ProjectDetail(){
   const project = projects.find(p=> String(p.id)===String(id))
   if(!project) return <div className="container py-8">Project not found</div>
 
-  const filename = project.image.split('/').pop().replace(/\.[^.]+$/, '.png')
-  const src = `/Projects/${filename}`
+  const src = project.image
 
   return (
     <div className="container py-8">
