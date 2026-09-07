@@ -1,0 +1,7 @@
+﻿node_modules/
+dist/
+.env
+.env.local
+npm-build.log
+npm-dev.log
+npm-install.log
