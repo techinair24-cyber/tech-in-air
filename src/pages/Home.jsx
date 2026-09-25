@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import Hero from '../components/Hero'
 import CapabilityStrip from '../components/CapabilityStrip'
 import Services from '../components/Services'
@@ -25,7 +26,7 @@ export default function Home(){
             {featured.map(p=> <ProjectCard key={p.id} p={p} />)}
           </div>
           <div className="mt-4">
-            <a href="/projects" className="text-cyan-600 dark:text-cyan-300">View All Projects →</a>
+            <Link to="/projects" className="text-cyan-600 dark:text-cyan-300">View All Projects →</Link>
           </div>
         </div>
       </section>

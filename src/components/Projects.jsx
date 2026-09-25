@@ -1,4 +1,5 @@
 import React, {useState, useMemo} from 'react'
+import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import projectsData from '../data/projects'
 import ProjectCard from './ProjectCard'
@@ -47,7 +48,7 @@ export default function Projects(){
         </div>
 
         <div className="mt-6 text-center">
-          <a href="#projects" className="px-6 py-3 bg-gradient-to-r from-cyan-400 to-blue-500 text-black rounded-md">View All Projects</a>
+          <Link to="/projects" className="px-6 py-3 bg-gradient-to-r from-cyan-400 to-blue-500 text-black rounded-md inline-block">View All Projects</Link>
         </div>
       </div>
     </section>
