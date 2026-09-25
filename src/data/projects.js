@@ -57,13 +57,22 @@ const projects = [
     id: 7,
     title: 'IR Wireless Underwater Communication System',
     categories: ['IoT','Embedded'],
-    status: 'In Progress',
+    status: 'Completed',
     description: 'A communication system exploring infrared-based wireless data transmission in an underwater environment.',
     image: '/Projects/underwater-communication.png',
     technologies: ['IR Communication','Embedded Systems','Wireless Communication','Underwater Communication']
   },
   {
     id: 8,
+    title: 'IoT and AI-Based Water Quality Monitoring and Intelligent Purification Recommendation System',
+    categories: ['AI / ML','IoT'],
+    status: 'Completed',
+    description: 'An IoT and AI-based system that monitors water quality in real time using pH, TDS, turbidity, and flow sensors. The STM32F103C8T6 collects and processes the sensor readings, while the ESP8266 provides Wi-Fi connectivity for sending data to the cloud. An AI model analyzes the water-quality parameters and provides suitable purification recommendations such as RO, UV, or sediment filtration. A mobile Android app displays the water-quality readings in real time.',
+    image: '/Projects/IoT and AI-Based Water Quality Monitoring and Intelligent Purification Recommendation System.png',
+    technologies: ['STM32F103C8T6','ESP8266 Wi-Fi','pH sensor','TDS sensor','Turbidity sensor','Flow sensor','AI-based purification recommendation','Android mobile application','Cloud/IoT communication']
+  },
+  {
+    id: 9,
     title: 'Deep Learning-Based Pest Detection System Using Sound Analytics',
     categories: ['AI / ML','Deep Learning'],
     status: 'In Progress',

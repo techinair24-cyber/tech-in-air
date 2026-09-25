@@ -7,13 +7,14 @@ export default function ProjectDetail(){
   const project = projects.find(p=> String(p.id)===String(id))
   if(!project) return <div className="container py-8">Project not found</div>
 
-  const src = project.image
+  const fallbackSrc = new URL('../assets/projects/placeholder.svg', import.meta.url).href
+  const src = project.image || fallbackSrc
 
   return (
     <div className="container py-8">
       <div className="grid md:grid-cols-2 gap-8">
         <div>
-          <img src={src} alt={project.title} className="w-full rounded-lg object-cover h-80" onError={(e)=>{e.currentTarget.onerror=null;e.currentTarget.src=new URL(`../assets/projects/${project.image.split('/').pop().replace(/\.[^.]+$/,'')}-fallback.svg`, import.meta.url).href}} />
+          <img src={src} alt={project.title} className="w-full rounded-lg object-cover h-80" onError={(e)=>{e.currentTarget.onerror=null;e.currentTarget.src=fallbackSrc}} />
         </div>
         <div>
           <h1 className="text-3xl font-bold text-slate-900 dark:text-white">{project.title}</h1>
