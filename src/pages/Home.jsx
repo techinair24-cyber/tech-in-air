@@ -5,6 +5,7 @@ import Hero from '../components/Hero'
 import CapabilityStrip from '../components/CapabilityStrip'
 import Services from '../components/Services'
 import CTA from '../components/CTA'
+import CustomerReviews from '../components/CustomerReviews'
 
 export default function Home(){
   return (
@@ -24,8 +25,6 @@ export default function Home(){
           </div>
         </div>
       </section>
-
-      <CTA />
 
       <section className="py-12 md:py-16">
         <div className="container">
@@ -79,6 +78,9 @@ export default function Home(){
           </motion.div>
         </div>
       </section>
+
+      <CustomerReviews />
+      <CTA />
     </div>
   )
 }

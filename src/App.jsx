@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Routes, Route, useLocation } from 'react-router-dom'
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import FloatingWhatsApp from './components/FloatingWhatsApp'
@@ -11,14 +11,65 @@ import ProjectsPage from './pages/Projects'
 import ProjectDetail from './pages/ProjectDetail'
 import ProcessPage from './pages/Process'
 import ContactPage from './pages/Contact'
+import AdminLogin from './pages/AdminLogin'
+import AdminReviews from './pages/AdminReviews'
+import { supabase } from './lib/supabase'
+
+function AdminReviewsPlaceholder() {
+  const navigate = useNavigate()
+  const [isAuthorized, setIsAuthorized] = useState(false)
+
+  useEffect(() => {
+    let isActive = true
+
+    const verifyAdmin = async () => {
+      try {
+        const { data, error } = await supabase.auth.getUser()
+        if (error) throw error
+
+        if (data.user?.app_metadata?.role === 'admin') {
+          if (isActive) setIsAuthorized(true)
+          return
+        }
+
+        const { error: signOutError } = await supabase.auth.signOut()
+        if (signOutError) throw signOutError
+        if (isActive) {
+          navigate('/admin/login', {
+            replace: true,
+            state: { message: 'You are not authorized to access the admin area.' },
+          })
+        }
+      } catch (error) {
+        console.error('Unable to verify admin access:', error)
+        if (isActive) {
+          navigate('/admin/login', {
+            replace: true,
+            state: { message: 'Unable to verify admin access. Please sign in again.' },
+          })
+        }
+      }
+    }
+
+    verifyAdmin()
+    return () => {
+      isActive = false
+    }
+  }, [navigate])
+
+  if (!isAuthorized) return null
+
+  return <AdminReviews />
+}
 
 export default function App() {
   const location = useLocation()
+  const isAdminRoute = location.pathname.startsWith('/admin')
 
   return (
     <div className="min-h-screen bg-[var(--bg)] text-[var(--foreground)] transition-colors duration-200">
-      <Navbar />
-      <main className="pt-24 md:pt-28">
+      {!isAdminRoute && <Navbar />}
+      <main className={isAdminRoute ? '' : 'pt-24 md:pt-28'}>
         <AnimatePresence mode="wait">
           <motion.div
             key={location.pathname}
@@ -35,12 +86,14 @@ export default function App() {
               <Route path="/projects/:id" element={<ProjectDetail />} />
               <Route path="/process" element={<ProcessPage />} />
               <Route path="/contact" element={<ContactPage />} />
+              <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/admin/reviews" element={<AdminReviewsPlaceholder />} />
             </Routes>
           </motion.div>
         </AnimatePresence>
       </main>
-      <Footer />
-      <FloatingWhatsApp />
+      {!isAdminRoute && <Footer />}
+      {!isAdminRoute && <FloatingWhatsApp />}
     </div>
   )
 }
