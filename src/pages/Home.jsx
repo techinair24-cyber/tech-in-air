@@ -59,10 +59,10 @@ export default function Home(){
 
             <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {[
-                { title: `${projects.length}`, description: 'Projects', prominent: true },
-                { title: 'Mini & Major', description: 'Project Support' },
-                { title: 'Diploma & Engineering', description: 'Academic Projects' },
-                { title: 'AI • IoT • Software • Embedded', description: 'Technology Domains' },
+                { title: '10', description: 'Total Projects', prominent: true },
+                { title: '6', description: 'Engineering Main Projects', prominent: true },
+                { title: '1', description: 'Diploma Main Project', prominent: true },
+                { title: '3', description: 'Other Projects', prominent: true },
               ].map(({ title, description, prominent }, index) => (
                 <motion.div
                   key={description}
