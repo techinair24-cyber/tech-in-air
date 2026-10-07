@@ -79,6 +79,15 @@ const projects = [
     description: 'A deep learning-based research project exploring sound analytics for identifying agricultural pest activity and supporting intelligent pest detection.',
     image: '/Projects/pest-detection.png',
     technologies: ['Deep Learning','Audio Analytics','Machine Learning','Agriculture AI']
+  },
+  {
+    id: 10,
+    title: 'Smart Wearable Reader for Blind (Smart Sight)',
+    categories: ['IoT'],
+    status: 'In Progress',
+    description: 'An IoT-based smart wearable assistive system designed to help visually impaired users identify and understand their surroundings. The system uses wearable sensing and intelligent processing to provide useful information to the user through an accessible real-time interface.',
+    image: '/Projects/Smart Wearable Reader for Blind (Smart Sight) create image.png',
+    technologies: ['IoT','Embedded Systems','Smart Wearable Technology','Sensors','Microcontroller','AI/Intelligent Processing']
   }
 ]
 
