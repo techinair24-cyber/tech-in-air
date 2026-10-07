@@ -5,7 +5,7 @@ import Hero from '../components/Hero'
 import CapabilityStrip from '../components/CapabilityStrip'
 import Services from '../components/Services'
 import CTA from '../components/CTA'
-import CustomerReviews from '../components/CustomerReviews'
+import ApprovedReviews from '../components/ApprovedReviews'
 
 export default function Home(){
   return (
@@ -79,7 +79,7 @@ export default function Home(){
         </div>
       </section>
 
-      <CustomerReviews />
+      <ApprovedReviews />
       <CTA />
     </div>
   )

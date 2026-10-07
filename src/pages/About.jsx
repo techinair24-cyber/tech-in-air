@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import PageHeader from '../components/PageHeader'
 import AboutVisual from '../components/AboutVisual'
+import CustomerReviews from '../components/CustomerReviews'
 
 export default function AboutPage(){
   return (
@@ -69,6 +70,8 @@ export default function AboutPage(){
           </motion.div>
         </div>
       </section>
+
+      <CustomerReviews />
     </div>
   )
 }
