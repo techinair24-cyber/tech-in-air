@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import Hero from '../components/Hero'
 import CapabilityStrip from '../components/CapabilityStrip'
