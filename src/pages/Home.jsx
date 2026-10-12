@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import NavratriBanner from '../components/NavratriBanner'
 import Hero from '../components/Hero'
 import CapabilityStrip from '../components/CapabilityStrip'
 import Services from '../components/Services'
@@ -10,6 +11,7 @@ import ApprovedReviews from '../components/ApprovedReviews'
 export default function Home(){
   return (
     <div>
+      <NavratriBanner />
       <Hero />
       <section className="py-10">
         <div className="container">

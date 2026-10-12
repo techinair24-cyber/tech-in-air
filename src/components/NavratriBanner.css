@@ -1,0 +1,184 @@
+.navratri-banner-wrap {
+  padding: 0 0 1.25rem;
+}
+
+.navratri-banner {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  min-height: 142px;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 1px solid rgba(248, 190, 91, 0.38);
+  border-radius: 1.25rem;
+  background:
+    radial-gradient(ellipse at 50% 115%, rgba(112, 58, 147, 0.32), transparent 48%),
+    radial-gradient(ellipse at 50% -35%, rgba(0, 210, 255, 0.16), transparent 55%),
+    linear-gradient(110deg, #091323 0%, #111126 49%, #091323 100%);
+  box-shadow: 0 10px 32px rgba(38, 25, 61, 0.18), inset 0 0 28px rgba(255, 190, 91, 0.035);
+  text-align: center;
+}
+
+.navratri-banner::before,
+.navratri-banner::after {
+  position: absolute;
+  z-index: -1;
+  width: 210px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(249, 189, 93, 0.6), transparent);
+  content: '';
+}
+
+.navratri-banner::before {
+  top: 21px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.navratri-banner::after {
+  bottom: 21px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.navratri-message {
+  position: relative;
+  z-index: 1;
+  padding: 1.5rem 5rem;
+}
+
+.navratri-kicker {
+  display: block;
+  color: #f5bd68;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.navratri-message h2 {
+  margin: 0.25rem 0 0;
+  background: linear-gradient(100deg, #ffe1a2 8%, #fff8e8 48%, #ffc66f 92%);
+  background-clip: text;
+  color: transparent;
+  font-size: clamp(1.7rem, 4vw, 2.45rem);
+  font-weight: 750;
+  letter-spacing: -0.035em;
+  line-height: 1.15;
+  -webkit-background-clip: text;
+}
+
+.navratri-message p {
+  margin: 0.45rem 0 0;
+  color: #d2d9e7;
+  font-size: clamp(0.8rem, 2vw, 0.95rem);
+}
+
+.navratri-side-diya {
+  position: absolute;
+  top: 50%;
+  width: 62px;
+  color: #f3a942;
+  transform: translateY(-48%);
+  animation: navratri-glow 3.2s ease-in-out infinite;
+}
+
+.navratri-side-diya-left {
+  left: clamp(1rem, 8vw, 7rem);
+}
+
+.navratri-side-diya-right {
+  right: clamp(1rem, 8vw, 7rem);
+  animation-delay: 1.6s;
+}
+
+.navratri-diya {
+  display: block;
+  width: 100%;
+  filter: drop-shadow(0 0 9px rgba(255, 164, 55, 0.24));
+}
+
+.navratri-flame {
+  fill: #ffc761;
+  filter: drop-shadow(0 0 6px rgba(255, 176, 63, 0.65));
+}
+
+.navratri-diya-bowl {
+  fill: rgba(240, 151, 56, 0.16);
+  stroke: #efa94f;
+  stroke-width: 2;
+}
+
+.navratri-diya-rim,
+.navratri-diya-detail {
+  stroke: #ffd58a;
+  stroke-linecap: round;
+  stroke-width: 2;
+}
+
+.navratri-flower {
+  position: absolute;
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffefaa 0 13%, #f6a82e 19% 32%, transparent 37%),
+    radial-gradient(ellipse at 50% 0%, #ffbd46 0 27%, transparent 31%),
+    radial-gradient(ellipse at 50% 100%, #ffbd46 0 27%, transparent 31%),
+    radial-gradient(ellipse at 0% 50%, #ffbd46 0 27%, transparent 31%),
+    radial-gradient(ellipse at 100% 50%, #ffbd46 0 27%, transparent 31%);
+  filter: drop-shadow(0 0 7px rgba(238, 157, 44, 0.24));
+}
+
+.navratri-flower-left {
+  top: 22px;
+  left: 24px;
+}
+
+.navratri-flower-right {
+  right: 24px;
+  bottom: 22px;
+}
+
+@keyframes navratri-glow {
+  0%, 100% { opacity: 0.88; }
+  50% { opacity: 1; }
+}
+
+@media (max-width: 600px) {
+  .navratri-banner {
+    min-height: 132px;
+  }
+
+  .navratri-message {
+    padding: 1.5rem 3rem;
+  }
+
+  .navratri-side-diya {
+    width: 38px;
+  }
+
+  .navratri-side-diya-left {
+    left: 0.5rem;
+  }
+
+  .navratri-side-diya-right {
+    right: 0.5rem;
+  }
+
+  .navratri-flower-left {
+    top: 12px;
+    left: 12px;
+  }
+
+  .navratri-flower-right {
+    right: 12px;
+    bottom: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navratri-side-diya {
+    animation: none;
+  }
+}
