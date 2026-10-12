@@ -48,8 +48,8 @@ export default function Home(){
 
             <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {[
-                { title: '10', description: 'Total Projects', prominent: true },
-                { title: '6', description: 'Engineering Main Projects', prominent: true },
+                { title: '11', description: 'Total Projects', prominent: true },
+                { title: '7', description: 'Engineering Main Projects', prominent: true },
                 { title: '1', description: 'Diploma Main Project', prominent: true },
                 { title: '3', description: 'Other Projects', prominent: true },
               ].map(({ title, description, prominent }, index) => (

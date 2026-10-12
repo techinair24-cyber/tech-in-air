@@ -88,6 +88,15 @@ const projects = [
     description: 'An IoT-based smart wearable assistive system designed to help visually impaired users identify and understand their surroundings. The system uses wearable sensing and intelligent processing to provide useful information to the user through an accessible real-time interface.',
     image: '/Projects/Smart Wearable Reader for Blind (Smart Sight) create image.png',
     technologies: ['IoT','Embedded Systems','Smart Wearable Technology','Sensors','Microcontroller','AI/Intelligent Processing']
+  },
+  {
+    id: 11,
+    title: 'AI-Enabled Drone-Based Crop Disease Detection and Monitoring System',
+    categories: ['AI / ML','Agriculture','Drone'],
+    status: 'In Progress',
+    description: 'An AI-enabled drone-based system designed to capture crop imagery, identify potential disease symptoms, and support ongoing crop health monitoring. Aerial imaging and computer-vision analysis help users detect affected areas and track field conditions.',
+    image: '/Projects/AI-Enabled Drone-Based Crop Disease Detection and Monitoring System.png',
+    technologies: ['Drone Imaging','AI / ML','Computer Vision','Crop Disease Detection','Crop Monitoring']
   }
 ]
 

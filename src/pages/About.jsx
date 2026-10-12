@@ -36,8 +36,8 @@ export default function AboutPage(){
 
             <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {[
-                { value: '10', label: 'Total Projects' },
-                { value: '6', label: 'Engineering Main Projects' },
+                { value: '11', label: 'Total Projects' },
+                { value: '7', label: 'Engineering Main Projects' },
                 { value: '1', label: 'Diploma Main Project' },
                 { value: '3', label: 'Other Projects' },
               ].map(({ value, label }, index) => (
