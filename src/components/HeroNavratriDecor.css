@@ -131,54 +131,78 @@
   position: absolute;
   top: 48px;
   z-index: 0;
-  width: 52px;
-  height: 100px;
+  width: 62px;
+  height: 116px;
   overflow: visible;
   transform-origin: 50% 0;
   animation: hero-navratri-lamp-sway 8s ease-in-out infinite;
-  filter: drop-shadow(0 3px 6px rgba(187, 116, 37, 0.2));
+  filter: drop-shadow(0 3px 8px rgba(187, 116, 37, 0.32));
 }
 
 .hero-navratri-lamp-left {
-  left: 3.5%;
+  left: max(4px, calc((100% - 1280px) / 2 + 4px));
 }
 
 .hero-navratri-lamp-right {
-  right: 3.5%;
+  right: max(4px, calc((100% - 1280px) / 2 + 4px));
   animation-delay: 1.8s;
 }
 
 .hero-navratri-lamp-hanger,
 .hero-navratri-lamp-chain {
-  stroke: #b8894d;
+  stroke: #9c672c;
   stroke-linecap: round;
-  stroke-width: 1.5;
+  stroke-width: 2;
 }
 
-.hero-navratri-lamp-metal {
-  fill: #b77b35;
-  stroke: #f2cb82;
+.hero-navratri-lamp-finial {
+  fill: #b57932;
+  stroke: #f6d68f;
   stroke-linejoin: round;
   stroke-width: 1.5;
 }
 
-.hero-navratri-lamp-detail {
-  stroke: #ffe1a0;
-  stroke-linecap: round;
+.hero-navratri-lamp-bowl {
+  fill: #b87b35;
+  stroke: #f5d28b;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.hero-navratri-lamp-rim {
+  fill: #e0ab57;
+  stroke: #fff0bd;
   stroke-width: 1.5;
 }
 
+.hero-navratri-lamp-ornament {
+  stroke: #ffe5a6;
+  stroke-linecap: round;
+  stroke-width: 1.8;
+}
+
+.hero-navratri-lamp-jewel {
+  fill: #fff0bd;
+  stroke: #9d6327;
+  stroke-width: 1;
+}
+
 .hero-navratri-lamp-flame-glow {
-  fill: rgba(255, 170, 54, 0.44);
-  filter: blur(3px);
-  animation: hero-navratri-flame 2.7s ease-in-out infinite;
+  fill: rgba(255, 160, 36, 0.4);
+  filter: blur(4px);
+  transform-box: fill-box;
+  transform-origin: 50% 90%;
+  animation: hero-navratri-flame-glow 1.9s ease-in-out infinite alternate;
 }
 
 .hero-navratri-lamp-flame {
-  fill: #ffe7a8;
-  filter: drop-shadow(0 0 5px rgba(255, 175, 54, 0.9));
-  transform-origin: 32px 43px;
-  animation: hero-navratri-flame 2.1s ease-in-out infinite alternate;
+  fill: #ffe8a3;
+  stroke: #fff5d2;
+  stroke-width: 0.65;
+  filter: drop-shadow(0 0 5px rgba(255, 175, 54, 0.92));
+  transform-box: fill-box;
+  transform-origin: 50% 92%;
+  animation: hero-navratri-flame-shape 1.35s ease-in-out infinite alternate;
 }
 
 .hero-navratri-petal,
@@ -271,9 +295,17 @@
   50% { transform: rotate(1.2deg); }
 }
 
-@keyframes hero-navratri-flame {
-  0%, 100% { opacity: 0.78; transform: scale(0.96, 1); }
-  50% { opacity: 1; transform: scale(1.05, 1.08); }
+@keyframes hero-navratri-flame-shape {
+  0% { transform: scale(0.9, 0.82) skewX(-5deg); filter: drop-shadow(0 0 3px rgba(255, 156, 41, 0.68)); }
+  35% { transform: scale(1.03, 1.1) skewX(3deg); }
+  70% { transform: scale(0.94, 0.94) skewX(-2deg); }
+  100% { transform: scale(1.06, 1.2) skewX(5deg); filter: drop-shadow(0 0 8px rgba(255, 199, 87, 1)); }
+}
+
+@keyframes hero-navratri-flame-glow {
+  0% { opacity: 0.55; transform: scale(0.85, 0.8) skewX(-3deg); }
+  55% { opacity: 0.9; transform: scale(1.14, 1.16) skewX(4deg); }
+  100% { opacity: 0.7; transform: scale(0.96, 1.05) skewX(-2deg); }
 }
 
 @keyframes hero-navratri-drift {
@@ -295,12 +327,9 @@
 
   .hero-navratri-lamp {
     top: 56px;
-    width: 36px;
-    height: 76px;
+    width: 34px;
+    height: 66px;
   }
-
-  .hero-navratri-lamp-left { left: 1%; }
-  .hero-navratri-lamp-right { right: 1%; }
 
   .hero-navratri-bulb-two,
   .hero-navratri-bulb-three,
@@ -352,7 +381,8 @@
   .hero-navratri-lamp,
   .hero-navratri-lamp-flame,
   .hero-navratri-lamp-flame-glow,
-  .hero-navratri-lights::after {
+  .hero-navratri-lights::after,
+  .hero-navratri-bulb::after {
     animation: none;
   }
 }

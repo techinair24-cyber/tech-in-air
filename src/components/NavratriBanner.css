@@ -23,7 +23,7 @@
   position: relative;
   isolation: isolate;
   display: flex;
-  min-height: 168px;
+  min-height: 96px;
   align-items: center;
   justify-content: center;
   overflow: hidden;
@@ -137,9 +137,9 @@
 
 .navratri-message {
   position: relative;
-  z-index: 1;
+  z-index: 3;
   max-width: 620px;
-  padding: 1.8rem 6rem 1.45rem;
+  padding: 0.4rem 6rem;
 }
 
 .navratri-kicker {
@@ -156,7 +156,7 @@
   background: linear-gradient(100deg, #ffe1a2 8%, #fff8e8 48%, #ffc66f 92%);
   background-clip: text;
   color: transparent;
-  font-size: clamp(1.7rem, 4vw, 2.45rem);
+  font-size: clamp(1.45rem, 3.2vw, 2rem);
   font-weight: 750;
   letter-spacing: -0.035em;
   line-height: 1.15;
@@ -164,16 +164,16 @@
 }
 
 .navratri-message p {
-  margin: 0.45rem 0 0;
+  margin: 0.3rem 0 0;
   color: #d2d9e7;
-  font-size: clamp(0.8rem, 2vw, 0.95rem);
+  font-size: clamp(0.75rem, 1.8vw, 0.9rem);
 }
 
 .navratri-side-diya {
   position: absolute;
   z-index: 1;
-  bottom: 23px;
-  width: 74px;
+  bottom: 8px;
+  width: 58px;
   transform-origin: center 30%;
   animation: navratri-glow 3.2s ease-in-out infinite;
 }
@@ -234,6 +234,71 @@
 .navratri-toran-left { left: 4%; transform: rotate(-12deg); }
 .navratri-toran-right { right: 4%; transform: rotate(12deg) scaleX(-1); }
 
+.navratri-dancer {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  width: clamp(44px, 4.2vw, 58px);
+  height: auto;
+  overflow: visible;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.navratri-dancer-left { left: 15%; }
+.navratri-dancer-right { right: 15%; transform: translateY(-50%) scaleX(-1); }
+
+.navratri-dancer-skin,
+.navratri-dancer-arm,
+.navratri-dancer-leg {
+  fill: #f4bf76;
+  stroke: #f4bf76;
+}
+
+.navratri-dancer-hair {
+  fill: #29192d;
+  stroke: #f8d895;
+  stroke-width: 0.7;
+}
+
+.navratri-dancer-arm,
+.navratri-dancer-leg {
+  stroke-linecap: round;
+  stroke-width: 3;
+}
+
+.navratri-dancer-sleeve {
+  fill: #bd642d;
+  stroke: #f4c86d;
+  stroke-width: 1;
+}
+
+.navratri-dancer-blouse {
+  fill: #774785;
+  stroke: #f3c66c;
+  stroke-width: 1.2;
+}
+
+.navratri-dancer-skirt {
+  fill: #b85c2d;
+  stroke: #f1bd58;
+  stroke-width: 1.2;
+}
+
+.navratri-dancer-skirt-band,
+.navratri-dancer-hem,
+.navratri-dancer-jewelry {
+  stroke: #f9d56f;
+  stroke-linecap: round;
+  stroke-width: 1.5;
+}
+
+.navratri-dancer-dupatta {
+  stroke: #c789ed;
+  stroke-linecap: round;
+  stroke-width: 2;
+}
+
 .navratri-particle,
 .navratri-petal {
   position: absolute;
@@ -286,7 +351,7 @@
 
 @media (max-width: 600px) {
   .navratri-banner {
-    min-height: 144px;
+    min-height: 84px;
   }
 
   .navratri-garland {
@@ -317,12 +382,12 @@
   .navratri-light-six { --light-left: 88%; }
 
   .navratri-message {
-    padding: 1.15rem 2.25rem 2.1rem;
+    padding: 0.3rem 1.65rem;
   }
 
   .navratri-side-diya {
-    bottom: 4px;
-    width: 48px;
+    bottom: 2px;
+    width: 36px;
   }
 
   .navratri-side-diya-left { left: 5%; }
@@ -338,11 +403,20 @@
   .navratri-toran-left { left: 19%; }
   .navratri-toran-right { right: 19%; transform: scaleX(-1) scale(0.8); }
 
+  .navratri-dancer {
+    display: none;
+  }
+
   .navratri-particle-three,
   .navratri-particle-four,
   .navratri-petal-three {
     display: none;
   }
+}
+
+@media (max-width: 420px) {
+  .navratri-side-diya-left { left: 3%; }
+  .navratri-side-diya-right { right: 3%; }
 }
 
 @media (prefers-reduced-motion: reduce) {

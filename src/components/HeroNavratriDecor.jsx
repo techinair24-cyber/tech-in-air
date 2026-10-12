@@ -1,6 +1,22 @@
 import React from 'react'
 import './HeroNavratriDecor.css'
 
+function BrassLamp({ side }) {
+  return (
+    <svg className={`hero-navratri-lamp hero-navratri-lamp-${side}`} viewBox="0 0 80 150" fill="none" aria-hidden="true">
+      <path className="hero-navratri-lamp-hanger" d="M40 0v12m-5 0h10" />
+      <path className="hero-navratri-lamp-chain" d="M40 12v15m-3-10h6m-5 5h4" />
+      <path className="hero-navratri-lamp-finial" d="m40 25-6 7 6 5 6-5-6-7Zm-4 12h8l4 7H32l4-7Z" />
+      <path className="hero-navratri-lamp-flame-glow" d="M40 34c1.5 7 8 10 5.3 16.5-1.1 2.7-3.2 4.8-5.3 6-2.1-1.2-4.2-3.3-5.3-6C32 44 38.5 41 40 34Z" />
+      <path className="hero-navratri-lamp-flame" d="M40 36c1 5 5 7 3.5 12-0.7 2-2 3.5-3.5 4.5-1.5-1-2.8-2.5-3.5-4.5-1.5-5 2.5-7 3.5-12Z" />
+      <path className="hero-navratri-lamp-bowl" d="M21 58c5 4 33 4 38 0l-5 12c-3.5 7-9 11-14 13-5-2-10.5-6-14-13l-5-12Z" />
+      <path className="hero-navratri-lamp-rim" d="M18 57c10-5 34-5 44 0-10 6-34 6-44 0Z" />
+      <path className="hero-navratri-lamp-ornament" d="M27 65c8 4 18 4 26 0m-22 9c5 3 13 3 18 0m-9 9v10m-7 0h14m-17 6c5-3 15-3 20 0l-3 8H33l-3-8Zm4 14h12m-9-4v7m-5 0h16" />
+      <circle className="hero-navratri-lamp-jewel" cx="40" cy="69" r="2" />
+    </svg>
+  )
+}
+
 export default function HeroNavratriDecor() {
   return (
     <div className="hero-navratri-decor" aria-hidden="true">
@@ -16,28 +32,11 @@ export default function HeroNavratriDecor() {
       </div>
       <span className="hero-navratri-garland hero-navratri-garland-left" />
       <span className="hero-navratri-garland hero-navratri-garland-right" />
-      <svg className="hero-navratri-lamp hero-navratri-lamp-left" viewBox="0 0 64 112" fill="none">
-        <path className="hero-navratri-lamp-hanger" d="M32 0v15m-5 0h10" />
-        <path className="hero-navratri-lamp-chain" d="M32 15v12" />
-        <path className="hero-navratri-lamp-metal" d="M32 26 19 43l5 5h16l5-5-13-17Zm-17 24c3 16 9 25 17 25s14-9 17-25H15Z" />
-        <path className="hero-navratri-lamp-detail" d="M19 51h26M24 63h16M27 72h10M22 84h20m-10-9v12m-8 0h16" />
-        <path className="hero-navratri-lamp-flame-glow" d="M32 32c1 5 6 7 4 12-1 2-2 3-4 4-2-1-3-2-4-4-2-5 3-7 4-12Z" />
-        <path className="hero-navratri-lamp-flame" d="M32 33c1 4 4 6 3 10-.5 1.5-1.5 2.5-3 3.3-1.5-.8-2.5-1.8-3-3.3-1-4 2-6 3-10Z" />
-      </svg>
-      <svg className="hero-navratri-lamp hero-navratri-lamp-right" viewBox="0 0 64 112" fill="none">
-        <path className="hero-navratri-lamp-hanger" d="M32 0v15m-5 0h10" />
-        <path className="hero-navratri-lamp-chain" d="M32 15v12" />
-        <path className="hero-navratri-lamp-metal" d="M32 26 19 43l5 5h16l5-5-13-17Zm-17 24c3 16 9 25 17 25s14-9 17-25H15Z" />
-        <path className="hero-navratri-lamp-detail" d="M19 51h26M24 63h16M27 72h10M22 84h20m-10-9v12m-8 0h16" />
-        <path className="hero-navratri-lamp-flame-glow" d="M32 32c1 5 6 7 4 12-1 2-2 3-4 4-2-1-3-2-4-4-2-5 3-7 4-12Z" />
-        <path className="hero-navratri-lamp-flame" d="M32 33c1 4 4 6 3 10-.5 1.5-1.5 2.5-3 3.3-1.5-.8-2.5-1.8-3-3.3-1-4 2-6 3-10Z" />
-      </svg>
+      <BrassLamp side="left" />
+      <BrassLamp side="right" />
       <span className="hero-navratri-petal hero-navratri-petal-one" />
       <span className="hero-navratri-petal hero-navratri-petal-two" />
-      <span className="hero-navratri-petal hero-navratri-petal-three" />
       <span className="hero-navratri-particle hero-navratri-particle-one" />
-      <span className="hero-navratri-particle hero-navratri-particle-two" />
-      <span className="hero-navratri-particle hero-navratri-particle-three" />
     </div>
   )
 }
