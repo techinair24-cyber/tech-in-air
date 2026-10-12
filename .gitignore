@@ -1,6 +1,8 @@
 ﻿node_modules/
 dist/
 .env
+.env.*
+!.env.example
 .env.local
 npm-build.log
 npm-dev.log

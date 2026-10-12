@@ -13,6 +13,8 @@ import ContactPage from './pages/Contact'
 import AdminLogin from './pages/AdminLogin'
 import AdminReviews from './pages/AdminReviews'
 import LegalPage from './pages/LegalPage'
+import TechieChatbot from './components/TechieChatbot'
+import { buildTechieContext } from './data/chatbotContext'
 import { supabase } from './lib/supabase'
 
 function AdminReviewsPlaceholder() {
@@ -95,6 +97,7 @@ export default function App() {
         </AnimatePresence>
       </main>
       {!isAdminRoute && <Footer />}
+      {!isAdminRoute && <TechieChatbot context={buildTechieContext} />}
     </div>
   )
 }
