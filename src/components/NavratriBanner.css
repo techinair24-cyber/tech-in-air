@@ -23,7 +23,7 @@
   position: relative;
   isolation: isolate;
   display: flex;
-  min-height: 216px;
+  min-height: 168px;
   align-items: center;
   justify-content: center;
   overflow: hidden;
@@ -139,7 +139,7 @@
   position: relative;
   z-index: 1;
   max-width: 620px;
-  padding: 2.7rem 6rem 2rem;
+  padding: 1.8rem 6rem 1.45rem;
 }
 
 .navratri-kicker {
@@ -286,7 +286,7 @@
 
 @media (max-width: 600px) {
   .navratri-banner {
-    min-height: 184px;
+    min-height: 144px;
   }
 
   .navratri-garland {
@@ -317,7 +317,7 @@
   .navratri-light-six { --light-left: 88%; }
 
   .navratri-message {
-    padding: 2.2rem 2.25rem 3.6rem;
+    padding: 1.15rem 2.25rem 2.1rem;
   }
 
   .navratri-side-diya {

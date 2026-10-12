@@ -20,38 +20,73 @@
   top: 0;
   left: 5%;
   width: 90%;
-  height: 38px;
+  height: 46px;
+  overflow: hidden;
+  pointer-events: none;
 }
 
 .hero-navratri-wire {
   position: absolute;
-  inset: -24px 0 auto;
-  height: 48px;
-  border-bottom: 1px solid rgba(244, 190, 102, 0.68);
+  inset: -30px 0 auto;
+  height: 62px;
+  border-bottom: 1px solid rgba(244, 190, 102, 0.78);
   border-radius: 0 0 50% 50%;
-  filter: drop-shadow(0 1px 3px rgba(248, 177, 77, 0.24));
+  filter: drop-shadow(0 1px 4px rgba(248, 177, 77, 0.42));
+}
+
+.hero-navratri-lights::after {
+  position: absolute;
+  top: 27px;
+  left: -30%;
+  width: 30%;
+  height: 5px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, transparent, rgba(255, 227, 165, 0.75), rgba(255, 180, 73, 0.48), transparent);
+  filter: blur(2px);
+  animation: hero-navratri-travel 11s ease-in-out infinite;
+  content: '';
 }
 
 .hero-navratri-bulb {
   position: absolute;
   top: var(--bulb-top);
   left: var(--bulb-left);
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
+  transform-origin: 50% -9px;
   border: 1px solid rgba(255, 240, 199, 0.9);
   border-radius: 50%;
   background: #ffe5ac;
-  box-shadow: 0 0 5px 2px rgba(255, 193, 93, 0.82), 0 0 12px 4px rgba(255, 157, 47, 0.3);
-  animation: hero-navratri-twinkle 3.4s ease-in-out infinite;
+  box-shadow: 0 0 6px 2px rgba(255, 193, 93, 0.88), 0 0 14px 4px rgba(255, 157, 47, 0.38);
+  animation: hero-navratri-sway 5.6s ease-in-out infinite, hero-navratri-twinkle 3.8s ease-in-out infinite;
 }
 
-.hero-navratri-bulb-one { --bulb-left: 4%; --bulb-top: 13px; }
-.hero-navratri-bulb-two { --bulb-left: 18%; --bulb-top: 23px; animation-delay: 1.2s; }
-.hero-navratri-bulb-three { --bulb-left: 32%; --bulb-top: 28px; animation-delay: 2.1s; }
-.hero-navratri-bulb-four { --bulb-left: 50%; --bulb-top: 30px; animation-delay: 0.6s; }
-.hero-navratri-bulb-five { --bulb-left: 68%; --bulb-top: 28px; animation-delay: 1.8s; }
-.hero-navratri-bulb-six { --bulb-left: 82%; --bulb-top: 23px; animation-delay: 2.6s; }
-.hero-navratri-bulb-seven { --bulb-left: 96%; --bulb-top: 13px; animation-delay: 0.9s; }
+.hero-navratri-bulb::before {
+  position: absolute;
+  bottom: calc(100% + 1px);
+  left: 2px;
+  width: 1px;
+  height: 10px;
+  background: linear-gradient(rgba(245, 205, 139, 0.5), rgba(255, 225, 163, 0.95));
+  content: '';
+}
+
+.hero-navratri-bulb::after {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 220, 150, 0.27), transparent 70%);
+  animation: hero-navratri-reflection 4.6s ease-in-out infinite;
+  content: '';
+}
+
+.hero-navratri-bulb-one { --bulb-left: 4%; --bulb-top: 13px; animation-delay: 0s, 0s; }
+.hero-navratri-bulb-two { --bulb-left: 18%; --bulb-top: 23px; animation-delay: 0.8s, 1.2s; }
+.hero-navratri-bulb-three { --bulb-left: 32%; --bulb-top: 28px; animation-delay: 1.7s, 2.1s; }
+.hero-navratri-bulb-four { --bulb-left: 50%; --bulb-top: 30px; animation-delay: 0.4s, 0.6s; }
+.hero-navratri-bulb-five { --bulb-left: 68%; --bulb-top: 28px; animation-delay: 1.2s, 1.8s; }
+.hero-navratri-bulb-six { --bulb-left: 82%; --bulb-top: 23px; animation-delay: 2s, 2.6s; }
+.hero-navratri-bulb-seven { --bulb-left: 96%; --bulb-top: 13px; animation-delay: 0.6s, 0.9s; }
 
 .hero-navratri-garland {
   position: absolute;
@@ -90,6 +125,60 @@
 .hero-navratri-garland-right {
   right: 2%;
   transform: rotate(3deg);
+}
+
+.hero-navratri-lamp {
+  position: absolute;
+  top: 48px;
+  z-index: 0;
+  width: 52px;
+  height: 100px;
+  overflow: visible;
+  transform-origin: 50% 0;
+  animation: hero-navratri-lamp-sway 8s ease-in-out infinite;
+  filter: drop-shadow(0 3px 6px rgba(187, 116, 37, 0.2));
+}
+
+.hero-navratri-lamp-left {
+  left: 3.5%;
+}
+
+.hero-navratri-lamp-right {
+  right: 3.5%;
+  animation-delay: 1.8s;
+}
+
+.hero-navratri-lamp-hanger,
+.hero-navratri-lamp-chain {
+  stroke: #b8894d;
+  stroke-linecap: round;
+  stroke-width: 1.5;
+}
+
+.hero-navratri-lamp-metal {
+  fill: #b77b35;
+  stroke: #f2cb82;
+  stroke-linejoin: round;
+  stroke-width: 1.5;
+}
+
+.hero-navratri-lamp-detail {
+  stroke: #ffe1a0;
+  stroke-linecap: round;
+  stroke-width: 1.5;
+}
+
+.hero-navratri-lamp-flame-glow {
+  fill: rgba(255, 170, 54, 0.44);
+  filter: blur(3px);
+  animation: hero-navratri-flame 2.7s ease-in-out infinite;
+}
+
+.hero-navratri-lamp-flame {
+  fill: #ffe7a8;
+  filter: drop-shadow(0 0 5px rgba(255, 175, 54, 0.9));
+  transform-origin: 32px 43px;
+  animation: hero-navratri-flame 2.1s ease-in-out infinite alternate;
 }
 
 .hero-navratri-petal,
@@ -156,8 +245,35 @@
 }
 
 @keyframes hero-navratri-twinkle {
-  0%, 100% { opacity: 0.72; }
-  50% { opacity: 1; }
+  0%, 100% { opacity: 0.78; box-shadow: 0 0 5px 2px rgba(255, 193, 93, 0.72), 0 0 10px 3px rgba(255, 157, 47, 0.24); }
+  50% { opacity: 1; box-shadow: 0 0 8px 3px rgba(255, 218, 135, 0.96), 0 0 18px 6px rgba(255, 157, 47, 0.42); }
+}
+
+@keyframes hero-navratri-sway {
+  0%, 100% { transform: rotate(-1.5deg); }
+  50% { transform: rotate(1.8deg); }
+}
+
+@keyframes hero-navratri-reflection {
+  0%, 100% { opacity: 0.35; transform: scale(0.88); }
+  50% { opacity: 0.9; transform: scale(1.22); }
+}
+
+@keyframes hero-navratri-travel {
+  0% { transform: translateX(0); opacity: 0; }
+  12% { opacity: 0.85; }
+  88% { opacity: 0.85; }
+  100% { transform: translateX(430%); opacity: 0; }
+}
+
+@keyframes hero-navratri-lamp-sway {
+  0%, 100% { transform: rotate(-1deg); }
+  50% { transform: rotate(1.2deg); }
+}
+
+@keyframes hero-navratri-flame {
+  0%, 100% { opacity: 0.78; transform: scale(0.96, 1); }
+  50% { opacity: 1; transform: scale(1.05, 1.08); }
 }
 
 @keyframes hero-navratri-drift {
@@ -176,6 +292,15 @@
     left: 8%;
     width: 84%;
   }
+
+  .hero-navratri-lamp {
+    top: 56px;
+    width: 36px;
+    height: 76px;
+  }
+
+  .hero-navratri-lamp-left { left: 1%; }
+  .hero-navratri-lamp-right { right: 1%; }
 
   .hero-navratri-bulb-two,
   .hero-navratri-bulb-three,
@@ -210,6 +335,10 @@
     display: none;
   }
 
+  .hero-navratri-lamp {
+    display: none;
+  }
+
   .hero-navratri-petal-two,
   .hero-navratri-particle-one {
     display: none;
@@ -219,7 +348,11 @@
 @media (prefers-reduced-motion: reduce) {
   .hero-navratri-bulb,
   .hero-navratri-petal,
-  .hero-navratri-particle {
+  .hero-navratri-particle,
+  .hero-navratri-lamp,
+  .hero-navratri-lamp-flame,
+  .hero-navratri-lamp-flame-glow,
+  .hero-navratri-lights::after {
     animation: none;
   }
 }
