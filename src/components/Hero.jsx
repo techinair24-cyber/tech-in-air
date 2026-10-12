@@ -1,6 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
+import HeroNavratriDecor from './HeroNavratriDecor'
 
 export default function Hero(){
   const fadeUp = {
@@ -9,8 +10,9 @@ export default function Hero(){
   }
 
   return (
-    <section id="home" className="pt-8 pb-12 md:pt-10">
-      <div className="container grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+    <section id="home" className="relative isolate pt-8 pb-12 md:pt-10">
+      <HeroNavratriDecor />
+      <div className="container relative z-10 grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
         <motion.div
           initial="hidden"
           animate="visible"
