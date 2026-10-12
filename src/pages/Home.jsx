@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import NavratriBanner from '../components/NavratriBanner'
+import HeroNavratriDecor from '../components/HeroNavratriDecor'
 import Hero from '../components/Hero'
 import CapabilityStrip from '../components/CapabilityStrip'
 import Services from '../components/Services'
@@ -12,7 +13,10 @@ export default function Home(){
   return (
     <div>
       <NavratriBanner />
-      <Hero />
+      <div className="home-hero-dashboard">
+        <HeroNavratriDecor />
+        <Hero />
+      </div>
       <section className="py-10">
         <div className="container">
           <CapabilityStrip />
