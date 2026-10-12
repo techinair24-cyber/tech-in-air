@@ -35,6 +35,8 @@ export default function ApprovedReviews() {
     }
   }, [])
 
+  if (isLoading || (!hasError && reviews.length === 0)) return null
+
   return (
     <section className="py-12 md:py-16">
       <div className="container">
@@ -50,17 +52,9 @@ export default function ApprovedReviews() {
             </h2>
           </div>
 
-          {isLoading ? (
-            <p className="text-center text-slate-500 dark:text-slate-400" role="status">
-              Loading customer reviews...
-            </p>
-          ) : hasError ? (
+          {hasError ? (
             <p className="text-center text-slate-500 dark:text-slate-400" role="status">
               Customer reviews are unavailable right now.
-            </p>
-          ) : reviews.length === 0 ? (
-            <p className="text-center text-slate-500 dark:text-slate-400">
-              Customer reviews will appear here after approval.
             </p>
           ) : (
             <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
