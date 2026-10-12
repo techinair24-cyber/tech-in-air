@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { FaPaperPlane, FaWhatsapp } from 'react-icons/fa6'
+import { Link } from 'react-router-dom'
 
 const inputClasses =
   'mt-1.5 w-full rounded-xl border border-slate-200 bg-slate-50/80 px-3 py-2.5 text-sm text-slate-900 shadow-sm transition duration-200 placeholder:text-slate-400 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-200 dark:border-slate-700 dark:bg-slate-950/50 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:ring-cyan-500/20'
@@ -103,6 +104,9 @@ export default function ContactForm() {
           WhatsApp Us
         </a>
       </div>
+      <p className="mt-4 text-sm text-slate-600 dark:text-slate-300">
+        Please review our <Link to="/terms-and-conditions" className="font-medium text-cyan-800 underline underline-offset-2 hover:text-cyan-700 dark:text-cyan-300 dark:hover:text-cyan-200">Terms &amp; Conditions</Link> before sending your project enquiry.
+      </p>
     </form>
   )
 }

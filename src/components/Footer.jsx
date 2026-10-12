@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 export default function Footer(){
   return (
@@ -42,6 +43,11 @@ export default function Footer(){
           <div className="mt-2"><a href="mailto:tech.in.air24@gmail.com">tech.in.air24@gmail.com</a></div>
           <div className="mt-1">+91 8310808011</div>
           <div className="mt-2"><a href="https://www.instagram.com/tech_in_air_ka" target="_blank" rel="noreferrer">Instagram</a></div>
+          <div className="mt-4 font-semibold text-slate-900 dark:text-white">Legal</div>
+          <ul className="mt-2 text-sm text-slate-600 dark:text-slate-300 space-y-1">
+            <li><Link to="/privacy-policy" className="hover:text-cyan-700 dark:hover:text-cyan-300">Privacy Policy</Link></li>
+            <li><Link to="/terms-and-conditions" className="hover:text-cyan-700 dark:hover:text-cyan-300">Terms &amp; Conditions</Link></li>
+          </ul>
         </div>
       </div>
       <div className="text-center text-sm text-slate-500 dark:text-slate-400 mt-8">© 2026 Tech in Air. All rights reserved.</div>

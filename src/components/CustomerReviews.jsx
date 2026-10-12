@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import projects from '../data/projects'
 import { supabase } from '../lib/supabase'
 
@@ -101,6 +102,12 @@ export default function CustomerReviews() {
               <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
                 Your review will be shared only after it has been approved.
               </p>
+              <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                Approved reviews may be displayed publicly with your name, project name, rating and review text. See our{' '}
+                <Link to="/privacy-policy" className="font-medium text-cyan-800 underline underline-offset-2 hover:text-cyan-700 dark:text-cyan-300 dark:hover:text-cyan-200">
+                  Privacy Policy
+                </Link>.
+              </p>
             </div>
 
             <form onSubmit={handleSubmit} noValidate>
@@ -131,13 +138,21 @@ export default function CustomerReviews() {
                     required
                     value={form.projectName}
                     onChange={(event) => updateField('projectName', event.target.value)}
-                    className={inputClasses}
+                    className={`${inputClasses} text-base`}
                     aria-invalid={Boolean(fieldErrors.projectName)}
                     aria-describedby={fieldErrors.projectName ? 'project-name-error' : undefined}
                   >
-                    <option value="" disabled>Select your project</option>
+                    <option value="" disabled className="bg-white text-base text-slate-900 dark:bg-slate-900 dark:text-slate-100">
+                      Select your project
+                    </option>
                     {projects.map(({ id, title }) => (
-                      <option key={id} value={title}>{title}</option>
+                      <option
+                        key={id}
+                        value={title}
+                        className="bg-white text-base text-slate-900 dark:bg-slate-900 dark:text-slate-100"
+                      >
+                        {title}
+                      </option>
                     ))}
                   </select>
                   {fieldErrors.projectName && (

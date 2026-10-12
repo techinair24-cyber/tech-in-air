@@ -13,6 +13,7 @@ import ProcessPage from './pages/Process'
 import ContactPage from './pages/Contact'
 import AdminLogin from './pages/AdminLogin'
 import AdminReviews from './pages/AdminReviews'
+import LegalPage from './pages/LegalPage'
 import { supabase } from './lib/supabase'
 
 function AdminReviewsPlaceholder() {
@@ -86,6 +87,8 @@ export default function App() {
               <Route path="/projects/:id" element={<ProjectDetail />} />
               <Route path="/process" element={<ProcessPage />} />
               <Route path="/contact" element={<ContactPage />} />
+              <Route path="/privacy-policy" element={<LegalPage page="privacyPolicy" />} />
+              <Route path="/terms-and-conditions" element={<LegalPage page="termsAndConditions" />} />
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin/reviews" element={<AdminReviewsPlaceholder />} />
             </Routes>
