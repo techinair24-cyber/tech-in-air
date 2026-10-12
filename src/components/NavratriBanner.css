@@ -2,6 +2,23 @@
   padding: 0 0 1.25rem;
 }
 
+.navratri-banner-wrap + #home {
+  position: relative;
+  isolation: isolate;
+}
+
+.navratri-banner-wrap + #home::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 72% 45%, rgba(0, 210, 255, 0.075), transparent 48%),
+    radial-gradient(ellipse at 18% 55%, rgba(132, 72, 166, 0.065), transparent 42%),
+    radial-gradient(ellipse at 48% 0%, rgba(243, 169, 66, 0.045), transparent 55%);
+  content: '';
+  pointer-events: none;
+}
+
 .navratri-banner {
   position: relative;
   isolation: isolate;
@@ -18,6 +35,62 @@
     linear-gradient(110deg, #091323 0%, #111126 49%, #091323 100%);
   box-shadow: 0 10px 32px rgba(38, 25, 61, 0.18), inset 0 0 28px rgba(255, 190, 91, 0.035);
   text-align: center;
+}
+
+.navratri-hanging-decor {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.navratri-garland {
+  position: absolute;
+  top: 0;
+  left: var(--garland-left);
+  width: 7px;
+  height: var(--garland-length);
+  border-left: 1px solid rgba(245, 189, 104, 0.68);
+  background:
+    radial-gradient(ellipse at 1px 4px, #ffc34f 0 2px, transparent 2.6px),
+    radial-gradient(ellipse at 5px 10px, #e88c28 0 2px, transparent 2.6px),
+    radial-gradient(ellipse at 1px 16px, #ffc34f 0 2px, transparent 2.6px),
+    radial-gradient(ellipse at 5px 22px, #e88c28 0 2px, transparent 2.6px),
+    radial-gradient(ellipse at 1px 28px, #ffc34f 0 2px, transparent 2.6px),
+    radial-gradient(ellipse at 5px 34px, #e88c28 0 2px, transparent 2.6px),
+    radial-gradient(ellipse at 1px 40px, #ffc34f 0 2px, transparent 2.6px),
+    radial-gradient(ellipse at 5px 46px, #e88c28 0 2px, transparent 2.6px);
+  background-repeat: no-repeat;
+  filter: drop-shadow(0 0 4px rgba(255, 173, 58, 0.32));
+  pointer-events: none;
+}
+
+.navratri-fairy-light {
+  position: absolute;
+  top: 0;
+  left: var(--light-left);
+  width: 1px;
+  height: var(--light-length);
+  background: linear-gradient(rgba(255, 218, 151, 0.65), rgba(255, 218, 151, 0.28));
+  pointer-events: none;
+}
+
+.navratri-fairy-light::after {
+  position: absolute;
+  bottom: -3px;
+  left: -2px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #ffe0a0;
+  box-shadow: 0 0 5px 2px rgba(255, 192, 91, 0.62), 0 0 12px 3px rgba(255, 160, 51, 0.25);
+  animation: navratri-twinkle 3.8s ease-in-out infinite;
+  content: '';
+}
+
+.navratri-fairy-light:nth-of-type(even)::after {
+  animation-delay: 1.9s;
 }
 
 .navratri-banner::before,
@@ -101,7 +174,17 @@
 
 .navratri-flame {
   fill: #ffc761;
-  filter: drop-shadow(0 0 6px rgba(255, 176, 63, 0.65));
+  filter: drop-shadow(0 0 9px rgba(255, 176, 63, 0.82));
+}
+
+.navratri-flame-halo {
+  fill: rgba(255, 173, 58, 0.48);
+  filter: blur(5px);
+}
+
+.navratri-flame-core {
+  fill: #fff4cf;
+  filter: drop-shadow(0 0 4px rgba(255, 244, 207, 0.7));
 }
 
 .navratri-diya-bowl {
@@ -140,9 +223,68 @@
   bottom: 22px;
 }
 
+.navratri-particle,
+.navratri-petal {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.navratri-particle {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #ffe2a4;
+  box-shadow: 0 0 7px 2px rgba(255, 195, 93, 0.35);
+  animation: navratri-float 5s ease-in-out infinite;
+}
+
+.navratri-particle-one {
+  top: 62%;
+  left: 34%;
+}
+
+.navratri-particle-two {
+  top: 35%;
+  right: 34%;
+  animation-delay: 2.5s;
+}
+
+.navratri-petal {
+  width: 5px;
+  height: 8px;
+  border-radius: 90% 15% 90% 15%;
+  background: linear-gradient(145deg, #ffd05d, #e88b28);
+  opacity: 0.72;
+  animation: navratri-float 6s ease-in-out infinite;
+}
+
+.navratri-petal-one {
+  top: 65%;
+  left: 29%;
+  transform: rotate(28deg);
+}
+
+.navratri-petal-two {
+  top: 34%;
+  right: 29%;
+  transform: rotate(68deg);
+  animation-delay: 3s;
+}
+
 @keyframes navratri-glow {
   0%, 100% { opacity: 0.88; }
   50% { opacity: 1; }
+}
+
+@keyframes navratri-twinkle {
+  0%, 100% { opacity: 0.72; }
+  50% { opacity: 1; }
+}
+
+@keyframes navratri-float {
+  0%, 100% { opacity: 0.65; transform: translateY(0) rotate(0deg); }
+  50% { opacity: 0.95; transform: translateY(-5px) rotate(8deg); }
 }
 
 @media (max-width: 600px) {
@@ -166,6 +308,16 @@
     right: 0.5rem;
   }
 
+  .navratri-garland:nth-child(even),
+  .navratri-fairy-light:nth-of-type(even) {
+    display: none;
+  }
+
+  .navratri-garland,
+  .navratri-fairy-light {
+    opacity: 0.78;
+  }
+
   .navratri-flower-left {
     top: 12px;
     left: 12px;
@@ -178,7 +330,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .navratri-side-diya {
+  .navratri-side-diya,
+  .navratri-fairy-light::after,
+  .navratri-particle,
+  .navratri-petal {
     animation: none;
   }
 }

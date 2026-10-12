@@ -4,7 +4,9 @@ import './NavratriBanner.css'
 function Diya() {
   return (
     <svg className="navratri-diya" viewBox="0 0 72 72" fill="none" aria-hidden="true">
+      <path className="navratri-flame-halo" d="M36 7c1.5 6.1 8 9.3 5.7 16.2-1.1 3.3-3.2 4.8-5.7 5.6-2.5-.8-4.6-2.3-5.7-5.6C28 16.3 34.5 13.1 36 7Z" />
       <path className="navratri-flame" d="M36 7c1.5 6.1 8 9.3 5.7 16.2-1.1 3.3-3.2 4.8-5.7 5.6-2.5-.8-4.6-2.3-5.7-5.6C28 16.3 34.5 13.1 36 7Z" />
+      <path className="navratri-flame-core" d="M36 14c.7 3.6 3.7 5.4 2.8 8.7-.4 1.5-1.4 2.7-2.8 3.5-1.4-.8-2.4-2-2.8-3.5-.9-3.3 2.1-5.1 2.8-8.7Z" />
       <path className="navratri-diya-bowl" d="M13 39c1.7 12 10.7 20 23 20s21.3-8 23-20H13Z" />
       <path className="navratri-diya-rim" d="M10 38h52M22 62h28" />
       <path className="navratri-diya-detail" d="M25 46c2.3 2.2 5.9 3.5 11 3.5s8.7-1.3 11-3.5" />
@@ -17,6 +19,22 @@ export default function NavratriBanner() {
     <section className="navratri-banner-wrap" aria-labelledby="navratri-greeting">
       <div className="container">
         <div className="navratri-banner">
+          <div className="navratri-hanging-decor" aria-hidden="true">
+            <span className="navratri-garland" style={{ '--garland-left': '7%', '--garland-length': '43px' }} />
+            <span className="navratri-garland" style={{ '--garland-left': '16%', '--garland-length': '30px' }} />
+            <span className="navratri-garland" style={{ '--garland-left': '25%', '--garland-length': '49px' }} />
+            <span className="navratri-garland" style={{ '--garland-left': '75%', '--garland-length': '49px' }} />
+            <span className="navratri-garland" style={{ '--garland-left': '84%', '--garland-length': '30px' }} />
+            <span className="navratri-garland" style={{ '--garland-left': '93%', '--garland-length': '43px' }} />
+            <span className="navratri-fairy-light" style={{ '--light-left': '11%', '--light-length': '35px' }} />
+            <span className="navratri-fairy-light" style={{ '--light-left': '21%', '--light-length': '25px' }} />
+            <span className="navratri-fairy-light" style={{ '--light-left': '79%', '--light-length': '25px' }} />
+            <span className="navratri-fairy-light" style={{ '--light-left': '89%', '--light-length': '35px' }} />
+          </div>
+          <span className="navratri-particle navratri-particle-one" aria-hidden="true" />
+          <span className="navratri-particle navratri-particle-two" aria-hidden="true" />
+          <span className="navratri-petal navratri-petal-one" aria-hidden="true" />
+          <span className="navratri-petal navratri-petal-two" aria-hidden="true" />
           <span className="navratri-flower navratri-flower-left" aria-hidden="true" />
           <div className="navratri-side-diya navratri-side-diya-left"><Diya /></div>
           <div className="navratri-message">
