@@ -3,7 +3,6 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
-import FloatingWhatsApp from './components/FloatingWhatsApp'
 import Home from './pages/Home'
 import AboutPage from './pages/About'
 import ServicesPage from './pages/Services'
@@ -96,7 +95,6 @@ export default function App() {
         </AnimatePresence>
       </main>
       {!isAdminRoute && <Footer />}
-      {!isAdminRoute && <FloatingWhatsApp />}
     </div>
   )
 }
