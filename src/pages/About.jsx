@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import PageHeader from '../components/PageHeader'
 import AboutVisual from '../components/AboutVisual'
 import CustomerReviews from '../components/CustomerReviews'
+import projects from '../data/projects'
 
 export default function AboutPage(){
   return (
@@ -36,8 +37,8 @@ export default function AboutPage(){
 
             <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {[
-                { value: '11', label: 'Total Projects' },
-                { value: '7', label: 'Engineering Main Projects' },
+                { value: projects.length, label: 'Total Projects' },
+                { value: '8', label: 'Engineering Main Projects' },
                 { value: '1', label: 'Diploma Main Project' },
                 { value: '3', label: 'Other Projects' },
               ].map(({ value, label }, index) => (

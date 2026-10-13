@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import projectsData from '../data/projects'
 import ProjectCard from './ProjectCard'
 
-const categories = ['All','AI / ML','AI / Machine Learning','Android / Software','IoT / Communication','Embedded / Robotics','Deep Learning / AI']
+const categories = ['All','AI / ML','Software','Android','IoT','Embedded','Deep Learning','Engineering Main Project']
 
 export default function Projects(){
   const [filter, setFilter] = useState('All')
@@ -24,7 +24,7 @@ export default function Projects(){
         </motion.div>
 
         <div className="mt-4 flex flex-wrap gap-3">
-          {['All','AI / ML','Software','Android','IoT','Embedded','Deep Learning'].map((c, index) => (
+          {categories.map((c, index) => (
             <motion.button
               key={c}
               initial={{opacity:0,y:10}}

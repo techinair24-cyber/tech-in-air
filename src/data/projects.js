@@ -97,6 +97,15 @@ const projects = [
     description: 'An AI-enabled drone-based system designed to capture crop imagery, identify potential disease symptoms, and support ongoing crop health monitoring. Aerial imaging and computer-vision analysis help users detect affected areas and track field conditions.',
     image: '/Projects/AI-Enabled Drone-Based Crop Disease Detection and Monitoring System.png',
     technologies: ['Drone Imaging','AI / ML','Computer Vision','Crop Disease Detection','Crop Monitoring']
+  },
+  {
+    id: 12,
+    title: 'Hybrid AI Based Smart EV Charging Station Using MATLAB',
+    categories: ['Engineering Main Project'],
+    status: 'In Progress',
+    description: 'A prototype concept for a hybrid AI-based smart EV charging station using MATLAB. It explores renewable energy integration, battery storage, EV charging-load analysis, and AI-based energy management through simulation.',
+    image: '/Projects/Hybrid AI Based Smart EV Charging Station Using MATLAB.png',
+    technologies: ['MATLAB']
   }
 ]
 
