@@ -14,7 +14,6 @@ import AdminLogin from './pages/AdminLogin'
 import AdminReviews from './pages/AdminReviews'
 import LegalPage from './pages/LegalPage'
 import TechieChatbot from './components/TechieChatbot'
-import DeepavaliFireworks from './components/DeepavaliFireworks'
 import { buildTechieContext } from './data/chatbotContext'
 import { supabase } from './lib/supabase'
 
@@ -70,38 +69,35 @@ export default function App() {
   const isAdminRoute = location.pathname.startsWith('/admin')
 
   return (
-    <div className="relative isolate min-h-screen text-[var(--foreground)] transition-colors duration-200">
-      {!isAdminRoute && <DeepavaliFireworks />}
-      <div className="relative z-10">
-        {!isAdminRoute && <Navbar />}
-        <main className={isAdminRoute ? '' : 'pt-24 md:pt-28'}>
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={location.pathname}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.22, ease: 'easeOut' }}
-            >
-              <Routes location={location}>
-                <Route path="/" element={<Home />} />
-                <Route path="/about" element={<AboutPage />} />
-                <Route path="/services" element={<ServicesPage />} />
-                <Route path="/projects" element={<ProjectsPage />} />
-                <Route path="/projects/:id" element={<ProjectDetail />} />
-                <Route path="/process" element={<ProcessPage />} />
-                <Route path="/contact" element={<ContactPage />} />
-                <Route path="/privacy-policy" element={<LegalPage page="privacyPolicy" />} />
-                <Route path="/terms-and-conditions" element={<LegalPage page="termsAndConditions" />} />
-                <Route path="/admin/login" element={<AdminLogin />} />
-                <Route path="/admin/reviews" element={<AdminReviewsPlaceholder />} />
-              </Routes>
-            </motion.div>
-          </AnimatePresence>
-        </main>
-        {!isAdminRoute && <Footer />}
-        {!isAdminRoute && <TechieChatbot context={buildTechieContext} />}
-      </div>
+    <div className="min-h-screen bg-[var(--bg)] text-[var(--foreground)] transition-colors duration-200">
+      {!isAdminRoute && <Navbar />}
+      <main className={isAdminRoute ? '' : 'pt-24 md:pt-28'}>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={location.pathname}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.22, ease: 'easeOut' }}
+          >
+            <Routes location={location}>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/services" element={<ServicesPage />} />
+              <Route path="/projects" element={<ProjectsPage />} />
+              <Route path="/projects/:id" element={<ProjectDetail />} />
+              <Route path="/process" element={<ProcessPage />} />
+              <Route path="/contact" element={<ContactPage />} />
+              <Route path="/privacy-policy" element={<LegalPage page="privacyPolicy" />} />
+              <Route path="/terms-and-conditions" element={<LegalPage page="termsAndConditions" />} />
+              <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/admin/reviews" element={<AdminReviewsPlaceholder />} />
+            </Routes>
+          </motion.div>
+        </AnimatePresence>
+      </main>
+      {!isAdminRoute && <Footer />}
+      {!isAdminRoute && <TechieChatbot context={buildTechieContext} />}
     </div>
   )
 }
