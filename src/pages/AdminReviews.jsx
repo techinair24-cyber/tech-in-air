@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { supabase } from '../lib/supabase'
+import ReviewPhotoGallery from '../components/ReviewPhotoGallery'
+import { createReviewPhotoUrls, REVIEW_PHOTO_BUCKET } from '../lib/reviewPhotos'
 
 const reviewStatuses = [
   { id: 'pending', label: 'Pending' },
@@ -36,7 +38,7 @@ export default function AdminReviews() {
 
     const { data, error } = await supabase
       .from('reviews')
-      .select('id, customer_name, project_type, rating, review_text, status, created_at')
+      .select('id, customer_name, project_type, rating, review_text, photo_paths, status, created_at')
       .order('created_at', { ascending: false })
 
     if (error) {
@@ -46,7 +48,17 @@ export default function AdminReviews() {
       return
     }
 
-    setReviews(data)
+    const reviewsWithPhotos = await Promise.all(data.map(async (review) => {
+      try {
+        const photos = await createReviewPhotoUrls(review.photo_paths, 60 * 60)
+        return { ...review, photos }
+      } catch (photoError) {
+        console.error(`Unable to load photos for customer review ${review.id}:`, photoError)
+        return { ...review, photos: [], photoError: true }
+      }
+    }))
+
+    setReviews(reviewsWithPhotos)
     setIsLoading(false)
   }, [])
 
@@ -102,6 +114,13 @@ export default function AdminReviews() {
     setFeedback(null)
 
     try {
+      if (review.photo_paths?.length) {
+        const { error: photoDeleteError } = await supabase.storage
+          .from(REVIEW_PHOTO_BUCKET)
+          .remove(review.photo_paths)
+        if (photoDeleteError) throw photoDeleteError
+      }
+
       const { data, error } = await supabase
         .from('reviews')
         .delete()
@@ -296,6 +315,12 @@ export default function AdminReviews() {
                     <p className="mt-3 whitespace-pre-wrap break-words text-sm leading-6 text-slate-700 dark:text-slate-200">
                       {review.review_text}
                     </p>
+                    <ReviewPhotoGallery photos={review.photos} label={`Photos from ${review.customer_name}'s review`} />
+                    {review.photoError && (
+                      <p className="mt-3 text-sm text-rose-700 dark:text-rose-300" role="status">
+                        Review photos could not be loaded. Refresh to try again.
+                      </p>
+                    )}
                     <p className="mt-4 text-xs text-slate-500 dark:text-slate-400">
                       Submitted {formatSubmittedDate(review.created_at)}
                     </p>

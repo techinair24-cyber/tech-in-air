@@ -12,7 +12,7 @@ export const legalContent = {
         ],
         bullets: [
           'Contact and enquiry information: your name, email address, phone number, messages and project requirements when you contact us through WhatsApp, email or another communication channel.',
-          'Customer reviews: your name, project name, rating and written review submitted through our website.',
+          'Customer reviews: your name, project name, rating, written review and any optional photos submitted through our website.',
           'Technical information: limited information that may be processed by our website hosting provider or service providers to deliver, maintain and secure the website.',
         ],
         closingParagraphs: [
@@ -38,7 +38,7 @@ export const legalContent = {
         title: 'Customer Reviews and Public Display',
         paragraphs: [
           'Reviews are submitted for moderation before publication. We may approve or reject a submission in accordance with our review process.',
-          "If approved, the customer's name, project name, rating and review text may be displayed publicly on our website. Please avoid including private information in a review.",
+          "If approved, the customer's name, project name, rating, review text and any photos submitted with the review may be displayed publicly on our website. Please avoid including private or sensitive information in a review or photo.",
           'If you want an approved review corrected or removed, contact us using the details below. We will assess the request and respond in accordance with applicable law.',
         ],
       },

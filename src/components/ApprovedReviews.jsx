@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { supabase } from '../lib/supabase'
+import ReviewPhotoGallery from './ReviewPhotoGallery'
+import { createReviewPhotoUrls } from '../lib/reviewPhotos'
 
 export default function ApprovedReviews() {
   const [reviews, setReviews] = useState([])
@@ -13,17 +15,27 @@ export default function ApprovedReviews() {
     const loadApprovedReviews = async () => {
       const { data, error } = await supabase
         .from('reviews')
-        .select('id, customer_name, project_type, rating, review_text, created_at')
+        .select('id, customer_name, project_type, rating, review_text, photo_paths, created_at')
         .eq('status', 'approved')
         .order('created_at', { ascending: false })
 
-      if (!isActive) return
-
       if (error) {
+        if (!isActive) return
         console.error('Unable to load approved customer reviews:', error)
         setHasError(true)
       } else {
-        setReviews(data)
+        const reviewsWithPhotos = await Promise.all(data.map(async (review) => {
+          try {
+            const photos = await createReviewPhotoUrls(review.photo_paths)
+            return { ...review, photos }
+          } catch (photoError) {
+            console.error(`Unable to load photos for approved review ${review.id}:`, photoError)
+            return { ...review, photos: [], photoError: true }
+          }
+        }))
+
+        if (!isActive) return
+        setReviews(reviewsWithPhotos)
       }
       setIsLoading(false)
     }
@@ -79,6 +91,12 @@ export default function ApprovedReviews() {
                     <p className="mt-4 flex-1 whitespace-pre-wrap break-words leading-7 text-slate-700 dark:text-slate-200">
                       {review.review_text}
                     </p>
+                    <ReviewPhotoGallery photos={review.photos} label={`Photos from ${review.customer_name}'s review`} />
+                    {review.photoError && (
+                      <p className="mt-3 text-xs text-slate-500 dark:text-slate-400" role="status">
+                        Review photos are temporarily unavailable.
+                      </p>
+                    )}
                     <div className="mt-6 border-t border-slate-200 pt-4 dark:border-slate-700">
                       <p className="font-semibold text-slate-900 dark:text-white">
                         {review.customer_name}
