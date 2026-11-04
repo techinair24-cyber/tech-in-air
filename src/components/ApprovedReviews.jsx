@@ -15,7 +15,7 @@ export default function ApprovedReviews() {
     const loadApprovedReviews = async () => {
       const { data, error } = await supabase
         .from('reviews')
-        .select('id, customer_name, project_type, rating, review_text, photo_paths, created_at')
+        .select('id, customer_name, college_name, education, project_type, rating, review_text, photo_paths, created_at')
         .eq('status', 'approved')
         .order('created_at', { ascending: false })
 
@@ -98,10 +98,20 @@ export default function ApprovedReviews() {
                       </p>
                     )}
                     <div className="mt-6 border-t border-slate-200 pt-4 dark:border-slate-700">
-                      <p className="font-semibold text-slate-900 dark:text-white">
+                      <p className="break-words font-semibold text-slate-900 dark:text-white">
                         {review.customer_name}
                       </p>
-                      <p className="mt-1 text-sm text-cyan-800 dark:text-cyan-300">
+                      {review.college_name && (
+                        <p className="mt-1 break-words text-sm text-cyan-800 dark:text-cyan-300">
+                          {review.college_name}
+                        </p>
+                      )}
+                      {review.education && (
+                        <span className="mt-2 inline-flex max-w-full break-words rounded-full bg-cyan-100 px-2.5 py-1 text-xs font-medium text-cyan-800 dark:bg-cyan-400/10 dark:text-cyan-300">
+                          {review.education}
+                        </span>
+                      )}
+                      <p className="mt-1 break-words text-sm text-cyan-800 dark:text-cyan-300">
                         {review.project_type}
                       </p>
                     </div>
