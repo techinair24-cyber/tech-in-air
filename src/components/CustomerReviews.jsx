@@ -3,13 +3,12 @@ import { motion } from 'framer-motion'
 import { ImagePlus, UploadCloud, X } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import projects from '../data/projects'
-import { supabase } from '../lib/supabase'
 import {
   MAX_REVIEW_PHOTOS,
   MAX_REVIEW_PHOTO_SIZE,
-  REVIEW_PHOTO_BUCKET,
   REVIEW_PHOTO_MIME_TYPES,
 } from '../lib/reviewPhotos'
+import { cancelReviewPhotoUploads, manageReview, uploadReviewPhotos } from '../lib/reviewManagement'
 
 const initialForm = {
   customerName: '',
@@ -32,6 +31,7 @@ export default function CustomerReviews() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isDraggingPhotos, setIsDraggingPhotos] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(null)
+  const [copyStatus, setCopyStatus] = useState('')
   const photoInputRef = useRef(null)
   const photosRef = useRef(selectedPhotos)
   photosRef.current = selectedPhotos
@@ -50,6 +50,7 @@ export default function CustomerReviews() {
     const files = Array.from(fileList ?? [])
     const errors = []
     const acceptedPhotos = []
+    const activePhotoCount = selectedPhotos.length
     const existingSignatures = new Set(
       selectedPhotos.map(({ file }) => `${file.name}:${file.size}:${file.lastModified}`),
     )
@@ -74,7 +75,7 @@ export default function CustomerReviews() {
         return
       }
 
-      if (selectedPhotos.length + acceptedPhotos.length >= MAX_REVIEW_PHOTOS) {
+      if (activePhotoCount + acceptedPhotos.length >= MAX_REVIEW_PHOTOS) {
         errors.push(`You can select no more than ${MAX_REVIEW_PHOTOS} photos per review.`)
         return
       }
@@ -124,72 +125,58 @@ export default function CustomerReviews() {
     setIsSubmitting(true)
     setUploadProgress(null)
     let reviewSaved = false
+    let createdEditLink = ''
     try {
-      const { data: reviewId, error } = await supabase.rpc('create_customer_review', {
-        p_customer_name: form.customerName.trim(),
-        p_college_name: form.collegeName.trim(),
-        p_education: form.education,
-        p_project_type: form.projectName,
-        p_rating: form.rating,
-        p_review_text: reviewText,
+      const { editToken } = await manageReview('create', {
+        customerName: form.customerName.trim(),
+        collegeName: form.collegeName.trim(),
+        education: form.education,
+        projectName: form.projectName,
+        rating: form.rating,
+        reviewText,
       })
-
-      if (error) throw error
-      if (!reviewId) throw new Error('The review submission did not return a review ID.')
+      if (!editToken) throw new Error('The review submission did not return an edit link.')
       reviewSaved = true
+      const nextEditLink = `${window.location.origin}/review/edit#${editToken}`
+      createdEditLink = nextEditLink
+      setCopyStatus('')
 
-      const uploadedPaths = []
       let failedPhotoCount = 0
 
       if (selectedPhotos.length > 0) {
         setUploadProgress({ completed: 0, total: selectedPhotos.length })
-
-        for (const [index, photo] of selectedPhotos.entries()) {
-          const extension = photo.file.name.split('.').pop().toLowerCase()
-          const objectPath = `${reviewId}/${crypto.randomUUID()}.${extension}`
-          const { error: reservationError } = await supabase.rpc('reserve_review_photo_upload', {
-            p_review_id: reviewId,
-            p_object_path: objectPath,
-          })
-
-          if (reservationError) {
-            console.error('Unable to reserve a customer review photo:', reservationError)
-            failedPhotoCount += 1
-            setUploadProgress({ completed: index + 1, total: selectedPhotos.length })
-            continue
-          }
-
-          const { error: uploadError } = await supabase.storage
-            .from(REVIEW_PHOTO_BUCKET)
-            .upload(objectPath, photo.file, {
-              cacheControl: '3600',
-              contentType: photo.mimeType,
-              upsert: false,
-            })
-
-          if (uploadError) {
-            console.error('Unable to upload a customer review photo:', uploadError)
-            failedPhotoCount += 1
-            const { error: releaseError } = await supabase.rpc('release_review_photo_upload', {
-              p_review_id: reviewId,
-              p_object_path: objectPath,
-            })
-            if (releaseError) {
-              console.error('Unable to release a failed customer review photo upload:', releaseError)
-            }
-          } else {
-            uploadedPaths.push(objectPath)
-          }
-
-          setUploadProgress({ completed: index + 1, total: selectedPhotos.length })
-        }
+        const { uploadedPaths, failedPhotoCount: uploadFailures } = await uploadReviewPhotos({
+          role: 'customer',
+          editToken,
+          files: selectedPhotos.map(({ file }) => file),
+          onProgress: (completed, total) => setUploadProgress({ completed, total }),
+        })
+        failedPhotoCount = uploadFailures
 
         if (uploadedPaths.length > 0) {
-          const { error: attachError } = await supabase.rpc('attach_review_photos', {
-            p_review_id: reviewId,
-            p_photo_paths: uploadedPaths,
-          })
-          if (attachError) throw attachError
+          try {
+            await manageReview('customer-save', {
+              editToken,
+              customerName: form.customerName.trim(),
+              collegeName: form.collegeName.trim(),
+              education: form.education,
+              projectName: form.projectName,
+              rating: form.rating,
+              reviewText,
+              keepPhotoPaths: [],
+              newPhotoPaths: uploadedPaths,
+            })
+          } catch (photoSaveError) {
+            console.error('Unable to link uploaded customer review photos:', photoSaveError)
+            failedPhotoCount += uploadedPaths.length
+            await cancelReviewPhotoUploads({
+              role: 'customer',
+              editToken,
+              objectPaths: uploadedPaths,
+            }).catch((cleanupError) => {
+              console.error('Unable to clean up unlinked customer review photos:', cleanupError)
+            })
+          }
         }
       }
 
@@ -201,10 +188,12 @@ export default function CustomerReviews() {
         ? {
             type: 'warning',
             text: `Your review was submitted for approval, but ${failedPhotoCount} ${failedPhotoCount === 1 ? 'photo could' : 'photos could'} not be uploaded.`,
+            editLink: nextEditLink,
           }
         : {
             type: 'success',
             text: 'Thank you for your review! It has been submitted for approval.',
+            editLink: nextEditLink,
           })
     } catch (error) {
       console.error('Unable to submit customer review:', error)
@@ -213,6 +202,7 @@ export default function CustomerReviews() {
         text: reviewSaved
           ? 'Your review was submitted for approval, but we could not link its photos. Please contact us if you need help.'
           : 'Unable to submit your review. Please try again.',
+        editLink: createdEditLink || undefined,
       })
       if (reviewSaved) {
         setForm(initialForm)
@@ -537,7 +527,7 @@ export default function CustomerReviews() {
               </div>
 
               {message && (
-                <p
+                <div
                   role={message.type === 'error' ? 'alert' : 'status'}
                   className={`mt-5 rounded-xl px-4 py-3 text-sm ${
                     message.type === 'error'
@@ -547,8 +537,30 @@ export default function CustomerReviews() {
                         : 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300'
                   }`}
                 >
-                  {message.text}
-                </p>
+                  <p>{message.text}</p>
+                  {message.editLink && (
+                    <div className="mt-3 rounded-lg border border-emerald-700/15 bg-white/70 p-3 dark:border-emerald-300/15 dark:bg-slate-950/30">
+                      <p className="font-semibold">Save this private link to edit your review later.</p>
+                      <p className="mt-1 break-all text-xs">{message.editLink}</p>
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          try {
+                            await navigator.clipboard.writeText(message.editLink)
+                            setCopyStatus('Edit link copied.')
+                          } catch (copyError) {
+                            console.error('Unable to copy the customer review edit link:', copyError)
+                            setCopyStatus('Unable to copy automatically. Select and copy the link above.')
+                          }
+                        }}
+                        className="mt-2 rounded-lg border border-current/20 px-3 py-1.5 text-xs font-semibold transition hover:bg-black/5 dark:hover:bg-white/5"
+                      >
+                        Copy Edit Link
+                      </button>
+                      {copyStatus && <p className="mt-1 text-xs">{copyStatus}</p>}
+                    </div>
+                  )}
+                </div>
               )}
 
               <button

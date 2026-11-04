@@ -1,7 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import ReviewPhotoGallery from '../components/ReviewPhotoGallery'
-import { createReviewPhotoUrls, REVIEW_PHOTO_BUCKET } from '../lib/reviewPhotos'
+import { createReviewPhotoUrls } from '../lib/reviewPhotos'
+import ReviewEditForm from '../components/ReviewEditForm'
+import { cancelReviewPhotoUploads, manageReview, uploadReviewPhotos } from '../lib/reviewManagement'
 
 const reviewStatuses = [
   { id: 'pending', label: 'Pending' },
@@ -31,6 +33,9 @@ export default function AdminReviews() {
   const [isLoading, setIsLoading] = useState(true)
   const [activeReviewId, setActiveReviewId] = useState(null)
   const [feedback, setFeedback] = useState(null)
+  const [editingReview, setEditingReview] = useState(null)
+  const [loadingEditId, setLoadingEditId] = useState(null)
+  const [replacementLink, setReplacementLink] = useState('')
 
   const loadReviews = useCallback(async () => {
     setIsLoading(true)
@@ -76,22 +81,15 @@ export default function AdminReviews() {
     setFeedback(null)
 
     try {
-      const { data, error } = await supabase
-        .from('reviews')
-        .update({ status: nextStatus })
-        .eq('id', review.id)
-        .select('id, status')
-        .maybeSingle()
-
-      if (error) throw error
-      if (!data) {
-        throw new Error('No review was updated. It may no longer exist or you may not have permission.')
-      }
+      const { review: updatedReview } = await manageReview('admin-status', {
+        reviewId: review.id,
+        status: nextStatus,
+      })
 
       setReviews((currentReviews) =>
         currentReviews.map((currentReview) =>
           currentReview.id === review.id
-            ? { ...currentReview, status: data.status }
+            ? { ...currentReview, status: updatedReview.status }
             : currentReview,
         ),
       )
@@ -114,27 +112,12 @@ export default function AdminReviews() {
     setFeedback(null)
 
     try {
-      if (review.photo_paths?.length) {
-        const { error: photoDeleteError } = await supabase.storage
-          .from(REVIEW_PHOTO_BUCKET)
-          .remove(review.photo_paths)
-        if (photoDeleteError) throw photoDeleteError
-      }
-
-      const { data, error } = await supabase
-        .from('reviews')
-        .delete()
-        .eq('id', review.id)
-        .select('id')
-        .maybeSingle()
-
-      if (error) throw error
-      if (!data) {
-        throw new Error('No review was deleted. It may no longer exist or you may not have permission.')
-      }
+      const result = await manageReview('admin-delete', { reviewId: review.id })
 
       setReviews((currentReviews) => currentReviews.filter((currentReview) => currentReview.id !== review.id))
-      setFeedback({ type: 'success', text: 'Review permanently deleted.' })
+      setFeedback(result.cleanupWarning
+        ? { type: 'warning', text: 'Review was deleted, but some associated records could not be cleaned up.' }
+        : { type: 'success', text: 'Review permanently deleted.' })
     } catch (error) {
       console.error('Unable to delete customer review:', error)
       setFeedback({ type: 'error', text: `Unable to delete review: ${error.message}` })
@@ -143,13 +126,123 @@ export default function AdminReviews() {
     }
   }
 
+  const saveReview = async (review, { form, keepPhotoPaths, newPhotos }) => {
+    setActiveReviewId(review.id)
+    setFeedback(null)
+    let uploadedPaths = []
+
+    try {
+      const uploadResult = await uploadReviewPhotos({
+        role: 'admin',
+        reviewId: review.id,
+        files: newPhotos,
+        keepPhotoPaths,
+        failFast: true,
+      })
+      uploadedPaths = uploadResult.uploadedPaths
+      const result = await manageReview('admin-save', {
+        reviewId: review.id,
+        ...form,
+        keepPhotoPaths,
+        newPhotoPaths: uploadedPaths,
+      })
+
+      let photos = []
+      let photoRefreshFailed = false
+      try {
+        photos = await createReviewPhotoUrls(result.review.photo_paths, 60 * 60)
+      } catch (photoError) {
+        console.error(`Unable to refresh photos for customer review ${review.id}:`, photoError)
+        photoRefreshFailed = true
+      }
+
+      setReviews((currentReviews) => currentReviews.map((currentReview) =>
+        currentReview.id === review.id
+          ? {
+              ...currentReview,
+              ...result.review,
+              photos,
+              photoError: photoRefreshFailed,
+            }
+          : currentReview,
+      ))
+      setEditingReview(null)
+      setFeedback(result.photoCleanupWarning || photoRefreshFailed
+        ? { type: 'warning', text: 'Review changes were saved, but some photo cleanup or refresh could not be completed.' }
+        : { type: 'success', text: 'Review changes saved successfully.' })
+    } catch (error) {
+      console.error('Unable to save customer review changes:', error)
+      if (uploadedPaths.length > 0) {
+        try {
+          await cancelReviewPhotoUploads({
+            role: 'admin',
+            reviewId: review.id,
+            objectPaths: uploadedPaths,
+          })
+        } catch (cleanupError) {
+          console.error('Unable to clean up unlinked customer review photos:', cleanupError)
+        }
+      }
+      setFeedback({ type: 'error', text: `Unable to save review: ${error.message}` })
+    } finally {
+      setActiveReviewId(null)
+    }
+  }
+
+  const openEditReview = async (review) => {
+    setLoadingEditId(review.id)
+    setFeedback(null)
+    try {
+      const { review: latestReview, photos } = await manageReview('admin-load', { reviewId: review.id })
+      setEditingReview({ ...latestReview, photos })
+    } catch (error) {
+      console.error(`Unable to load customer review ${review.id} for editing:`, error)
+      setFeedback({ type: 'error', text: `Unable to open review editor: ${error.message}` })
+    } finally {
+      setLoadingEditId(null)
+    }
+  }
+
+  const replaceCustomerEditLink = async (review) => {
+    setActiveReviewId(review.id)
+    setFeedback(null)
+    setReplacementLink('')
+    try {
+      const { editToken } = await manageReview('admin-replace-token', { reviewId: review.id })
+      if (!editToken) throw new Error('The review service did not return a replacement link.')
+      setReplacementLink(`${window.location.origin}/review/edit#${editToken}`)
+      setFeedback({ type: 'success', text: 'Replacement edit link created. The previous link is no longer valid.' })
+    } catch (error) {
+      console.error(`Unable to replace the edit link for customer review ${review.id}:`, error)
+      setFeedback({ type: 'error', text: `Unable to replace edit link: ${error.message}` })
+    } finally {
+      setActiveReviewId(null)
+    }
+  }
+
   const renderActions = (review) => {
     const buttonClass =
       'rounded-lg px-3 py-2 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50'
-    const isBusy = activeReviewId === review.id
+    const isBusy = activeReviewId === review.id || loadingEditId === review.id
 
     return (
       <div className="flex flex-wrap gap-2">
+        <button
+          type="button"
+          disabled={isBusy}
+          onClick={() => openEditReview(review)}
+          className={`${buttonClass} border border-cyan-300 text-cyan-800 hover:bg-cyan-50 dark:border-cyan-500/30 dark:text-cyan-200 dark:hover:bg-cyan-500/10`}
+        >
+          {loadingEditId === review.id ? 'Loading...' : 'Edit'}
+        </button>
+        <button
+          type="button"
+          disabled={isBusy}
+          onClick={() => replaceCustomerEditLink(review)}
+          className={`${buttonClass} border border-violet-300 text-violet-800 hover:bg-violet-50 dark:border-violet-500/30 dark:text-violet-200 dark:hover:bg-violet-500/10`}
+        >
+          New Edit Link
+        </button>
         {review.status === 'pending' && (
           <>
             <button
@@ -253,16 +346,38 @@ export default function AdminReviews() {
         </div>
 
         {feedback && (
-          <p
+          <div
             role={feedback.type === 'error' ? 'alert' : 'status'}
             className={`mb-5 rounded-xl px-4 py-3 text-sm ${
               feedback.type === 'error'
                 ? 'border border-red-200 bg-red-50 text-red-700 dark:border-red-900/70 dark:bg-red-950/40 dark:text-red-300'
-                : 'border border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900/70 dark:bg-emerald-950/40 dark:text-emerald-300'
+                : feedback.type === 'warning'
+                  ? 'border border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-900/70 dark:bg-amber-950/40 dark:text-amber-300'
+                  : 'border border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900/70 dark:bg-emerald-950/40 dark:text-emerald-300'
             }`}
           >
-            {feedback.text}
-          </p>
+            <p>{feedback.text}</p>
+            {replacementLink && (
+              <div className="mt-3">
+                <p className="break-all font-mono text-xs">{replacementLink}</p>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    try {
+                      await navigator.clipboard.writeText(replacementLink)
+                      setFeedback({ type: 'success', text: 'Replacement edit link copied.' })
+                    } catch (error) {
+                      console.error('Unable to copy the replacement review edit link:', error)
+                      setFeedback({ type: 'warning', text: 'Unable to copy automatically. Select and copy the replacement link above.' })
+                    }
+                  }}
+                  className="mt-2 rounded-lg border border-current/20 px-3 py-1.5 text-xs font-semibold transition hover:bg-black/5 dark:hover:bg-white/5"
+                >
+                  Copy Edit Link
+                </button>
+              </div>
+            )}
+          </div>
         )}
 
         <section
@@ -344,6 +459,28 @@ export default function AdminReviews() {
           )}
         </section>
       </div>
+      {editingReview && (
+        <div
+          className="fixed inset-0 z-[90] flex items-center justify-center bg-slate-950/70 p-3 backdrop-blur-sm sm:p-6"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Edit review from ${editingReview.customer_name}`}
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget && activeReviewId === null) setEditingReview(null)
+          }}
+        >
+          <div className="max-h-[95vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-slate-200 bg-white p-5 shadow-2xl dark:border-slate-700 dark:bg-slate-900 sm:p-7">
+            <ReviewEditForm
+              key={editingReview.id}
+              review={editingReview}
+              photos={editingReview.photos}
+              isSaving={activeReviewId === editingReview.id}
+              onCancel={() => setEditingReview(null)}
+              onSave={(changes) => saveReview(editingReview, changes)}
+            />
+          </div>
+        </div>
+      )}
     </main>
   )
 }

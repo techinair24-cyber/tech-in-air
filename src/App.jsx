@@ -12,6 +12,7 @@ import ProcessPage from './pages/Process'
 import ContactPage from './pages/Contact'
 import AdminLogin from './pages/AdminLogin'
 import AdminReviews from './pages/AdminReviews'
+import CustomerReviewEdit from './pages/CustomerReviewEdit'
 import LegalPage from './pages/LegalPage'
 import TechieChatbot from './components/TechieChatbot'
 import { buildTechieContext } from './data/chatbotContext'
@@ -90,6 +91,7 @@ export default function App() {
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/privacy-policy" element={<LegalPage page="privacyPolicy" />} />
               <Route path="/terms-and-conditions" element={<LegalPage page="termsAndConditions" />} />
+              <Route path="/review/edit" element={<CustomerReviewEdit />} />
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin/reviews" element={<AdminReviewsPlaceholder />} />
             </Routes>

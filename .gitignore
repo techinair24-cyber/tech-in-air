@@ -7,3 +7,4 @@ dist/
 npm-build.log
 npm-dev.log
 npm-install.log
+supabase/.temp/
