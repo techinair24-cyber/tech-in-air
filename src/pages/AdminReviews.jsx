@@ -38,7 +38,7 @@ export default function AdminReviews() {
 
     const { data, error } = await supabase
       .from('reviews')
-      .select('id, customer_name, project_type, rating, review_text, photo_paths, status, created_at')
+      .select('id, customer_name, college_name, education, project_type, rating, review_text, photo_paths, status, created_at')
       .order('created_at', { ascending: false })
 
     if (error) {
@@ -303,6 +303,16 @@ export default function AdminReviews() {
                     <p className="mt-1 break-words text-sm font-medium text-cyan-800 dark:text-cyan-300">
                       {review.project_type}
                     </p>
+                    {review.college_name && (
+                      <p className="mt-1 break-words text-sm text-slate-600 dark:text-slate-300">
+                        College Name: {review.college_name}
+                      </p>
+                    )}
+                    {review.education && (
+                      <p className="mt-1 break-words text-sm text-slate-600 dark:text-slate-300">
+                        Education: {review.education}
+                      </p>
+                    )}
                     <p className="mt-3 text-lg tracking-wide text-amber-500" aria-label={`Rating: ${review.rating} out of 5 stars`}>
                       {'★'.repeat(Math.max(0, Math.min(5, Number(review.rating) || 0)))}
                       <span className="text-slate-300 dark:text-slate-600">

@@ -13,6 +13,8 @@ import {
 
 const initialForm = {
   customerName: '',
+  collegeName: '',
+  education: '',
   projectName: '',
   rating: 0,
   review: '',
@@ -108,6 +110,8 @@ export default function CustomerReviews() {
     const errors = {}
 
     if (!form.customerName.trim()) errors.customerName = 'Please enter your name.'
+    if (!form.collegeName.trim()) errors.collegeName = 'Please enter your college name.'
+    if (!['Engineering', 'Diploma'].includes(form.education)) errors.education = 'Please select your education.'
     if (!form.projectName) errors.projectName = 'Please select your project.'
     if (form.rating < 1 || form.rating > 5) errors.rating = 'Please select a rating from 1 to 5 stars.'
     if (reviewText.length < 10) errors.review = 'Your review must be at least 10 characters.'
@@ -123,6 +127,8 @@ export default function CustomerReviews() {
     try {
       const { data: reviewId, error } = await supabase.rpc('create_customer_review', {
         p_customer_name: form.customerName.trim(),
+        p_college_name: form.collegeName.trim(),
+        p_education: form.education,
         p_project_type: form.projectName,
         p_rating: form.rating,
         p_review_text: reviewText,
@@ -271,6 +277,55 @@ export default function CustomerReviews() {
                   {fieldErrors.customerName && (
                     <span id="customer-name-error" className="mt-1 block text-sm text-red-600 dark:text-red-400">
                       {fieldErrors.customerName}
+                    </span>
+                  )}
+                </label>
+
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
+                  College Name
+                  <input
+                    required
+                    maxLength={120}
+                    value={form.collegeName}
+                    onChange={(event) => updateField('collegeName', event.target.value)}
+                    className={inputClasses}
+                    aria-invalid={Boolean(fieldErrors.collegeName)}
+                    aria-describedby={fieldErrors.collegeName ? 'college-name-error' : undefined}
+                    placeholder="Enter your college name"
+                  />
+                  {fieldErrors.collegeName && (
+                    <span id="college-name-error" className="mt-1 block text-sm text-red-600 dark:text-red-400">
+                      {fieldErrors.collegeName}
+                    </span>
+                  )}
+                </label>
+
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
+                  Education
+                  <select
+                    required
+                    value={form.education}
+                    onChange={(event) => updateField('education', event.target.value)}
+                    className={`${inputClasses} text-base`}
+                    aria-invalid={Boolean(fieldErrors.education)}
+                    aria-describedby={fieldErrors.education ? 'education-error' : undefined}
+                  >
+                    <option value="" disabled className="bg-white text-base text-slate-900 dark:bg-slate-900 dark:text-slate-100">
+                      Select your education
+                    </option>
+                    {['Engineering', 'Diploma'].map((education) => (
+                      <option
+                        key={education}
+                        value={education}
+                        className="bg-white text-base text-slate-900 dark:bg-slate-900 dark:text-slate-100"
+                      >
+                        {education}
+                      </option>
+                    ))}
+                  </select>
+                  {fieldErrors.education && (
+                    <span id="education-error" className="mt-1 block text-sm text-red-600 dark:text-red-400">
+                      {fieldErrors.education}
                     </span>
                   )}
                 </label>
