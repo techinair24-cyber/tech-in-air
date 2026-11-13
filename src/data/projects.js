@@ -66,7 +66,7 @@ const projects = [
     id: 8,
     title: 'IoT and AI-Based Water Quality Monitoring and Intelligent Purification Recommendation System',
     categories: ['AI / ML','IoT'],
-    status: 'In Progress',
+    status: 'Completed',
     description: 'An IoT and AI-based system that monitors water quality in real time using pH, TDS, turbidity, and flow sensors. The STM32F103C8T6 collects and processes the sensor readings, while the ESP8266 provides Wi-Fi connectivity for sending data to the cloud. An AI model analyzes the water-quality parameters and provides suitable purification recommendations such as RO, UV, or sediment filtration. A mobile Android app displays the water-quality readings in real time.',
     image: '/Projects/IoT and AI-Based Water Quality Monitoring and Intelligent Purification Recommendation System.png',
     technologies: ['STM32F103C8T6','ESP8266 Wi-Fi','pH sensor','TDS sensor','Turbidity sensor','Flow sensor','AI-based purification recommendation','Android mobile application','Cloud/IoT communication']
@@ -75,7 +75,7 @@ const projects = [
     id: 9,
     title: 'Deep Learning-Based Pest Detection System Using Sound Analytics',
     categories: ['AI / ML','Deep Learning'],
-    status: 'In Progress',
+    status: 'Completed',
     description: 'A deep learning-based research project exploring sound analytics for identifying agricultural pest activity and supporting intelligent pest detection.',
     image: '/Projects/pest-detection.png',
     technologies: ['Deep Learning','Audio Analytics','Machine Learning','Agriculture AI']
@@ -84,7 +84,7 @@ const projects = [
     id: 10,
     title: 'Smart Wearable Reader for Blind (Smart Sight)',
     categories: ['IoT'],
-    status: 'In Progress',
+    status: 'Completed',
     description: 'An IoT-based smart wearable assistive system designed to help visually impaired users identify and understand their surroundings. The system uses wearable sensing and intelligent processing to provide useful information to the user through an accessible real-time interface.',
     image: '/Projects/Smart Wearable Reader for Blind (Smart Sight) create image.png',
     technologies: ['IoT','Embedded Systems','Smart Wearable Technology','Sensors','Microcontroller','AI/Intelligent Processing']
@@ -93,7 +93,7 @@ const projects = [
     id: 11,
     title: 'AI-Enabled Drone-Based Crop Disease Detection and Monitoring System',
     categories: ['AI / ML','Agriculture','Drone'],
-    status: 'In Progress',
+    status: 'Completed',
     description: 'An AI-enabled drone-based system designed to capture crop imagery, identify potential disease symptoms, and support ongoing crop health monitoring. Aerial imaging and computer-vision analysis help users detect affected areas and track field conditions.',
     image: '/Projects/AI-Enabled Drone-Based Crop Disease Detection and Monitoring System.png',
     technologies: ['Drone Imaging','AI / ML','Computer Vision','Crop Disease Detection','Crop Monitoring']
@@ -102,7 +102,7 @@ const projects = [
     id: 12,
     title: 'Hybrid AI Based Smart EV Charging Station Using MATLAB',
     categories: ['Engineering Main Project'],
-    status: 'In Progress',
+    status: 'Completed',
     description: 'A prototype concept for a hybrid AI-based smart EV charging station using MATLAB. It explores renewable energy integration, battery storage, EV charging-load analysis, and AI-based energy management through simulation.',
     image: '/Projects/Hybrid AI Based Smart EV Charging Station Using MATLAB.png',
     technologies: ['MATLAB']
