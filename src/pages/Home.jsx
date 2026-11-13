@@ -27,6 +27,8 @@ export default function Home(){
         </div>
       </section>
 
+      <ApprovedReviews />
+
       <section className="py-12 md:py-16">
         <div className="container">
           <motion.div
@@ -80,7 +82,6 @@ export default function Home(){
         </div>
       </section>
 
-      <ApprovedReviews />
       <CTA />
     </div>
   )
