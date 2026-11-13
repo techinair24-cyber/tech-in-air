@@ -1,7 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import DeepavaliBanner from '../components/DeepavaliBanner'
 import HeroNavratriDecor from '../components/HeroNavratriDecor'
 import Hero from '../components/Hero'
 import CapabilityStrip from '../components/CapabilityStrip'
@@ -13,7 +12,6 @@ import projects from '../data/projects'
 export default function Home(){
   return (
     <div>
-      <DeepavaliBanner />
       <div className="home-hero-dashboard">
         <HeroNavratriDecor />
         <Hero />
