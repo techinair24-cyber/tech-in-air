@@ -15,6 +15,7 @@ import AdminReviews from './pages/AdminReviews'
 import CustomerReviewEdit from './pages/CustomerReviewEdit'
 import LegalPage from './pages/LegalPage'
 import TechieChatbot from './components/TechieChatbot'
+import SeoMetadata from './components/SeoMetadata'
 import { buildTechieContext } from './data/chatbotContext'
 import { supabase } from './lib/supabase'
 
@@ -71,6 +72,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[var(--bg)] text-[var(--foreground)] transition-colors duration-200">
+      <SeoMetadata />
       {!isAdminRoute && <Navbar />}
       <main className={isAdminRoute ? '' : 'pt-24 md:pt-28'}>
         <AnimatePresence mode="wait">

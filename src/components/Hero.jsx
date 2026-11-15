@@ -17,7 +17,7 @@ export default function Hero(){
           transition={{ duration: 0.45, staggerChildren: 0.08 }}
           className="md:col-span-5"
         >
-          <motion.h1 variants={fadeUp} className="font-extrabold leading-tight text-slate-900 dark:text-white" style={{fontSize:'clamp(2.6rem,5vw,4rem)'}}>Building Technology That Brings Ideas to Life.</motion.h1>
+          <motion.h1 variants={fadeUp} className="font-extrabold leading-tight text-slate-900 dark:text-white" style={{fontSize:'clamp(2.6rem,5vw,4rem)'}}>Tech in Air: Software, AI/ML, IoT &amp; Embedded Systems Projects</motion.h1>
           <motion.p variants={fadeUp} className="mt-4 text-lg text-slate-600 dark:text-slate-300">Tech in Air develops innovative Software, AI/ML, IoT and Embedded Systems projects for academic and real-world applications.</motion.p>
           <motion.div variants={fadeUp} className="mt-6 flex flex-wrap gap-4">
             <Link to="/contact" className="px-6 py-3 bg-gradient-to-r from-cyan-400 to-blue-500 text-black rounded-md font-semibold shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">Start Your Project</Link>
