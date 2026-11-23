@@ -16,6 +16,10 @@ const routeMetadata = {
     title: 'Tech in Air Services | Software, AI/ML, IoT & Embedded Systems',
     description: 'Explore Tech in Air project development, project explanation, documentation, demonstrations and hardware setup support for technology projects.',
   },
+  '/business-solutions': {
+    title: 'Business Solutions | Website & Online Store Development | Tech In Air',
+    description: 'Tech In Air offers affordable business website, portfolio website and e-commerce development services. Explore packages and request a custom quotation.',
+  },
   '/projects': {
     title: 'Tech in Air Projects | Software, AI/ML, IoT & Embedded Systems',
     description: 'Explore Tech in Air projects across Software, AI/ML, IoT, Android and Embedded Systems, with project details and technologies.',

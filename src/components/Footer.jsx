@@ -32,6 +32,7 @@ export default function Footer(){
           <ul className="mt-2 text-sm text-slate-600 dark:text-slate-300 space-y-1">
             <li><Link to="/about" className="hover:text-cyan-700 dark:hover:text-cyan-300">About</Link></li>
             <li><Link to="/services" className="hover:text-cyan-700 dark:hover:text-cyan-300">Services</Link></li>
+            <li><Link to="/business-solutions" className="hover:text-cyan-700 dark:hover:text-cyan-300">Business Solutions</Link></li>
             <li><Link to="/projects" className="hover:text-cyan-700 dark:hover:text-cyan-300">Projects</Link></li>
             <li><Link to="/process" className="hover:text-cyan-700 dark:hover:text-cyan-300">Process</Link></li>
             <li><Link to="/contact" className="hover:text-cyan-700 dark:hover:text-cyan-300">Contact</Link></li>

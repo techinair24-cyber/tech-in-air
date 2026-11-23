@@ -14,6 +14,7 @@ import AdminLogin from './pages/AdminLogin'
 import AdminReviews from './pages/AdminReviews'
 import CustomerReviewEdit from './pages/CustomerReviewEdit'
 import LegalPage from './pages/LegalPage'
+import BusinessSolutionsPage from './pages/BusinessSolutions'
 import TechieChatbot from './components/TechieChatbot'
 import SeoMetadata from './components/SeoMetadata'
 import { buildTechieContext } from './data/chatbotContext'
@@ -87,6 +88,7 @@ export default function App() {
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/services" element={<ServicesPage />} />
+              <Route path="/business-solutions" element={<BusinessSolutionsPage />} />
               <Route path="/projects" element={<ProjectsPage />} />
               <Route path="/projects/:id" element={<ProjectDetail />} />
               <Route path="/process" element={<ProcessPage />} />
