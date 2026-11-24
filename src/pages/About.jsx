@@ -65,7 +65,7 @@ export default function AboutPage(){
                 to="/contact"
                 className="rounded-md bg-gradient-to-r from-cyan-400 to-blue-500 px-6 py-3 font-semibold text-black transition-transform duration-200 hover:-translate-y-0.5"
               >
-                Start Your Project
+                Let's Talk
               </Link>
             </div>
           </motion.div>
@@ -73,6 +73,27 @@ export default function AboutPage(){
       </section>
 
       <CustomerReviews />
+      <section className="py-16 md:py-24 surface-section">
+        <div className="container">
+          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[var(--accent)]">How We Work</p>
+          <h2 className="section-heading mt-4">From idea to implementation.</h2>
+          <div className="mt-12 grid gap-px overflow-hidden rounded-[1.25rem] border border-[var(--border)] bg-[var(--border)] md:grid-cols-5">
+            {[
+              ['01', 'Discuss', 'Understand the project idea, requirements and objectives.'],
+              ['02', 'Plan', 'Define the technology stack, architecture and implementation approach.'],
+              ['03', 'Develop', 'Build the software, AI model, hardware or complete project system.'],
+              ['04', 'Test & Demo', 'Test the system and prepare the project for demonstration.'],
+              ['05', 'Deliver', 'Provide the developed project with documentation and presentation.']
+            ].map(([number, title, description]) => (
+              <article key={number} className="bg-[var(--card)] p-6">
+                <p className="text-sm font-bold text-[var(--accent)]">{number}</p>
+                <h3 className="mt-5 text-xl font-bold">{title}</h3>
+                <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{description}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
     </div>
   )
 }

@@ -120,7 +120,7 @@ export default function BusinessSolutionsPage() {
           <h2 className="text-3xl font-bold">Have a Business Idea? Let's Build It.</h2>
           <p className="mx-auto mt-3 max-w-2xl text-slate-300">Discuss your requirement and receive a clear, project-specific quotation.</p>
           <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
-            <Link to="/business-solutions/quotation" className="inline-flex items-center justify-center gap-2 rounded-xl bg-cyan-400 px-5 py-3 font-semibold text-slate-950">Request a Custom Quote <ArrowRight size={18} /></Link>
+            <Link to="/business-solutions/quotation" className="inline-flex items-center justify-center gap-2 rounded-xl bg-cyan-400 px-5 py-3 font-semibold text-slate-950">Let's Talk <ArrowRight size={18} /></Link>
             <a href="https://wa.me/918310808011" target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-600 px-5 py-3 font-semibold">WhatsApp <MessageCircle size={18} /></a>
           </div>
         </div>

@@ -3,59 +3,42 @@ import { Link } from 'react-router-dom'
 
 export default function Footer(){
   return (
-    <footer className="py-10 mt-12 border-t border-slate-200 dark:border-gray-900">
-      <div className="container grid md:grid-cols-4 gap-6">
+    <footer className="mt-16 border-t border-[var(--border)] py-12">
+      <div className="container grid gap-10 md:grid-cols-4">
         <div>
-          <div className="flex items-center gap-3">
-            <div style={{width:132,height:48}} className="overflow-hidden flex items-center shrink-0">
-              <img src="/Projects/tech-in-air-logo.jpeg" alt="Tech in Air" className="h-full w-full object-contain" onError={(e)=>{e.currentTarget.style.display='none'}} />
-            </div>
-            <div>
-              <div className="font-bold text-slate-900 dark:text-white">TECH IN AIR</div>
-              <div className="text-sm text-slate-600 dark:text-slate-300 mt-2">Technology • AI • IoT • Software Solutions</div>
-            </div>
+          <img src="/Logo/Tech%20in%20Air%20Logo.png" alt="Tech in Air" className="h-24 w-48 object-contain" />
+          <p className="mt-3 text-sm font-medium text-[var(--muted)]">Tech Made Simple</p>
+        </div>
+        <div>
+          <div className="font-semibold">Explore</div>
+          <ul className="mt-4 space-y-3 text-sm text-[var(--muted)]">
+            <li><Link to="/about" className="hover:text-[var(--accent)]">About</Link></li>
+            <li><Link to="/projects" className="hover:text-[var(--accent)]">Projects</Link></li>
+            <li><Link to="/business-solutions" className="hover:text-[var(--accent)]">Business Solutions</Link></li>
+            <li><Link to="/services" className="hover:text-[var(--accent)]">Academic Solutions</Link></li>
+            <li><Link to="/contact" className="hover:text-[var(--accent)]">Contact</Link></li>
+          </ul>
+        </div>
+        <div>
+          <div className="font-semibold">Contact</div>
+          <div className="mt-4 space-y-3 text-sm text-[var(--muted)]">
+            <p>Bangalore, Karnataka, India</p>
+            <p><a href="mailto:tech.in.air24@gmail.com" className="hover:text-[var(--accent)]">tech.in.air24@gmail.com</a></p>
+            <p>+91 8310808011</p>
+            <p><a href="https://www.instagram.com/tech_in_air_ka" target="_blank" rel="noreferrer" className="hover:text-[var(--accent)]">Instagram</a></p>
           </div>
         </div>
         <div>
-          <div className="font-semibold text-slate-900 dark:text-white">Services</div>
-          <ul className="mt-2 text-sm text-slate-600 dark:text-slate-300 space-y-1">
-            <li>Project Development</li>
-            <li>Project Explanation</li>
-            <li>Documentation</li>
-            <li>PPT</li>
-            <li>Project Demo</li>
-            <li>Hardware Setup</li>
-            <li className="pt-2"><Link to="/business-solutions" className="font-semibold hover:text-cyan-700 dark:hover:text-cyan-300">Business Solutions</Link></li>
-            <li><Link to="/business-solutions/business-website" className="hover:text-cyan-700 dark:hover:text-cyan-300">Business Websites</Link></li>
-            <li><Link to="/business-solutions/ecommerce" className="hover:text-cyan-700 dark:hover:text-cyan-300">E-Commerce</Link></li>
-            <li><Link to="/business-solutions/android-development" className="hover:text-cyan-700 dark:hover:text-cyan-300">Android Apps</Link></li>
-          </ul>
-        </div>
-        <div>
-          <div className="font-semibold text-slate-900 dark:text-white">Explore</div>
-          <ul className="mt-2 text-sm text-slate-600 dark:text-slate-300 space-y-1">
-            <li><Link to="/about" className="hover:text-cyan-700 dark:hover:text-cyan-300">About</Link></li>
-            <li><Link to="/services" className="hover:text-cyan-700 dark:hover:text-cyan-300">Services</Link></li>
-            <li><Link to="/business-solutions" className="hover:text-cyan-700 dark:hover:text-cyan-300">Business Solutions</Link></li>
-            <li><Link to="/projects" className="hover:text-cyan-700 dark:hover:text-cyan-300">Projects</Link></li>
-            <li><Link to="/process" className="hover:text-cyan-700 dark:hover:text-cyan-300">Process</Link></li>
-            <li><Link to="/contact" className="hover:text-cyan-700 dark:hover:text-cyan-300">Contact</Link></li>
-          </ul>
-        </div>
-        <div>
-          <div className="font-semibold text-slate-900 dark:text-white">Contact</div>
-          <div className="text-sm text-slate-600 dark:text-slate-300 mt-2">Bangalore, Karnataka, India</div>
-          <div className="mt-2"><a href="mailto:tech.in.air24@gmail.com">tech.in.air24@gmail.com</a></div>
-          <div className="mt-1">+91 8310808011</div>
-          <div className="mt-2"><a href="https://www.instagram.com/tech_in_air_ka" target="_blank" rel="noreferrer">Instagram</a></div>
-          <div className="mt-4 font-semibold text-slate-900 dark:text-white">Legal</div>
-          <ul className="mt-2 text-sm text-slate-600 dark:text-slate-300 space-y-1">
-            <li><Link to="/privacy-policy" className="hover:text-cyan-700 dark:hover:text-cyan-300">Privacy Policy</Link></li>
-            <li><Link to="/terms-and-conditions" className="hover:text-cyan-700 dark:hover:text-cyan-300">Terms &amp; Conditions</Link></li>
+          <div className="font-semibold">Legal</div>
+          <ul className="mt-4 space-y-3 text-sm text-[var(--muted)]">
+            <li><Link to="/privacy-policy" className="hover:text-[var(--accent)]">Privacy Policy</Link></li>
+            <li><Link to="/terms-and-conditions" className="hover:text-[var(--accent)]">Terms &amp; Conditions</Link></li>
           </ul>
         </div>
       </div>
-      <div className="text-center text-sm text-slate-500 dark:text-slate-400 mt-8">© 2026 Tech in Air. All rights reserved.</div>
+      <div className="container mt-10 border-t border-[var(--border)] pt-6 text-sm text-[var(--muted)]">
+        © 2023 Tech In Air. All rights reserved.
+      </div>
     </footer>
   )
 }

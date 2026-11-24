@@ -9,25 +9,27 @@ export default function Hero(){
   }
 
   return (
-    <section id="home" className="relative z-10 isolate pt-8 pb-12 md:pt-10">
-      <div className="container grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+    <section id="home" className="relative isolate min-h-[calc(100vh-7rem)] overflow-hidden pb-16 pt-12 md:pb-20 md:pt-16">
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_75%_35%,rgba(41,151,255,0.12),transparent_32%)]" />
+      <div className="container grid items-center gap-10 md:grid-cols-12">
         <motion.div
           initial="hidden"
           animate="visible"
           transition={{ duration: 0.45, staggerChildren: 0.08 }}
-          className="md:col-span-5"
+          className="md:col-span-6"
         >
-          <motion.h1 variants={fadeUp} className="font-extrabold leading-tight text-slate-900 dark:text-white" style={{fontSize:'clamp(2.6rem,5vw,4rem)'}}>Tech in Air: Software, AI/ML, IoT &amp; Embedded Systems Projects</motion.h1>
-          <motion.p variants={fadeUp} className="mt-4 text-lg text-slate-600 dark:text-slate-300">Tech in Air develops innovative Software, AI/ML, IoT and Embedded Systems projects for academic and real-world applications.</motion.p>
-          <motion.div variants={fadeUp} className="mt-6 flex flex-wrap gap-4">
-            <Link to="/contact" className="px-6 py-3 bg-gradient-to-r from-cyan-400 to-blue-500 text-black rounded-md font-semibold shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">Start Your Project</Link>
-            <Link to="/projects" className="px-6 py-3 border border-slate-200 dark:border-slate-700 rounded-md text-slate-800 dark:text-slate-100 bg-white/60 dark:bg-white/5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm">Explore Projects</Link>
+          <motion.p variants={fadeUp} className="mb-5 text-sm font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">AI. Software. Digital Solutions.</motion.p>
+          <motion.h1 variants={fadeUp} className="max-w-3xl text-[clamp(3.2rem,7vw,6.7rem)] font-bold leading-[0.92] tracking-[-0.065em]">Intelligence<br />Meets Innovation.</motion.h1>
+          <motion.p variants={fadeUp} className="mt-7 max-w-xl text-lg leading-8 text-[var(--muted)] md:text-xl">We design and build intelligent software, AI systems and digital products that turn ambitious ideas into working solutions.</motion.p>
+          <motion.div variants={fadeUp} className="mt-8 flex flex-wrap gap-3">
+            <Link to="/contact" className="primary-button">Let's Talk</Link>
+            <Link to="/projects" className="secondary-button">Explore Our Work</Link>
           </motion.div>
         </motion.div>
-        <div className="md:col-span-7">
-          <motion.div initial={{opacity:0,y:20,scale:0.97}} animate={{opacity:1,y:0,scale:1}} transition={{duration:0.55,ease:'easeOut'}} className="w-full">
-            <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-white/10 shadow-lg dark:shadow-black/30 hover:shadow-2xl transition-transform duration-500 bg-white/50 dark:bg-transparent">
-              <img src="/Projects/tech-in-air-hero.png" alt="Tech in Air hero" className="w-full h-[300px] md:h-[420px] lg:h-[500px] object-cover object-center transform transition-transform duration-500 hover:scale-105"/>
+        <div className="md:col-span-6">
+          <motion.div initial={{opacity:0,y:20,scale:0.98}} animate={{opacity:1,y:0,scale:1}} transition={{duration:0.55,ease:'easeOut'}} className="w-full">
+            <div className="overflow-hidden rounded-[1.5rem] border border-[var(--border)] bg-[var(--surface)] shadow-2xl">
+              <img src="/Projects/tech-in-air-hero.png" alt="Tech in Air software and AI project portfolio" className="h-[320px] w-full object-cover md:h-[520px]"/>
             </div>
           </motion.div>
         </div>

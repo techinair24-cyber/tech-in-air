@@ -1,12 +1,12 @@
 import projects from './data/projects'
 
 export const SITE_URL = 'https://tech-in-air.vercel.app'
-export const LOGO_URL = `${SITE_URL}/Projects/tech-in-air-logo.jpeg`
+export const LOGO_URL = `${SITE_URL}/Logo/Tech%20in%20Air%20Logo.png`
 
 const routeMetadata = {
   '/': {
-    title: 'Tech in Air | AI, IoT & Software Project Development',
-    description: 'Tech in Air develops Software, AI/ML, IoT and Embedded Systems projects, with project explanation, documentation and hardware setup support in Bangalore.',
+    title: 'Tech in Air | AI, Software & Digital Solutions',
+    description: 'Tech in Air builds intelligent software, AI systems, applications and digital solutions for academic and business needs in Bangalore.',
   },
   '/about': {
     title: 'About Tech in Air | Technology Project Development in Bangalore',

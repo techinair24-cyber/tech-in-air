@@ -21,6 +21,7 @@ import TechieChatbot from './components/TechieChatbot'
 import SeoMetadata from './components/SeoMetadata'
 import { buildTechieContext } from './data/chatbotContext'
 import { supabase } from './lib/supabase'
+import OpeningAnimation from './components/OpeningAnimation'
 
 function AdminReviewsPlaceholder() {
   const navigate = useNavigate()
@@ -74,11 +75,18 @@ export default function App() {
   const isAdminRoute = location.pathname.startsWith('/admin')
 
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
-  }, [location.pathname])
+    if (location.hash) {
+      window.requestAnimationFrame(() => {
+        document.querySelector(location.hash)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      })
+    } else {
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+    }
+  }, [location.pathname, location.hash])
 
   return (
     <div className="min-h-screen bg-[var(--bg)] text-[var(--foreground)] transition-colors duration-200">
+      <OpeningAnimation />
       <SeoMetadata />
       {!isAdminRoute && <Navbar />}
       <main className={isAdminRoute ? '' : 'pt-24 md:pt-28'}>

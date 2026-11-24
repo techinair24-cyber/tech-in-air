@@ -3,21 +3,33 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('theme');
+          var theme = saved === 'dark' || saved === 'light'
+            ? saved
+            : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+          document.documentElement.classList.toggle('dark', theme === 'dark');
+          document.documentElement.style.colorScheme = theme;
+        } catch (_) {}
+      })();
+    </script>
     <!-- SEO_METADATA_START -->
-    <title>Tech in Air | AI, IoT &amp; Software Project Development</title>
-    <meta name="description" content="Tech in Air develops Software, AI/ML, IoT and Embedded Systems projects, with project explanation, documentation and hardware setup support in Bangalore." />
+    <title>Tech in Air | AI, Software &amp; Digital Solutions</title>
+    <meta name="description" content="Tech in Air builds intelligent software, AI systems, applications and digital solutions for academic and business needs in Bangalore." />
     <link rel="canonical" href="https://tech-in-air.vercel.app/" />
-    <meta property="og:title" content="Tech in Air | AI, IoT &amp; Software Project Development" />
-    <meta property="og:description" content="Tech in Air develops Software, AI/ML, IoT and Embedded Systems projects, with project explanation, documentation and hardware setup support in Bangalore." />
+    <meta property="og:title" content="Tech in Air | AI, Software &amp; Digital Solutions" />
+    <meta property="og:description" content="Tech in Air builds intelligent software, AI systems, applications and digital solutions for academic and business needs in Bangalore." />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Tech in Air" />
     <meta property="og:url" content="https://tech-in-air.vercel.app/" />
-    <meta property="og:image" content="https://tech-in-air.vercel.app/Projects/tech-in-air-logo.jpeg" />
+    <meta property="og:image" content="https://tech-in-air.vercel.app/Logo/Tech%20in%20Air%20Logo.png" />
     <meta property="og:image:alt" content="Tech in Air logo" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Tech in Air | AI, IoT &amp; Software Project Development" />
-    <meta name="twitter:description" content="Tech in Air develops Software, AI/ML, IoT and Embedded Systems projects, with project explanation, documentation and hardware setup support in Bangalore." />
-    <meta name="twitter:image" content="https://tech-in-air.vercel.app/Projects/tech-in-air-logo.jpeg" />
+    <meta name="twitter:title" content="Tech in Air | AI, Software &amp; Digital Solutions" />
+    <meta name="twitter:description" content="Tech in Air builds intelligent software, AI systems, applications and digital solutions for academic and business needs in Bangalore." />
+    <meta name="twitter:image" content="https://tech-in-air.vercel.app/Logo/Tech%20in%20Air%20Logo.png" />
     <meta name="twitter:image:alt" content="Tech in Air logo" />
     <!-- SEO_METADATA_END -->
     <script type="application/ld+json">
@@ -31,7 +43,7 @@
             "url": "https://tech-in-air.vercel.app/",
             "logo": {
               "@type": "ImageObject",
-              "url": "https://tech-in-air.vercel.app/Projects/tech-in-air-logo.jpeg"
+              "url": "https://tech-in-air.vercel.app/Logo/Tech%20in%20Air%20Logo.png"
             },
             "sameAs": ["https://www.instagram.com/tech_in_air_ka"]
           },

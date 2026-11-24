@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Bot, MessageCircle, Send, Sparkles, X } from 'lucide-react'
+import { AnimatePresence, motion } from 'framer-motion'
 import './TechieChatbot.css'
 
 const API_BASE_URL = (import.meta.env.VITE_CHATBOT_API_URL || '').trim().replace(/\/+$/, '')
 const WHATSAPP_URL = 'https://wa.me/918310808011'
 const MAX_MESSAGE_LENGTH = 2000
-const LOGO_URL = '/Projects/tech-in-air-logo.jpeg'
+const LOGO_URL = '/Logo/TA%20logo.png'
 const QUICK_REPLIES = [
   '🚀 Start a Project',
   '💰 Pricing',
@@ -244,12 +245,17 @@ export default function TechieChatbot({ context = '' }) {
 
   return (
     <div className="techie-chatbot">
-      {isOpen && (
-        <section
+      <AnimatePresence>
+        {isOpen && (
+        <motion.section
           id="techie-chat-panel"
           className="techie-chat-panel"
           role="dialog"
           aria-labelledby="techie-chat-title"
+          initial={{ opacity: 0, y: 18, scale: 0.98 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 12, scale: 0.98 }}
+          transition={{ duration: 0.2, ease: 'easeOut' }}
         >
           <header className="techie-chat-header">
             <div className="techie-chat-brand">
@@ -371,8 +377,9 @@ export default function TechieChatbot({ context = '' }) {
               <span>{input.length}/{MAX_MESSAGE_LENGTH}</span>
             </p>
           </form>
-        </section>
-      )}
+        </motion.section>
+        )}
+      </AnimatePresence>
 
       <button
         ref={launcherRef}

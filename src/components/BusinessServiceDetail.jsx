@@ -142,7 +142,7 @@ export default function BusinessServiceDetail({ service }) {
                 {service.pricingUnit === 'month' && <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">Monthly billing</p>}
                 <ul className="mt-5 flex-1 space-y-3">{pkg.features.map((feature) => <li key={feature} className="flex gap-2 text-sm text-slate-600 dark:text-slate-300"><Check size={16} className="mt-0.5 shrink-0 text-emerald-500" /><span>{feature}</span></li>)}</ul>
                 {pkg.limitations?.map((limitation) => <p key={limitation} className="mt-4 rounded-lg bg-slate-100 px-3 py-2 text-xs leading-5 text-slate-600 dark:bg-slate-800 dark:text-slate-300">{limitation}</p>)}
-                <Link to={`/business-solutions/quotation?service=${service.slug}&package=${pkg.id}`} className="mt-5 inline-flex items-center justify-center rounded-xl border border-cyan-500 px-4 py-2.5 text-sm font-semibold text-cyan-800 hover:bg-cyan-50 dark:text-cyan-300 dark:hover:bg-cyan-500/10">Get a Quote</Link>
+                <Link to={`/business-solutions/quotation?service=${service.slug}&package=${pkg.id}`} className="mt-5 inline-flex items-center justify-center rounded-xl border border-cyan-500 px-4 py-2.5 text-sm font-semibold text-cyan-800 hover:bg-cyan-50 dark:text-cyan-300 dark:hover:bg-cyan-500/10">Let's Talk</Link>
               </article>
             ))}
           </div>
@@ -184,7 +184,10 @@ export default function BusinessServiceDetail({ service }) {
         <div className="container rounded-3xl bg-slate-900 px-6 py-10 text-center text-white dark:bg-cyan-950/40 md:px-10">
           <h2 className="text-3xl font-bold">Have a specific requirement?</h2>
           <p className="mx-auto mt-3 max-w-2xl text-slate-300">Share your project scope and receive a quotation based on the final requirements.</p>
-          <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row"><Link to={`/business-solutions/quotation?service=${service.slug}&package=${service.packages[0].id}`} className="inline-flex items-center justify-center gap-2 rounded-xl bg-cyan-400 px-5 py-3 font-semibold text-slate-950">Request a Custom Quote <ArrowRight size={18} /></Link><a href="https://wa.me/918310808011" target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-600 px-5 py-3 font-semibold">WhatsApp <MessageCircle size={18} /></a></div>
+          <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
+            <Link to={`/business-solutions/quotation?service=${service.slug}&package=${service.packages[0].id}`} className="inline-flex items-center justify-center gap-2 rounded-xl bg-cyan-400 px-5 py-3 font-semibold text-slate-950">Let's Talk <ArrowRight size={18} /></Link>
+            <a href="https://wa.me/918310808011" target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-600 px-5 py-3 font-semibold">WhatsApp <MessageCircle size={18} /></a>
+          </div>
         </div>
       </section>
     </div>
