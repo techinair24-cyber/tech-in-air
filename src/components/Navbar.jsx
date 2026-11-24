@@ -1,21 +1,23 @@
-import React, {useState, useEffect} from 'react'
-import { ChevronDown, Menu, X } from 'lucide-react'
+import React, { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { ChevronDown, Menu, X } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
 import ThemeToggle from './ThemeToggle'
 import { businessServices } from '../data/businessSolutions'
 
-export default function Navbar(){
-  const [open,setOpen] = useState(false)
-  const [scrolled,setScrolled] = useState(false)
-  const [businessOpen,setBusinessOpen] = useState(false)
-  const [mobileBusinessOpen,setMobileBusinessOpen] = useState(false)
+export default function Navbar() {
+  const [open, setOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const [solutionsOpen, setSolutionsOpen] = useState(false)
+  const [mobileSolutionsOpen, setMobileSolutionsOpen] = useState(false)
+  const location = useLocation()
 
-  useEffect(()=>{
-    const onScroll = ()=> setScrolled(window.scrollY>20)
-    window.addEventListener('scroll',onScroll)
-    return ()=>window.removeEventListener('scroll',onScroll)
-  },[])
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20)
+    onScroll()
+    window.addEventListener('scroll', onScroll)
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   const links = [
     { label: 'Home', href: '/' },
@@ -23,87 +25,86 @@ export default function Navbar(){
     { label: 'Solutions', href: '/business-solutions', dropdown: true },
     { label: 'Projects', href: '/projects' },
     { label: 'Reviews', href: '/#reviews' },
-    { label: 'Contact', href: '/contact' }
+    { label: 'Contact', href: '/contact' },
   ]
-  const location = useLocation()
+
+  const isActive = (href) => {
+    if (href === '/#reviews') return location.pathname === '/' && location.hash === '#reviews'
+    if (href === '/business-solutions') return location.pathname.startsWith('/business-solutions')
+    return location.pathname === href
+  }
 
   return (
-    <header className={`fixed w-full z-50 top-0 transition-all duration-300 h-[76px] ${scrolled ? 'border-b border-[var(--border)] backdrop-blur-xl bg-[var(--navbar-bg)]' : 'bg-[var(--bg)]/70 backdrop-blur-md'}`}>
-      <div className="container flex items-center justify-between h-full">
-        <div className="flex items-center gap-4 min-w-0">
-          <Link to="/" className="flex items-center gap-3 shrink-0 transition-transform duration-200 hover:scale-[1.01]">
-            <div className="hidden sm:flex items-center justify-center overflow-hidden shrink-0" style={{ width: 132, height: 48 }}>
-              <img src="/Logo/TA%20logo.png" alt="Tech in Air" className="h-12 w-12 object-contain" onError={(e)=>{e.currentTarget.style.display='none'}} />
-            </div>
-            <div className="flex sm:hidden items-center justify-center overflow-hidden shrink-0" style={{ width: 108, height: 40 }}>
-              <img src="/Logo/TA%20logo.png" alt="Tech in Air" className="h-10 w-10 object-contain" onError={(e)=>{e.currentTarget.style.display='none'}} />
-            </div>
-            <div className="text-sm font-bold tracking-wider sr-only sm:not-sr-only text-slate-900 dark:text-slate-50">TECH IN AIR</div>
-          </Link>
-          <div className="hidden text-[11px] leading-4 text-[var(--muted)] whitespace-nowrap lg:block">AI • Software • Digital Solutions</div>
-        </div>
+    <header className={`fixed top-0 z-50 h-[72px] w-full transition-all duration-300 ${scrolled ? 'border-b border-[var(--border)] bg-[var(--navbar-bg)] backdrop-blur-xl' : 'bg-[var(--bg)]'}`}>
+      <div className="container flex h-full items-center justify-between">
+        <Link to="/" className="flex shrink-0 items-center gap-2.5" aria-label="Tech in Air home">
+          <img src="/Logo/TA%20logo.png" alt="" className="h-11 w-11 object-contain" />
+          <span className="text-[15px] font-bold tracking-[-0.02em] text-[var(--foreground)]">Tech in Air</span>
+        </Link>
 
-        <nav className="hidden md:flex items-center gap-5 lg:gap-6">
-          {links.map(l => (
-            l.dropdown ? (
-              <div key={l.label} className="relative" onMouseEnter={() => setBusinessOpen(true)} onMouseLeave={() => setBusinessOpen(false)}>
+        <nav className="hidden items-center gap-7 md:flex" aria-label="Primary navigation">
+          {links.map((link) => (
+            link.dropdown ? (
+              <div
+                key={link.label}
+                className="relative"
+                onMouseEnter={() => setSolutionsOpen(true)}
+                onMouseLeave={() => setSolutionsOpen(false)}
+              >
                 <Link
-                  to={l.href}
+                  to={link.href}
                   aria-haspopup="menu"
-                  aria-expanded={businessOpen}
-                  className={`inline-flex items-center gap-1 text-sm transition-all ${location.pathname.startsWith(l.href) ? 'text-[var(--accent)] font-semibold' : 'text-[var(--foreground)]'}`}
-                  onClick={() => setBusinessOpen(false)}
+                  aria-expanded={solutionsOpen}
+                  className={`relative inline-flex items-center gap-1 py-6 text-[14px] transition-colors ${isActive(link.href) ? 'text-[var(--accent)]' : 'text-[var(--foreground)]'}`}
+                  onClick={() => setSolutionsOpen(false)}
                 >
-                  {l.label}<ChevronDown size={14} />
+                  {link.label}
+                  <ChevronDown size={14} className={`transition-transform duration-200 ${solutionsOpen ? 'rotate-180' : ''}`} />
+                  {isActive(link.href) && <motion.span layoutId="nav-active" className="absolute bottom-3 left-0 h-px w-full bg-[var(--accent)]" />}
                 </Link>
                 <AnimatePresence>
-                  {businessOpen && (
-                  <motion.div
-                    role="menu"
-                    initial={{ opacity: 0, y: 8, scale: 0.98 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 6, scale: 0.98 }}
-                    transition={{ duration: 0.16, ease: 'easeOut' }}
-                    className="absolute left-1/2 top-full w-72 -translate-x-1/2 pt-3"
-                  >
-                    <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-2 shadow-xl">
-                      <Link to="/services" role="menuitem" onClick={() => setBusinessOpen(false)} className="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[var(--foreground)] hover:bg-[var(--surface)]">Academic Solutions</Link>
-                      <Link to="/business-solutions" role="menuitem" onClick={() => setBusinessOpen(false)} className="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[var(--foreground)] hover:bg-[var(--surface)]">Business Solutions</Link>
-                      <div className="my-1 border-t border-[var(--border)]" />
-                      {businessServices.map((service) => (
-                        <Link key={service.slug} to={`/business-solutions/${service.slug}`} role="menuitem" onClick={() => setBusinessOpen(false)} className="block rounded-lg px-3 py-2.5 text-sm text-slate-700 hover:bg-cyan-50 hover:text-cyan-800 dark:text-slate-200 dark:hover:bg-cyan-500/10 dark:hover:text-cyan-300">
-                          {service.title}
-                        </Link>
-                      ))}
-                      <Link to="/business-solutions/quotation" role="menuitem" onClick={() => setBusinessOpen(false)} className="mt-1 block rounded-lg border-t border-slate-100 px-3 py-2.5 text-sm font-semibold text-cyan-700 dark:border-slate-800 dark:text-cyan-300">Let's Talk</Link>
-                    </div>
-                  </motion.div>
+                  {solutionsOpen && (
+                    <motion.div
+                      role="menu"
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 6 }}
+                      transition={{ duration: 0.16, ease: 'easeOut' }}
+                      className="absolute left-1/2 top-full w-64 -translate-x-1/2 pt-2"
+                    >
+                      <div className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-2 shadow-[0_18px_50px_rgba(0,0,0,0.12)]">
+                        <Link to="/services" role="menuitem" onClick={() => setSolutionsOpen(false)} className="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[var(--foreground)] hover:bg-[var(--surface)]">Academic Solutions</Link>
+                        <Link to="/business-solutions" role="menuitem" onClick={() => setSolutionsOpen(false)} className="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[var(--foreground)] hover:bg-[var(--surface)]">Business Solutions</Link>
+                        <div className="my-1 border-t border-[var(--border)]" />
+                        {businessServices.map((service) => (
+                          <Link key={service.slug} to={`/business-solutions/${service.slug}`} role="menuitem" onClick={() => setSolutionsOpen(false)} className="block rounded-lg px-3 py-2.5 text-sm text-[var(--muted)] hover:bg-[var(--surface)] hover:text-[var(--foreground)]">
+                            {service.title}
+                          </Link>
+                        ))}
+                      </div>
+                    </motion.div>
                   )}
                 </AnimatePresence>
               </div>
             ) : (
-            <Link
-              key={l.label}
-              to={l.href}
-              className={`text-sm transition-all duration-200 hover:-translate-y-0.5 ${location.pathname === l.href ? 'text-[var(--accent)] font-semibold' : 'text-[var(--foreground)]'}`}
-            >
-              <span className="relative inline-block after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full after:origin-left after:scale-x-0 after:bg-cyan-500 after:transition-transform after:duration-200 after:content-[''] group-hover:after:scale-x-100">
-                {l.label}
-              </span>
-            </Link>
+              <Link key={link.label} to={link.href} className={`relative py-6 text-[14px] transition-colors ${isActive(link.href) ? 'text-[var(--accent)]' : 'text-[var(--foreground)]'}`}>
+                {link.label}
+                {isActive(link.href) && <motion.span layoutId="nav-active" className="absolute bottom-3 left-0 h-px w-full bg-[var(--accent)]" />}
+              </Link>
             )
           ))}
-          <Link to="/contact" className="ml-2 bg-gradient-to-r from-cyan-400 to-blue-500 text-black px-4 py-2 rounded-md font-semibold text-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:translate-y-0">Let's Talk</Link>
+          <Link to="/contact" className="primary-button !min-h-10 px-5 py-2 text-[14px]">Let's Talk</Link>
           <ThemeToggle />
         </nav>
 
-        <div className="flex items-center gap-2 md:hidden">
+        <div className="flex items-center gap-1 md:hidden">
           <ThemeToggle />
-          <button className="p-2 text-slate-700 dark:text-slate-200" aria-label="menu" onClick={() => setOpen(!open)}>
-            {open ? <X /> : <Menu />}
+          <button type="button" className="grid h-10 w-10 place-items-center rounded-full text-[var(--foreground)]" aria-label={open ? 'Close menu' : 'Open menu'} aria-expanded={open} onClick={() => setOpen((current) => !current)}>
+            {open ? <X size={21} /> : <Menu size={21} />}
           </button>
         </div>
       </div>
+
       <AnimatePresence>
         {open && (
           <motion.div
@@ -111,28 +112,43 @@ export default function Navbar(){
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
-            className="md:hidden px-6 pb-6"
+            className="border-t border-[var(--border)] bg-[var(--bg)] px-6 py-5 md:hidden"
           >
-            <div className="flex flex-col gap-4 glass p-4 rounded-md text-slate-700 dark:text-slate-200">
-              {links.map((l) => l.dropdown ? (
-                <div key={l.label}>
-                  <div className="flex items-center justify-between">
-                    <Link to={l.href} onClick={() => { setOpen(false); setMobileBusinessOpen(false) }} className="font-semibold transition hover:text-cyan-600 dark:hover:text-cyan-300">{l.label}</Link>
-                    <button type="button" aria-label="Toggle Business Solutions menu" aria-expanded={mobileBusinessOpen} onClick={() => setMobileBusinessOpen((value) => !value)} className="p-1"><ChevronDown size={18} className={mobileBusinessOpen ? 'rotate-180' : ''} /></button>
-                  </div>
-                  {mobileBusinessOpen && (
-                    <div className="mt-2 grid gap-1 border-l border-slate-200 pl-3 dark:border-slate-700">
-                      <Link to="/services" onClick={() => { setOpen(false); setMobileBusinessOpen(false) }} className="py-2 text-sm font-semibold text-[var(--foreground)]">Academic Solutions</Link>
-                      <Link to="/business-solutions" onClick={() => { setOpen(false); setMobileBusinessOpen(false) }} className="py-2 text-sm font-semibold text-[var(--foreground)]">Business Solutions</Link>
-                      {businessServices.map((service) => <Link key={service.slug} to={`/business-solutions/${service.slug}`} onClick={() => { setOpen(false); setMobileBusinessOpen(false) }} className="py-2 text-sm text-slate-600 dark:text-slate-300">{service.title}</Link>)}
-                      <Link to="/business-solutions/quotation" onClick={() => { setOpen(false); setMobileBusinessOpen(false) }} className="py-2 text-sm font-semibold text-cyan-700 dark:text-cyan-300">Let's Talk</Link>
+            <div className="mx-auto flex max-w-xl flex-col gap-1">
+              {links.map((link) => (
+                link.dropdown ? (
+                  <div key={link.label}>
+                    <div className="flex items-center justify-between">
+                      <Link to={link.href} onClick={() => { setOpen(false); setMobileSolutionsOpen(false) }} className={`py-3 text-[15px] ${isActive(link.href) ? 'font-semibold text-[var(--accent)]' : 'text-[var(--foreground)]'}`}>{link.label}</Link>
+                      <button type="button" aria-label="Toggle Solutions menu" aria-expanded={mobileSolutionsOpen} onClick={() => setMobileSolutionsOpen((current) => !current)} className="grid h-10 w-10 place-items-center text-[var(--foreground)]">
+                        <ChevronDown size={18} className={`transition-transform duration-200 ${mobileSolutionsOpen ? 'rotate-180' : ''}`} />
+                      </button>
                     </div>
-                  )}
-                </div>
-              ) : (
-                <Link key={l.label} to={l.href} onClick={() => setOpen(false)} className="transition hover:text-cyan-600 dark:hover:text-cyan-300">{l.label}</Link>
+                    <AnimatePresence>
+                      {mobileSolutionsOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.18, ease: 'easeOut' }}
+                          className="overflow-hidden"
+                        >
+                          <div className="mb-2 ml-3 grid gap-1 border-l border-[var(--border)] pl-4">
+                            <Link to="/services" onClick={() => { setOpen(false); setMobileSolutionsOpen(false) }} className="py-2 text-sm font-semibold text-[var(--foreground)]">Academic Solutions</Link>
+                            <Link to="/business-solutions" onClick={() => { setOpen(false); setMobileSolutionsOpen(false) }} className="py-2 text-sm font-semibold text-[var(--foreground)]">Business Solutions</Link>
+                            {businessServices.map((service) => (
+                              <Link key={service.slug} to={`/business-solutions/${service.slug}`} onClick={() => { setOpen(false); setMobileSolutionsOpen(false) }} className="py-2 text-sm text-[var(--muted)]">{service.title}</Link>
+                            ))}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                ) : (
+                  <Link key={link.label} to={link.href} onClick={() => setOpen(false)} className={`py-3 text-[15px] ${isActive(link.href) ? 'font-semibold text-[var(--accent)]' : 'text-[var(--foreground)]'}`}>{link.label}</Link>
+                )
               ))}
-              <Link to="/contact" className="bg-cyan-400 text-black px-3 py-2 rounded-md inline-block font-semibold">Let's Talk</Link>
+              <Link to="/contact" onClick={() => setOpen(false)} className="primary-button mt-3 w-full">Let's Talk</Link>
             </div>
           </motion.div>
         )}

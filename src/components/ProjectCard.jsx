@@ -20,8 +20,8 @@ export default function ProjectCard({p, onOpen}){
   }
 
   return (
-    <article className="bg-white dark:bg-[#041017] rounded-xl border border-slate-200 dark:border-white/10 overflow-hidden shadow-md shadow-slate-200/70 dark:shadow-black/20 hover:shadow-xl transition-transform transform hover:-translate-y-1">
-      <div className="w-full" style={{aspectRatio:'16/9'}}>
+    <article className="group overflow-hidden rounded-[1.25rem] border border-[var(--border)] bg-[var(--card)]">
+      <div className="relative w-full overflow-hidden" style={{aspectRatio:'16/9'}}>
         <img src={src} alt={p.title} onError={handleError} className="w-full h-full object-cover rounded-t-xl transition-transform duration-500 group-hover:scale-105" loading="lazy" />
         <div className="absolute inset-0 pointer-events-none" style={{mixBlendMode:'overlay'}} />
       </div>
@@ -40,7 +40,7 @@ export default function ProjectCard({p, onOpen}){
           {p.technologies && p.technologies.map(t=> <span key={t} className="opacity-100 rounded-full border border-slate-200 bg-slate-100 px-2 py-1 text-xs text-slate-700 dark:border-slate-700 dark:bg-slate-900/80 dark:text-slate-100">{t}</span>)}
         </div>
         <div className="mt-4 flex items-center justify-between">
-          <Link to={`/projects/${p.id}`} className="text-sm px-4 py-2 bg-gradient-to-r from-cyan-400 to-blue-500 text-black rounded-md font-semibold">View Project</Link>
+          <Link to={`/projects/${p.id}`} className="primary-button !min-h-10 px-4 py-2 text-sm">View Project</Link>
         </div>
       </div>
     </article>

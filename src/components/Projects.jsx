@@ -19,8 +19,9 @@ export default function Projects(){
     <section id="projects" className="py-12">
       <div className="container">
         <motion.div initial={{opacity:0,y:12}} whileInView={{opacity:1,y:0}} viewport={{once:true}} transition={{duration:0.35}}>
-          <h2 className="text-3xl font-semibold text-slate-900 dark:text-white">Our Projects</h2>
-          <p className="text-slate-600 dark:text-slate-300 mt-2">A growing portfolio of software, AI, IoT and embedded technology projects.</p>
+          <p className="text-sm font-semibold text-[var(--accent)]">Portfolio</p>
+          <h2 className="mt-3 text-4xl font-semibold md:text-5xl">Selected technology work</h2>
+          <p className="mt-3 max-w-2xl text-[var(--muted)]">Completed projects across artificial intelligence, software, mobile and intelligent systems.</p>
         </motion.div>
 
         <div className="mt-4 flex flex-wrap gap-3">

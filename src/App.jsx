@@ -85,7 +85,7 @@ export default function App() {
   }, [location.pathname, location.hash])
 
   return (
-    <div className="min-h-screen bg-[var(--bg)] text-[var(--foreground)] transition-colors duration-200">
+    <div className={`min-h-screen bg-[var(--bg)] text-[var(--foreground)] transition-colors duration-200 ${isAdminRoute ? '' : 'public-site'}`}>
       <OpeningAnimation />
       <SeoMetadata />
       {!isAdminRoute && <Navbar />}

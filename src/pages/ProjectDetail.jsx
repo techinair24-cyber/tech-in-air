@@ -1,5 +1,6 @@
 import React from 'react'
 import { useParams, Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import projects from '../data/projects'
 
 export default function ProjectDetail(){
@@ -11,10 +12,10 @@ export default function ProjectDetail(){
   const src = project.image || fallbackSrc
 
   return (
-    <div className="container py-8">
-      <div className="grid md:grid-cols-2 gap-8">
+    <div className="container py-12 md:py-20">
+      <div className="grid gap-10 md:grid-cols-[1.15fr_0.85fr] md:items-start">
         <div>
-          <img src={src} alt={project.title} className="w-full rounded-lg object-cover h-80" onError={(e)=>{e.currentTarget.onerror=null;e.currentTarget.src=fallbackSrc}} />
+          <motion.img src={src} alt={project.title} className="w-full rounded-[1.25rem] border border-[var(--border)] object-cover" initial={{opacity:0,y:16}} animate={{opacity:1,y:0}} transition={{duration:0.45}} onError={(e)=>{e.currentTarget.onerror=null;e.currentTarget.src=fallbackSrc}} />
         </div>
         <div>
           <h1 className="text-3xl font-bold text-slate-900 dark:text-white">{project.title}</h1>
