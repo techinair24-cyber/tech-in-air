@@ -1,39 +1,52 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import PublishedPageSections from '../components/PublishedPageSections'
 import projects from '../data/projects'
+import { getPublicMediaUrl, usePublishedPage, usePublishedProjects } from '../lib/publicContent'
+import { getPageText } from '../lib/pageContent.mjs'
 
 export default function AboutPage() {
-  const engineeringCount = projects.filter((project) => project.categories?.includes('Engineering Main Project')).length
+  const { content } = usePublishedPage('about')
+  const { data: publishedProjects } = usePublishedProjects()
+  const hero = content?.hero && typeof content.hero === 'object' ? content.hero : {}
+  const mission = content?.mission && typeof content.mission === 'object' ? content.mission : {}
+  const vision = content?.vision && typeof content.vision === 'object' ? content.vision : {}
+  const projectList = publishedProjects === null ? projects : publishedProjects
+  const engineeringCount = projectList.filter((project) => project.categories?.includes('Engineering Main Project')).length
+  const heroImage = getPublicMediaUrl(hero.image || hero.imagePath)
 
   return (
     <div>
       <header className="border-b border-[var(--border)] py-16 md:py-24">
-        <div className="container grid gap-10 lg:grid-cols-[1fr_0.75fr] lg:items-end">
+        <div className={`container grid gap-10 ${heroImage ? 'lg:grid-cols-[1fr_0.75fr_0.6fr]' : 'lg:grid-cols-[1fr_0.75fr]'} lg:items-end`}>
           <div>
             <p className="mb-4 text-sm font-semibold text-[var(--accent)]">About Tech In Air</p>
-            <h1 className="max-w-4xl text-5xl font-semibold leading-[1.02] tracking-[-0.04em] md:text-7xl">Technology With Purpose.</h1>
+            <h1 className="max-w-4xl text-5xl font-semibold leading-[1.02] tracking-[-0.04em] md:text-7xl">{getPageText(hero.heading, 'Technology With Purpose.')}</h1>
           </div>
           <p className="max-w-xl text-lg leading-8 text-[var(--muted)]">
-            Tech In Air is an AI and software technology company in Bangalore, helping students, businesses and innovators turn practical ideas into working digital solutions.
+            {getPageText(hero.description, 'Tech In Air is an AI and software technology company in Bangalore, helping students, businesses and innovators turn practical ideas into working digital solutions.')}
           </p>
+          {heroImage && <img src={heroImage} alt={getPageText(hero.imageAlt)} loading="lazy" className="max-h-72 w-full rounded-2xl border border-[var(--border)] object-cover" />}
         </div>
       </header>
+
+      <PublishedPageSections content={content} projects={projectList} excludedTypes={['hero']} />
 
       <section className="py-16 md:py-24">
         <div className="container grid gap-8 md:grid-cols-2">
           <motion.article initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="rounded-[1.25rem] bg-[var(--surface)] p-8 md:p-10">
             <p className="text-sm font-semibold text-[var(--accent)]">Our Mission</p>
-            <h2 className="mt-5 text-3xl font-semibold md:text-4xl">Make technology accessible, practical and meaningful.</h2>
+            <h2 className="mt-5 text-3xl font-semibold md:text-4xl">{getPageText(mission.heading, 'Make technology accessible, practical and meaningful.')}</h2>
             <p className="mt-6 max-w-xl text-lg leading-8 text-[var(--muted)]">
-              Our mission is to develop reliable AI-powered software, innovative digital solutions and technical services that help students, businesses and individuals turn ideas into reality.
+              {getPageText(mission.description, 'Our mission is to develop reliable AI-powered software, innovative digital solutions and technical services that help students, businesses and individuals turn ideas into reality.')}
             </p>
           </motion.article>
           <motion.article initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.08 }} className="border-t border-[var(--border)] pt-8 md:border-l md:border-t-0 md:pl-10 md:pt-10">
             <p className="text-sm font-semibold text-[var(--accent)]">Our Vision</p>
-            <h2 className="mt-5 text-3xl font-semibold md:text-4xl">Become a trusted technology partner for thoughtful innovation.</h2>
+            <h2 className="mt-5 text-3xl font-semibold md:text-4xl">{getPageText(vision.heading, 'Become a trusted technology partner for thoughtful innovation.')}</h2>
             <p className="mt-6 max-w-xl text-lg leading-8 text-[var(--muted)]">
-              Our vision is to be recognized for innovation, quality and accessible digital solutions that empower individuals and businesses through artificial intelligence, software development and emerging technologies.
+              {getPageText(vision.description, 'Our vision is to be recognized for innovation, quality and accessible digital solutions that empower individuals and businesses through artificial intelligence, software development and emerging technologies.')}
             </p>
           </motion.article>
         </div>
@@ -63,9 +76,9 @@ export default function AboutPage() {
           <h2 className="text-3xl font-semibold md:text-5xl">Work across software and intelligent technology.</h2>
           <div className="mt-12 grid grid-cols-2 gap-y-10 md:grid-cols-4">
             {[
-              [projects.length, 'Completed project entries'],
-              [projects.filter((project) => project.categories?.some((category) => ['AI / ML', 'Deep Learning'].includes(category))).length, 'AI and ML projects'],
-              [projects.filter((project) => project.categories?.includes('Software') || project.categories?.includes('Android')).length, 'Software and mobile projects'],
+              [projectList.length, 'Published project entries'],
+              [projectList.filter((project) => project.categories?.some((category) => ['AI / ML', 'Deep Learning'].includes(category))).length, 'AI and ML projects'],
+              [projectList.filter((project) => project.categories?.includes('Software') || project.categories?.includes('Android')).length, 'Software and mobile projects'],
               [engineeringCount, 'Engineering main projects'],
             ].map(([value, label]) => (
               <div key={label} className="border-l border-[var(--border)] pl-5 first:border-l-0 first:pl-0 md:first:border-l md:first:pl-5">

@@ -16,6 +16,7 @@ import {
 } from 'lucide-react'
 import { businessServices, PRICING_DISCLAIMER } from '../data/businessSolutions'
 import ServiceVisual from './ServiceVisual'
+import { usePublishedServices } from '../lib/publicContent'
 
 const iconMap = { store: Store, user: User, cart: ShoppingCart, android: Smartphone, automation: Bot, maintenance: Wrench }
 
@@ -75,9 +76,12 @@ function ConceptPreview({ service, preview, index }) {
   )
 }
 
-export default function BusinessServiceDetail({ service }) {
+export default function BusinessServiceDetail({ service, pricingDisclaimer = PRICING_DISCLAIMER }) {
+  const { data: publishedServices } = usePublishedServices('business-solutions')
+  const serviceList = publishedServices === null ? businessServices : publishedServices
   const Icon = iconMap[service.icon] || Monitor
-  const related = businessServices.filter((item) => service.relatedServices.includes(item.slug))
+  const related = serviceList.filter((item) => service.relatedServices.includes(item.slug))
+  const firstPackageId = service.packages[0]?.id || 'custom'
 
   return (
     <div className="overflow-hidden">
@@ -101,7 +105,7 @@ export default function BusinessServiceDetail({ service }) {
             <h1 className="mt-3 max-w-3xl text-4xl font-bold leading-tight text-slate-900 dark:text-white md:text-5xl">{service.title}</h1>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-600 dark:text-slate-300">{service.detailedDescription}</p>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              <Link to={`/business-solutions/quotation?service=${service.slug}&package=${service.packages[0].id}`} className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-5 py-3 font-semibold text-slate-900">
+              <Link to={`/business-solutions/quotation?service=${service.slug}&package=${firstPackageId}`} className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-5 py-3 font-semibold text-slate-900">
                 Let's Talk <ArrowRight size={18} />
               </Link>
               <a href="https://wa.me/918310808011" target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-5 py-3 font-semibold text-slate-900 dark:border-slate-700 dark:bg-slate-900 dark:text-white">
@@ -109,7 +113,7 @@ export default function BusinessServiceDetail({ service }) {
               </a>
             </div>
           </motion.div>
-          <ServiceVisual slug={service.slug} title={service.title} />
+          <ServiceVisual slug={service.slug} title={service.title} image={service.image} />
         </div>
       </section>
 
@@ -141,7 +145,8 @@ export default function BusinessServiceDetail({ service }) {
               </article>
             ))}
           </div>
-          <p className="mt-6 text-xs leading-5 text-slate-500 dark:text-slate-400">{PRICING_DISCLAIMER}</p>
+          {service.packages.length === 0 && <p className="mt-8 text-slate-600 dark:text-slate-300">Pricing is provided by custom quotation. Share your requirements to discuss the scope.</p>}
+          <p className="mt-6 text-xs leading-5 text-slate-500 dark:text-slate-400">{pricingDisclaimer}</p>
         </div>
       </section>
 
@@ -180,7 +185,7 @@ export default function BusinessServiceDetail({ service }) {
           <h2 className="text-3xl font-bold">Have a specific requirement?</h2>
           <p className="mx-auto mt-3 max-w-2xl text-slate-300">Share your project scope and receive a quotation based on the final requirements.</p>
           <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
-            <Link to={`/business-solutions/quotation?service=${service.slug}&package=${service.packages[0].id}`} className="inline-flex items-center justify-center gap-2 rounded-xl bg-cyan-400 px-5 py-3 font-semibold text-slate-950">Let's Talk <ArrowRight size={18} /></Link>
+            <Link to={`/business-solutions/quotation?service=${service.slug}&package=${firstPackageId}`} className="inline-flex items-center justify-center gap-2 rounded-xl bg-cyan-400 px-5 py-3 font-semibold text-slate-950">Let's Talk <ArrowRight size={18} /></Link>
             <a href="https://wa.me/918310808011" target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-600 px-5 py-3 font-semibold">WhatsApp <MessageCircle size={18} /></a>
           </div>
         </div>

@@ -1,25 +1,34 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { ArrowLeft, ArrowRight, Check, MessageCircle } from 'lucide-react'
 import { businessServices, PRICING_DISCLAIMER } from '../data/businessSolutions'
+import { submitPublicEnquiry } from '../lib/publicEnquiry'
+import { usePublishedPage, usePublishedServices } from '../lib/publicContent'
 
 const inputClasses =
   'mt-1.5 w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-sm text-slate-900 shadow-sm outline-none transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200 dark:border-slate-700 dark:bg-slate-950/60 dark:text-white dark:focus:ring-cyan-500/20'
 
 export default function QuotationPage() {
   const [searchParams, setSearchParams] = useSearchParams()
+  const { data: publishedServices, loading: servicesLoading } = usePublishedServices('business-solutions')
+  const { content: businessPageContent } = usePublishedPage('business-solutions')
+  const serviceOptions = publishedServices === null ? businessServices : publishedServices
   const queryService = searchParams.get('service')
   const queryPackage = searchParams.get('package')
-  const initialService = businessServices.find((item) => item.slug === queryService) || businessServices[0]
+  const initialService = serviceOptions.find((item) => item.slug === queryService) || serviceOptions[0] || businessServices[0]
   const initialPackage = queryPackage === 'custom'
     ? { id: 'custom' }
-    : initialService.packages.find((item) => item.id === queryPackage) || initialService.packages[0]
+    : initialService.packages.find((item) => item.id === queryPackage) || initialService.packages[0] || { id: 'custom' }
 
   const [step, setStep] = useState(1)
   const [serviceId, setServiceId] = useState(initialService.slug)
   const [packageId, setPackageId] = useState(initialPackage.id)
   const [consent, setConsent] = useState(false)
   const [errors, setErrors] = useState({})
+  const [submitting, setSubmitting] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
+  const [submitError, setSubmitError] = useState('')
+  const [whatsAppUrl, setWhatsAppUrl] = useState('')
   const [details, setDetails] = useState({
     name: '', organization: '', phone: '', email: '', businessCategory: '', features: '',
     budget: '', timeline: '', requirements: '', websiteUrl: '', appPurpose: '', workflow: '',
@@ -31,14 +40,33 @@ export default function QuotationPage() {
     features: ['Requirements and scope finalized after consultation'],
   }
 
+  useEffect(() => {
+    const requestedService = serviceOptions.find((item) => item.slug === queryService)
+    if (queryService && !requestedService && servicesLoading) return
+
+    const nextService = requestedService
+      || serviceOptions.find((item) => item.slug === serviceId)
+      || serviceOptions[0]
+    if (!nextService) return
+
+    const requestedPackage = queryPackage === 'custom'
+      ? { id: 'custom' }
+      : nextService.packages.find((item) => item.id === queryPackage)
+    const currentPackage = nextService.packages.find((item) => item.id === packageId)
+    const nextPackage = requestedPackage || currentPackage || nextService.packages[0] || { id: 'custom' }
+
+    if (serviceId !== nextService.slug) setServiceId(nextService.slug)
+    if (packageId !== nextPackage.id) setPackageId(nextPackage.id)
+  }, [packageId, queryPackage, queryService, serviceId, serviceOptions, servicesLoading])
+
   const selectedService = useMemo(
-    () => businessServices.find((item) => item.slug === serviceId) || businessServices[0],
-    [serviceId],
+    () => serviceOptions.find((item) => item.slug === serviceId) || serviceOptions[0] || null,
+    [serviceOptions, serviceId],
   )
   const selectedPackage = useMemo(
-    () => packageId === 'custom'
+    () => !selectedService || packageId === 'custom'
       ? customPackage
-      : selectedService.packages.find((item) => item.id === packageId) || selectedService.packages[0],
+      : selectedService.packages.find((item) => item.id === packageId) || selectedService.packages[0] || customPackage,
     [selectedService, packageId],
   )
 
@@ -48,10 +76,12 @@ export default function QuotationPage() {
   }
 
   const handleServiceChange = (slug) => {
-    const service = businessServices.find((item) => item.slug === slug) || businessServices[0]
+    const service = serviceOptions.find((item) => item.slug === slug) || serviceOptions[0]
+    if (!service) return
     setServiceId(service.slug)
-    setPackageId(service.packages[0].id)
-    setSearchParams({ service: service.slug, package: service.packages[0].id })
+    const nextPackageId = service.packages[0]?.id || 'custom'
+    setPackageId(nextPackageId)
+    setSearchParams({ service: service.slug, package: nextPackageId })
   }
 
   const handlePackageChange = (id) => {
@@ -61,7 +91,7 @@ export default function QuotationPage() {
 
   const validateStepOne = () => {
     const nextErrors = {}
-    if (!selectedService) nextErrors.service = 'Please select a service.'
+    if (!selectedService || serviceOptions.length === 0) nextErrors.service = 'No published services are currently available.'
     if (!selectedPackage) nextErrors.package = 'Please select a package.'
     setErrors(nextErrors)
     return Object.keys(nextErrors).length === 0
@@ -84,11 +114,12 @@ export default function QuotationPage() {
     return Object.keys(nextErrors).length === 0
   }
 
-  const submitWhatsApp = () => {
+  const submitWhatsApp = async () => {
     if (!consent) {
       setErrors({ consent: 'Please provide consent before continuing.' })
       return
     }
+    if (submitting || submitted || !selectedService || !selectedPackage) return
 
     const lines = [
       'Hello Tech In Air, I would like to request a quote.',
@@ -112,7 +143,38 @@ export default function QuotationPage() {
     if (serviceId === 'business-automation') lines.push(`Current workflow and automation requirements: ${details.workflow.trim() || 'Not provided'}`)
     lines.push('', 'I consent to Tech In Air using this information to respond to this enquiry.')
 
-    window.open(`https://wa.me/918310808011?text=${encodeURIComponent(lines.join('\n'))}`, '_blank', 'noopener,noreferrer')
+    const whatsappUrl = `https://wa.me/918310808011?text=${encodeURIComponent(lines.join('\n'))}`
+    const requirements = [
+      `Package: ${selectedPackage.name}`,
+      `Business category: ${details.businessCategory.trim() || 'Not provided'}`,
+      `Required features: ${details.features.trim() || 'Not provided'}`,
+      `Estimated budget: ${details.budget.trim() || 'Not provided'}`,
+      `Preferred timeline: ${details.timeline.trim() || 'Not provided'}`,
+      `Additional requirements: ${details.requirements.trim() || 'Not provided'}`,
+      serviceId === 'website-maintenance' ? `Existing website URL: ${details.websiteUrl.trim() || 'Not provided'}` : '',
+      serviceId === 'android-development' ? `Application purpose: ${details.appPurpose.trim() || 'Not provided'}` : '',
+      serviceId === 'business-automation' ? `Current workflow: ${details.workflow.trim() || 'Not provided'}` : '',
+    ].filter(Boolean).join('\n')
+
+    setSubmitting(true)
+    setSubmitError('')
+    try {
+      await submitPublicEnquiry({
+        customerName: details.name,
+        email: details.email,
+        phone: details.phone,
+        organization: details.organization,
+        serviceRequested: selectedService.title,
+        requirements,
+        source: 'quotation',
+      })
+      setSubmitted(true)
+      setWhatsAppUrl(whatsappUrl)
+    } catch (error) {
+      setSubmitError(error.message)
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -134,13 +196,19 @@ export default function QuotationPage() {
         </div>
 
         <div className="mt-6 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-950/60 md:p-8">
-          {step === 1 && (
+          {step === 1 && serviceOptions.length === 0 && (
+            <div role="status" className="rounded-xl border border-slate-200 bg-slate-50 p-5 text-sm text-slate-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300">
+              No services are currently published. Please contact Tech In Air directly for a quotation.
+            </div>
+          )}
+
+          {step === 1 && serviceOptions.length > 0 && (
             <div>
               <h2 className="text-xl font-bold text-slate-900 dark:text-white">1. Select your service and package</h2>
               <div className="mt-6 grid gap-5 md:grid-cols-2">
                 <label className="text-sm font-semibold text-slate-700 dark:text-slate-200">Service
                   <select value={serviceId} onChange={(event) => handleServiceChange(event.target.value)} className={inputClasses}>
-                    {businessServices.map((service) => <option key={service.slug} value={service.slug}>{service.title}</option>)}
+                    {serviceOptions.map((service) => <option key={service.slug} value={service.slug}>{service.title}</option>)}
                   </select>
                   {errors.service && <span className="mt-1 block text-xs text-red-600">{errors.service}</span>}
                 </label>
@@ -158,7 +226,7 @@ export default function QuotationPage() {
                 <p className="mt-2 text-2xl font-bold text-cyan-700 dark:text-cyan-300">{selectedPackage.price}</p>
                 <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">{selectedPackage.features.slice(0, 4).join(' • ')}</p>
               </div>
-              <p className="mt-5 text-xs leading-5 text-slate-500 dark:text-slate-400">{PRICING_DISCLAIMER}</p>
+              <p className="mt-5 text-xs leading-5 text-slate-500 dark:text-slate-400">{businessPageContent?.pricingDisclaimer || PRICING_DISCLAIMER}</p>
               <div className="mt-6 flex justify-end"><button type="button" onClick={() => validateStepOne() && setStep(2)} className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-5 py-3 font-semibold text-slate-900">Continue <ArrowRight size={18} /></button></div>
             </div>
           )}
@@ -222,10 +290,12 @@ export default function QuotationPage() {
                 <div className="rounded-xl border border-slate-200 p-5 text-sm text-slate-600 dark:border-slate-800 dark:text-slate-300"><p><strong>Customer:</strong> {details.name}</p><p className="mt-2"><strong>Organization:</strong> {details.organization || 'Not provided'}</p><p className="mt-2"><strong>Phone:</strong> {details.phone}</p><p className="mt-2"><strong>Email:</strong> {details.email || 'Not provided'}</p><p className="mt-2"><strong>Category:</strong> {details.businessCategory || 'Not provided'}</p></div>
                 <div className="md:col-span-2 rounded-xl border border-slate-200 p-5 text-sm text-slate-600 dark:border-slate-800 dark:text-slate-300"><p><strong>Features:</strong> {details.features || 'Not provided'}</p><p className="mt-2"><strong>Budget:</strong> {details.budget || 'Not provided'}</p><p className="mt-2"><strong>Timeline:</strong> {details.timeline || 'Not provided'}</p><p className="mt-2"><strong>Additional requirements:</strong> {details.requirements || 'Not provided'}</p>{serviceId === 'website-maintenance' && <p className="mt-2"><strong>Website URL:</strong> {details.websiteUrl || 'Not provided'}</p>} {serviceId === 'android-development' && <p className="mt-2"><strong>App purpose:</strong> {details.appPurpose || 'Not provided'}</p>} {serviceId === 'business-automation' && <p className="mt-2"><strong>Workflow:</strong> {details.workflow || 'Not provided'}</p>}</div>
               </div>
-              <label className="mt-5 flex items-start gap-3 text-sm text-slate-700 dark:text-slate-200"><input type="checkbox" checked={consent} onChange={(event) => { setConsent(event.target.checked); setErrors({}) }} className="mt-1 h-4 w-4 accent-cyan-500" /><span>I consent to Tech In Air using this information only to respond to and discuss this enquiry. *</span></label>
+              <label className="mt-5 flex items-start gap-3 text-sm text-slate-700 dark:text-slate-200"><input type="checkbox" checked={consent} onChange={(event) => { setConsent(event.target.checked); setErrors({}) }} className="mt-1 h-4 w-4 accent-cyan-500" /><span>I consent to Tech In Air storing and using this information to respond to this enquiry. *</span></label>
               {errors.consent && <p className="mt-2 text-xs text-red-600">{errors.consent}</p>}
-              <p className="mt-4 text-xs text-slate-500 dark:text-slate-400">Your details are not stored in a database. WhatsApp will open with the prepared enquiry for you to review and send.</p>
-              <div className="mt-6 flex flex-col-reverse justify-between gap-3 sm:flex-row"><button type="button" onClick={() => setStep(2)} className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 px-5 py-3 font-semibold text-slate-700 dark:border-slate-700 dark:text-slate-200"><ArrowLeft size={17} /> Edit details</button><button type="button" onClick={submitWhatsApp} className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-5 py-3 font-semibold text-slate-900"><MessageCircle size={18} /> Send Enquiry via WhatsApp</button></div>
+              <p className="mt-4 text-xs text-slate-500 dark:text-slate-400">Your enquiry will be stored in Tech In Air’s administrator-only enquiry records so the team can respond. WhatsApp is an optional follow-up channel.</p>
+              {submitError && <p role="alert" className="mt-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300">{submitError}</p>}
+              {submitted && <p role="status" className="mt-4 rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300">Your enquiry has been received.</p>}
+              <div className="mt-6 flex flex-col-reverse justify-between gap-3 sm:flex-row"><button type="button" onClick={() => setStep(2)} disabled={submitting || submitted} className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 px-5 py-3 font-semibold text-slate-700 disabled:opacity-60 dark:border-slate-700 dark:text-slate-200"><ArrowLeft size={17} /> Edit details</button>{submitted ? <a href={whatsAppUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-5 py-3 font-semibold text-slate-900"><MessageCircle size={18} /> Continue via WhatsApp</a> : <button type="button" onClick={submitWhatsApp} disabled={submitting} className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-5 py-3 font-semibold text-slate-900 disabled:cursor-not-allowed disabled:opacity-60"><MessageCircle size={18} /> {submitting ? 'Sending enquiry…' : 'Submit Enquiry'}</button>}</div>
             </div>
           )}
         </div>

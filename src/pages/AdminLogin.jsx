@@ -16,6 +16,10 @@ export default function AdminLogin() {
     setIsSubmitting(true)
 
     try {
+      if (!supabase) {
+        setErrorMessage('Authentication is unavailable because Supabase is not configured.')
+        return
+      }
       const { data, error } = await supabase.auth.signInWithPassword({ email, password })
 
       if (error || !data.user) {

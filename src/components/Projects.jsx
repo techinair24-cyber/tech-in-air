@@ -3,17 +3,18 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import projectsData from '../data/projects'
 import ProjectCard from './ProjectCard'
-
-const categories = ['All','AI / ML','Software','Android','IoT','Embedded','Deep Learning','Engineering Main Project']
+import { usePublishedProjects } from '../lib/publicContent'
 
 export default function Projects(){
   const [filter, setFilter] = useState('All')
-  const [selected, setSelected] = useState(null)
+  const { data: publishedProjects } = usePublishedProjects()
+  const projects = publishedProjects === null ? projectsData : publishedProjects
+  const categories = useMemo(() => ['All', ...new Set(projects.flatMap((project) => project.categories || []))], [projects])
 
   const filtered = useMemo(()=>{
-    if(filter==='All') return projectsData
-    return projectsData.filter(p=> Array.isArray(p.categories) && p.categories.includes(filter))
-  },[filter])
+    if(filter==='All') return projects
+    return projects.filter(p=> Array.isArray(p.categories) && p.categories.includes(filter))
+  },[filter, projects])
 
   return (
     <section id="projects" className="py-12">
@@ -21,7 +22,7 @@ export default function Projects(){
         <motion.div initial={{opacity:0,y:12}} whileInView={{opacity:1,y:0}} viewport={{once:true}} transition={{duration:0.35}}>
           <p className="text-sm font-semibold text-[var(--accent)]">Portfolio</p>
           <h2 className="mt-3 text-4xl font-semibold md:text-5xl">Selected technology work</h2>
-          <p className="mt-3 max-w-2xl text-[var(--muted)]">Completed projects across artificial intelligence, software, mobile and intelligent systems.</p>
+          <p className="mt-3 max-w-2xl text-[var(--muted)]">Explore published projects across artificial intelligence, software, mobile and intelligent systems.</p>
         </motion.div>
 
         <div className="mt-4 flex flex-wrap gap-3">
@@ -41,6 +42,7 @@ export default function Projects(){
         </div>
 
         <div className="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {filtered.length === 0 && <p className="text-[var(--muted)]">No projects are currently published.</p>}
           {filtered.map((p, index) => (
             <motion.div key={p.id} initial={{opacity:0,y:18}} whileInView={{opacity:1,y:0}} viewport={{once:true}} transition={{duration:0.35, delay:index*0.06}}>
               <ProjectCard p={p} />
@@ -48,9 +50,9 @@ export default function Projects(){
           ))}
         </div>
 
-        <div className="mt-6 text-center">
+        {projects.length > 0 && <div className="mt-6 text-center">
           <Link to="/projects" className="px-6 py-3 bg-gradient-to-r from-cyan-400 to-blue-500 text-black rounded-md inline-block">View All Projects</Link>
-        </div>
+        </div>}
       </div>
     </section>
   )

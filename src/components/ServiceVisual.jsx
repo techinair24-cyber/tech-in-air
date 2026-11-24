@@ -1,7 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 
-export default function ServiceVisual({ slug, title }) {
+export default function ServiceVisual({ slug, title, image }) {
   const isMobile = slug === 'android-development'
   const isStore = slug === 'ecommerce'
   const isAutomation = slug === 'business-automation'
@@ -15,7 +15,9 @@ export default function ServiceVisual({ slug, title }) {
       className="relative aspect-[16/10] overflow-hidden rounded-[1.25rem] border border-[var(--border)] bg-[var(--surface)]"
       aria-label={`${title} illustrative concept`}
     >
-      <div className="absolute left-[10%] top-[15%] h-[70%] w-[80%] rounded-[1.1rem] border border-[var(--border)] bg-[var(--card)] p-[4%] shadow-[0_24px_60px_rgba(0,113,227,0.10)]">
+      {image ? (
+        <img src={image} alt={title} loading="lazy" className="h-full w-full object-cover" />
+      ) : <div className="absolute left-[10%] top-[15%] h-[70%] w-[80%] rounded-[1.1rem] border border-[var(--border)] bg-[var(--card)] p-[4%] shadow-[0_24px_60px_rgba(0,113,227,0.10)]">
         {isMobile ? (
           <div className="mx-auto h-full w-[32%] min-w-24 rounded-[1.4rem] border-[5px] border-[var(--foreground)] bg-[var(--surface)] p-2">
             <div className="mx-auto h-1 w-8 rounded-full bg-[var(--muted)]" />
@@ -71,7 +73,7 @@ export default function ServiceVisual({ slug, title }) {
             </div>
           </div>
         )}
-      </div>
+      </div>}
     </motion.div>
   )
 }

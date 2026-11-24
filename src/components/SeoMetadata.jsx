@@ -1,7 +1,9 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import { getSeoMetadata } from '../seo'
+import { getSeoMetadata, LOGO_URL, SITE_URL } from '../seo'
 import { businessServices } from '../data/businessSolutions'
+import projects from '../data/projects'
+import { usePublishedPage, usePublishedProjects, usePublishedServices } from '../lib/publicContent'
 
 const metaTags = [
   ['name', 'description'],
@@ -63,9 +65,46 @@ function updateCanonical(url) {
 
 export default function SeoMetadata() {
   const { pathname } = useLocation()
+  const cmsSlug = pathname === '/' ? 'home'
+    : pathname === '/about' ? 'about'
+      : pathname === '/services' ? 'academic-solutions'
+        : pathname === '/business-solutions' ? 'business-solutions'
+          : ['/contact', '/projects', '/process'].includes(pathname)
+            ? pathname.slice(1)
+            : /^(\/business-solutions\/[^/]+|\/projects\/[^/]+|\/admin(?:\/|$)|\/review(?:\/|$))/.test(pathname)
+              ? ''
+              : pathname.replace(/^\/+|\/+$/g, '')
+  const { title: cmsPageTitle, seo } = usePublishedPage(cmsSlug)
+  const { data: publishedServices } = usePublishedServices('business-solutions')
+  const { data: publishedProjects } = usePublishedProjects()
 
   useEffect(() => {
-    const metadata = getSeoMetadata(pathname)
+    const serviceList = publishedServices === null ? businessServices : publishedServices
+    const service = serviceList.find((item) => pathname === `/business-solutions/${item.slug}`)
+    const projectList = publishedProjects === null ? projects : publishedProjects
+    const project = projectList.find((item) => pathname === `/projects/${item.slug || item.id}`)
+    const metadata = getSeoMetadata(pathname) || (service ? {
+      title: `${service.title} | Tech In Air`,
+      description: service.detailedDescription || service.shortDescription,
+      url: `${SITE_URL}${pathname}`,
+      image: LOGO_URL,
+    } : project ? {
+      title: `${project.title} | Tech In Air`,
+      description: project.description,
+      url: `${SITE_URL}${pathname}`,
+      image: project.image ? new URL(project.image, SITE_URL).href : LOGO_URL,
+    } : cmsPageTitle ? {
+      title: `${cmsPageTitle} | Tech In Air`,
+      description: typeof seo?.description === 'string' && seo.description.trim()
+        ? seo.description.trim()
+        : `${cmsPageTitle} from Tech In Air.`,
+      url: `${SITE_URL}${pathname}`,
+      image: LOGO_URL,
+    } : null)
+    if (metadata && seo && typeof seo === 'object') {
+      if (typeof seo.title === 'string' && seo.title.trim()) metadata.title = seo.title.trim()
+      if (typeof seo.description === 'string' && seo.description.trim()) metadata.description = seo.description.trim()
+    }
     let structuredData = document.head.querySelector('script[data-tech-in-air-jsonld]')
     if (structuredData) structuredData.remove()
 
@@ -92,7 +131,6 @@ export default function SeoMetadata() {
     updateMetaTag('name', 'twitter:image:alt', 'Tech in Air logo')
     updateCanonical(metadata.url)
 
-    const service = businessServices.find((item) => pathname === `/business-solutions/${item.slug}`)
     if (service) {
       structuredData = document.createElement('script')
       structuredData.type = 'application/ld+json'
@@ -110,14 +148,18 @@ export default function SeoMetadata() {
               url: 'https://tech-in-air.vercel.app',
             },
             areaServed: 'India',
-            offers: service.packages.map((pkg) => ({
+            offers: service.packages
+              .filter((pkg) => Number.isSafeInteger(pkg.priceMinor) && pkg.priceMinor >= 0)
+              .map((pkg) => ({
               '@type': 'Offer',
               name: pkg.name,
               priceSpecification: {
                 '@type': 'PriceSpecification',
-                price: pkg.price,
+                price: (pkg.priceMinor / 100).toFixed(2),
+                priceCurrency: pkg.currency || 'INR',
+                ...(pkg.billingInterval ? { unitText: pkg.billingInterval } : {}),
               },
-            })),
+              })),
           },
           {
             '@type': 'BreadcrumbList',
@@ -131,7 +173,7 @@ export default function SeoMetadata() {
       })
       document.head.appendChild(structuredData)
     }
-  }, [pathname])
+  }, [cmsPageTitle, pathname, seo, publishedProjects, publishedServices])
 
   return null
 }

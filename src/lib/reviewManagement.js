@@ -2,6 +2,9 @@ import { supabase } from './supabase'
 import { MAX_REVIEW_PHOTO_SIZE, REVIEW_PHOTO_BUCKET, REVIEW_PHOTO_MIME_TYPES } from './reviewPhotos'
 
 export async function manageReview(action, payload = {}) {
+  if (!supabase) {
+    throw new Error('The review service is unavailable because Supabase is not configured.')
+  }
   const { data, error } = await supabase.functions.invoke('review-management', {
     body: { action, ...payload },
   })

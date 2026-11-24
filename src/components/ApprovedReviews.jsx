@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { supabase } from '../lib/supabase'
+import { isSupabaseConfigured, supabase } from '../lib/supabase'
 import ReviewPhotoGallery from './ReviewPhotoGallery'
 import { createReviewPhotoUrls } from '../lib/reviewPhotos'
 
-export default function ApprovedReviews({ limit }) {
+export default function ApprovedReviews({ limit, title = 'What Our Customers Say' }) {
   const [reviews, setReviews] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
@@ -14,6 +14,11 @@ export default function ApprovedReviews({ limit }) {
     let isActive = true
 
     const loadApprovedReviews = async () => {
+      if (!isSupabaseConfigured) {
+        setHasError(true)
+        setIsLoading(false)
+        return
+      }
       const { data, error } = await supabase
         .from('reviews')
         .select('id, customer_name, college_name, education, project_type, rating, review_text, photo_paths, created_at')
@@ -62,7 +67,7 @@ export default function ApprovedReviews({ limit }) {
           <div className="mb-10 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
             <div>
               <p className="mb-3 text-sm font-semibold text-[var(--accent)]">Customer Experiences</p>
-              <h2 className="text-3xl font-semibold md:text-5xl">What Our Customers Say</h2>
+              <h2 className="text-3xl font-semibold md:text-5xl">{title}</h2>
             </div>
             {typeof limit === 'number' && (
               <Link to="/reviews" className="secondary-button w-fit">Read All Reviews</Link>

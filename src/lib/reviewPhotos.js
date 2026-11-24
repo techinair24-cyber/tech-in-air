@@ -11,6 +11,9 @@ export const REVIEW_PHOTO_MIME_TYPES = {
 }
 
 export async function createReviewPhotoUrls(paths, expiresIn = 60) {
+  if (!supabase) {
+    throw new Error('Review photos are unavailable because Supabase is not configured.')
+  }
   return Promise.all(
     (paths ?? []).map(async (path) => {
       const { data, error } = await supabase.storage

@@ -23,6 +23,9 @@ import SeoMetadata from './components/SeoMetadata'
 import { buildTechieContext } from './data/chatbotContext'
 import { supabase } from './lib/supabase'
 import OpeningAnimation from './components/OpeningAnimation'
+import PublicAnnouncementBanner from './components/PublicAnnouncementBanner'
+import PublicOfferBanner from './components/PublicOfferBanner'
+import PublishedPage from './pages/PublishedPage'
 
 function AdminReviewsPlaceholder() {
   const navigate = useNavigate()
@@ -85,12 +88,22 @@ export default function App() {
     }
   }, [location.pathname, location.hash])
 
+  useEffect(() => {
+    if (isAdminRoute) return undefined
+    const intervalId = window.setInterval(() => {
+      window.dispatchEvent(new Event('tech-in-air:public-content-refresh'))
+    }, 60_000)
+    return () => window.clearInterval(intervalId)
+  }, [isAdminRoute])
+
   return (
     <div className={`min-h-screen bg-[var(--bg)] text-[var(--foreground)] transition-colors duration-200 ${isAdminRoute ? '' : 'public-site'}`}>
       <OpeningAnimation />
       <SeoMetadata />
       {!isAdminRoute && <Navbar />}
       <main className={isAdminRoute ? '' : 'pt-24 md:pt-28'}>
+        {!isAdminRoute && <PublicAnnouncementBanner />}
+        {!isAdminRoute && <PublicOfferBanner />}
         <AnimatePresence mode="wait">
           <motion.div
             key={location.pathname}
@@ -116,6 +129,7 @@ export default function App() {
               <Route path="/review/edit" element={<CustomerReviewEdit />} />
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin/reviews" element={<AdminReviewsPlaceholder />} />
+              <Route path="*" element={<PublishedPage />} />
             </Routes>
           </motion.div>
         </AnimatePresence>

@@ -3,42 +3,50 @@ import { motion } from 'framer-motion'
 import { SiWhatsapp, SiInstagram, SiGmail } from 'react-icons/si'
 import { FiArrowUpRight } from 'react-icons/fi'
 import ContactForm from './ContactForm'
+import { getPageText, getSafeExternalUrl } from '../lib/pageContent.mjs'
 
-const contactLinks = [
-  {
-    href: 'https://wa.me/918310808011',
-    label: 'Chat on WhatsApp',
-    meta: '+91 8310808011',
-    icon: SiWhatsapp,
-    accent: 'bg-emerald-500/10 text-emerald-600 border-emerald-200 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-400',
-    cardClass: 'border-emerald-200/80 hover:border-emerald-300 dark:border-emerald-500/30 dark:hover:border-emerald-400/60',
-    textClass: 'text-emerald-700 dark:text-emerald-300',
-    target: '_blank',
-    rel: 'noreferrer',
-  },
-  {
-    href: 'mailto:tech.in.air24@gmail.com',
-    label: 'Email Us',
-    meta: 'tech.in.air24@gmail.com',
-    icon: SiGmail,
-    accent: 'bg-red-500/10 text-red-600 border-red-200 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-400',
-    cardClass: 'border-red-200/80 hover:border-red-300 dark:border-red-500/30 dark:hover:border-red-400/60',
-    textClass: 'text-red-700 dark:text-red-300',
-  },
-  {
-    href: 'https://www.instagram.com/tech_in_air_ka',
-    label: 'Follow Tech in Air',
-    meta: '@tech_in_air_ka',
-    icon: SiInstagram,
-    accent: 'bg-pink-500/10 text-pink-600 border-pink-200 dark:border-pink-500/30 dark:bg-pink-500/10 dark:text-pink-400',
-    cardClass: 'border-pink-200/80 hover:border-pink-300 dark:border-pink-500/30 dark:hover:border-pink-400/60',
-    textClass: 'text-pink-700 dark:text-pink-300',
-    target: '_blank',
-    rel: 'noreferrer',
-  },
-]
+export default function Contact({ contact = {}, intro = {} }) {
+  const phone = typeof contact.phone === 'string' && contact.phone.trim() ? contact.phone : '+91 8310808011'
+  const phoneDigits = phone.replace(/\D/g, '') || '918310808011'
+  const whatsapp = getSafeExternalUrl(contact.whatsappUrl) || `https://wa.me/${phoneDigits}`
+  const rawEmail = typeof contact.email === 'string' && contact.email.trim() ? contact.email : 'tech.in.air24@gmail.com'
+  const email = rawEmail.replace(/^mailto:/i, '')
+  const emailHref = getSafeExternalUrl(rawEmail.startsWith('mailto:') ? rawEmail : `mailto:${rawEmail}`) || 'mailto:tech.in.air24@gmail.com'
+  const instagram = getSafeExternalUrl(contact.instagramUrl) || 'https://www.instagram.com/tech_in_air_ka'
+  const contactLinks = [
+    {
+      href: whatsapp,
+      label: typeof contact.whatsappLabel === 'string' ? contact.whatsappLabel : 'Chat on WhatsApp',
+      meta: phone,
+      icon: SiWhatsapp,
+      accent: 'bg-emerald-500/10 text-emerald-600 border-emerald-200 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-400',
+      cardClass: 'border-emerald-200/80 hover:border-emerald-300 dark:border-emerald-500/30 dark:hover:border-emerald-400/60',
+      textClass: 'text-emerald-700 dark:text-emerald-300',
+      target: '_blank',
+      rel: 'noreferrer',
+    },
+    {
+      href: emailHref,
+      label: 'Email Us',
+      meta: email,
+      icon: SiGmail,
+      accent: 'bg-red-500/10 text-red-600 border-red-200 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-400',
+      cardClass: 'border-red-200/80 hover:border-red-300 dark:border-red-500/30 dark:hover:border-red-400/60',
+      textClass: 'text-red-700 dark:text-red-300',
+    },
+    {
+      href: instagram,
+      label: typeof contact.instagramLabel === 'string' ? contact.instagramLabel : 'Follow Tech in Air',
+      meta: typeof contact.instagramHandle === 'string' ? contact.instagramHandle : '@tech_in_air_ka',
+      icon: SiInstagram,
+      accent: 'bg-pink-500/10 text-pink-600 border-pink-200 dark:border-pink-500/30 dark:bg-pink-500/10 dark:text-pink-400',
+      cardClass: 'border-pink-200/80 hover:border-pink-300 dark:border-pink-500/30 dark:hover:border-pink-400/60',
+      textClass: 'text-pink-700 dark:text-pink-300',
+      target: '_blank',
+      rel: 'noreferrer',
+    },
+  ]
 
-export default function Contact() {
   return (
     <section id="contact" className="py-8 md:py-10">
       <div className="container grid gap-8 md:grid-cols-2 md:items-start">
@@ -69,10 +77,10 @@ export default function Contact() {
 
           <div>
             <h2 className="text-3xl font-semibold tracking-tight text-slate-900 dark:text-white">
-              Have a Project Idea? Let's Build It.
+              {getPageText(intro.heading, 'Have a Project Idea? Let’s Build It.')}
             </h2>
             <p className="mt-3 max-w-xl text-base leading-7 text-slate-600 dark:text-slate-300">
-              Tell us about your project idea, requirements or technology challenge. Tech in Air can help turn the concept into a working project.
+              {getPageText(intro.description, 'Tell us about your project idea, requirements or technology challenge. Tech in Air can help turn the concept into a working project.')}
             </p>
           </div>
 

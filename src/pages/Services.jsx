@@ -3,11 +3,33 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import projects from '../data/projects'
 import services from '../data/services'
+import PublishedPageSections from '../components/PublishedPageSections'
+import { usePublishedPage, usePublishedProjects, usePublishedServices } from '../lib/publicContent'
+import { getPageText } from '../lib/pageContent.mjs'
 
 export default function ServicesPage() {
-  const academicProjects = [11, 8, 9, 2, 4, 12]
-    .map((id) => projects.find((project) => project.id === id))
-    .filter(Boolean)
+  const { content } = usePublishedPage('academic-solutions')
+  const { data: academicServiceRecords } = usePublishedServices('academic-solutions')
+  const { data: publishedProjects } = usePublishedProjects()
+  const hero = content?.hero && typeof content.hero === 'object' ? content.hero : {}
+  const pageServices = Array.isArray(content?.services)
+    ? content.services.filter((service) => service && typeof service === 'object' && typeof service.title === 'string')
+      .map((service) => ({
+        id: service.id || service.title,
+        title: service.title,
+        description: getPageText(service.description),
+      }))
+    : services
+  const academicServices = academicServiceRecords === null || academicServiceRecords.length === 0
+    ? pageServices
+    : academicServiceRecords.map((service) => ({
+      id: service.id,
+      title: service.title,
+      description: service.shortDescription || service.detailedDescription,
+    }))
+  const academicProjects = publishedProjects === null
+    ? [11, 8, 9, 2, 4, 12].map((id) => projects.find((project) => project.id === id)).filter(Boolean)
+    : publishedProjects.slice(0, 6)
 
   return (
     <div>
@@ -15,16 +37,18 @@ export default function ServicesPage() {
         <div className="container grid gap-10 lg:grid-cols-[1fr_0.72fr] lg:items-end">
           <div>
             <p className="mb-4 text-sm font-semibold text-[var(--accent)]">Academic Solutions</p>
-            <h1 className="max-w-4xl text-5xl font-semibold leading-[1.02] tracking-[-0.04em] md:text-7xl">Turn your academic ideas into working technology.</h1>
+            <h1 className="max-w-4xl text-5xl font-semibold leading-[1.02] tracking-[-0.04em] md:text-7xl">{getPageText(hero.heading, 'Turn your academic ideas into working technology.')}</h1>
           </div>
           <div>
             <p className="max-w-xl text-lg leading-8 text-[var(--muted)]">
-              AI, software and engineering project development with clear planning, technical guidance and demonstration support.
+              {getPageText(hero.description, 'AI, software and engineering project development with clear planning, technical guidance and demonstration support.')}
             </p>
             <Link to="/contact" className="primary-button mt-8">Let's Talk</Link>
           </div>
         </div>
       </header>
+
+      <PublishedPageSections content={content} services={academicServices} projects={publishedProjects || projects} serviceBasePath={null} excludedTypes={['hero']} />
 
       <section className="py-16 md:py-24">
         <div className="container">
@@ -56,8 +80,9 @@ export default function ServicesPage() {
             <h2 className="mt-3 text-3xl font-semibold md:text-4xl">Clarity at every stage.</h2>
           </div>
           <div className="grid gap-6 sm:grid-cols-2">
-            {services.map((service) => (
-              <article key={service.id} className="border-t border-[var(--border)] pt-5">
+            {academicServices.length === 0 && <p className="text-[var(--muted)]">No academic services are currently published.</p>}
+            {academicServices.map((service) => (
+              <article key={service.id || service.title} className="border-t border-[var(--border)] pt-5">
                 <h3 className="text-lg font-semibold">{service.title}</h3>
                 <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{service.description}</p>
               </article>

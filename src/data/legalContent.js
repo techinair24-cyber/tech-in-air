@@ -11,7 +11,7 @@ export const legalContent = {
           'Depending on how you interact with us, we may collect:',
         ],
         bullets: [
-          'Contact and enquiry information: your name, email address, phone number, messages and project requirements when you contact us through WhatsApp, email or another communication channel.',
+          'Contact and enquiry information: your name, email address, phone number, organization, selected service and project requirements when you submit the website contact or quotation form or contact us through another communication channel. Website form submissions are stored in administrator-only enquiry records so we can respond and manage follow-ups.',
           'Customer reviews: your name, project name, rating, written review and any optional photos submitted through our website.',
           'Technical information: limited information that may be processed by our website hosting provider or service providers to deliver, maintain and secure the website.',
         ],
@@ -24,6 +24,7 @@ export const legalContent = {
         paragraphs: ['We use information, as applicable, to:'],
         bullets: [
           'Respond to enquiries and discuss project requirements.',
+          'Manage website enquiries and follow up on project requests.',
           'Provide, coordinate and deliver agreed services.',
           'Receive, review and moderate customer reviews.',
           'Display approved reviews on our website.',
@@ -47,7 +48,7 @@ export const legalContent = {
         paragraphs: ['Our website and communication channels may rely on service providers, including:'],
         bullets: [
           'Vercel: website hosting and delivery.',
-          'Supabase: storage and moderation of customer reviews.',
+          'Supabase: storage and moderation of customer reviews and website enquiries.',
           'WhatsApp and email providers: communication with customers.',
         ],
         closingParagraphs: [

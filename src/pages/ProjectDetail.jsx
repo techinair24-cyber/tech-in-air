@@ -2,11 +2,14 @@ import React from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import projects from '../data/projects'
+import { usePublishedProjects } from '../lib/publicContent'
 
 export default function ProjectDetail(){
   const { id } = useParams()
-  const project = projects.find(p=> String(p.id)===String(id))
-  if(!project) return <div className="container py-8">Project not found</div>
+  const { data: publishedProjects, loading } = usePublishedProjects()
+  const projectList = publishedProjects === null ? projects : publishedProjects
+  const project = projectList.find(p=> String(p.id)===String(id) || p.slug === id)
+  if(!project) return <div className="container py-8">{loading ? 'Loading project…' : 'Project not found'}</div>
 
   const fallbackSrc = new URL('../assets/projects/placeholder.svg', import.meta.url).href
   const src = project.image || fallbackSrc
@@ -20,13 +23,13 @@ export default function ProjectDetail(){
         <div>
           <h1 className="text-4xl font-semibold leading-tight">{project.title}</h1>
           <div className="mt-3 text-sm font-semibold text-[var(--accent)]">
-            {Array.isArray(project.categories) ? project.categories.join(' • ') : project.category} • {project.status}
+            {Array.isArray(project.categories) ? project.categories.join(' • ') : project.category} • {project.status || 'Published'}
           </div>
           <p className="mt-5 text-lg leading-8 text-[var(--muted)]">{project.description}</p>
           <div className="mt-4">
             <div className="font-semibold text-sm text-slate-800 dark:text-slate-200">Technologies</div>
             <div className="mt-2 flex flex-wrap gap-2">
-              {project.technologies.map(t=> <span key={t} className="rounded-full border border-slate-200 bg-slate-100 px-2 py-1 text-xs text-slate-700 opacity-100 dark:border-slate-700 dark:bg-slate-900/80 dark:text-slate-100">{t}</span>)}
+              {(project.technologies || []).map(t=> <span key={t} className="rounded-full border border-slate-200 bg-slate-100 px-2 py-1 text-xs text-slate-700 opacity-100 dark:border-slate-700 dark:bg-slate-900/80 dark:text-slate-100">{t}</span>)}
             </div>
           </div>
           <div className="mt-6">

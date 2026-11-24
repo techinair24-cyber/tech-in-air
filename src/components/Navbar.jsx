@@ -4,8 +4,19 @@ import { ChevronDown, Menu, X } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
 import ThemeToggle from './ThemeToggle'
 import { businessServices } from '../data/businessSolutions'
+import { getPublicMediaUrl, usePublishedPage, usePublishedServices } from '../lib/publicContent'
+import { getSafeInternalPath, getSiteSettings } from '../lib/pageContent.mjs'
+
+const publicNavigationPaths = new Set([
+  '/', '/about', '/services', '/business-solutions', '/projects', '/reviews', '/contact',
+])
 
 export default function Navbar() {
+  const { content } = usePublishedPage('home')
+  const { data: publishedServices } = usePublishedServices('business-solutions')
+  const siteSettings = getSiteSettings(content)
+  const brand = siteSettings.brand && typeof siteSettings.brand === 'object' ? siteSettings.brand : {}
+  const serviceList = publishedServices === null ? businessServices : publishedServices
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [solutionsOpen, setSolutionsOpen] = useState(false)
@@ -19,7 +30,7 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const links = [
+  const defaultLinks = [
     { label: 'Home', href: '/' },
     { label: 'About', href: '/about' },
     { label: 'Solutions', href: '/business-solutions', dropdown: true },
@@ -27,6 +38,16 @@ export default function Navbar() {
     { label: 'Reviews', href: '/reviews' },
     { label: 'Contact', href: '/contact' },
   ]
+  const configuredLinks = Array.isArray(siteSettings.navigation)
+    ? siteSettings.navigation.map((item) => ({
+      label: typeof item?.label === 'string' ? item.label.trim() : '',
+      href: getSafeInternalPath(item?.href, publicNavigationPaths),
+      dropdown: item?.href === '/business-solutions',
+    })).filter((item) => item.label && item.href)
+    : []
+  const links = configuredLinks.length ? configuredLinks : defaultLinks
+  const brandName = typeof brand.name === 'string' && brand.name.trim() ? brand.name : 'Tech in Air'
+  const logo = getPublicMediaUrl(brand.logoPath || brand.logo) || '/Logo/TA%20logo.png'
 
   const isActive = (href) => {
     if (href === '/business-solutions') return location.pathname.startsWith('/business-solutions')
@@ -36,9 +57,9 @@ export default function Navbar() {
   return (
     <header className={`fixed top-0 z-50 h-[72px] w-full transition-all duration-300 ${scrolled ? 'border-b border-[var(--border)] bg-[var(--navbar-bg)] backdrop-blur-xl' : 'bg-[var(--bg)]'}`}>
       <div className="container flex h-full items-center justify-between">
-        <Link to="/" className="flex shrink-0 items-center gap-2.5" aria-label="Tech in Air home">
-          <img src="/Logo/TA%20logo.png" alt="" className="h-11 w-11 object-contain" />
-          <span className="text-[15px] font-bold tracking-[-0.02em] text-[var(--foreground)]">Tech in Air</span>
+        <Link to="/" className="flex shrink-0 items-center gap-2.5" aria-label={`${brandName} home`}>
+          <img src={logo} alt="" className="h-11 w-11 object-contain" />
+          <span className="text-[15px] font-bold tracking-[-0.02em] text-[var(--foreground)]">{brandName}</span>
         </Link>
 
         <nav className="hidden items-center gap-7 md:flex" aria-label="Primary navigation">
@@ -75,7 +96,7 @@ export default function Navbar() {
                         <Link to="/services" role="menuitem" onClick={() => setSolutionsOpen(false)} className="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[var(--foreground)] hover:bg-[var(--surface)]">Academic Solutions</Link>
                         <Link to="/business-solutions" role="menuitem" onClick={() => setSolutionsOpen(false)} className="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[var(--foreground)] hover:bg-[var(--surface)]">Business Solutions</Link>
                         <div className="my-1 border-t border-[var(--border)]" />
-                        {businessServices.map((service) => (
+                        {serviceList.map((service) => (
                           <Link key={service.slug} to={`/business-solutions/${service.slug}`} role="menuitem" onClick={() => setSolutionsOpen(false)} className="block rounded-lg px-3 py-2.5 text-sm text-[var(--muted)] hover:bg-[var(--surface)] hover:text-[var(--foreground)]">
                             {service.title}
                           </Link>
@@ -135,7 +156,7 @@ export default function Navbar() {
                           <div className="mb-2 ml-3 grid gap-1 border-l border-[var(--border)] pl-4">
                             <Link to="/services" onClick={() => { setOpen(false); setMobileSolutionsOpen(false) }} className="py-2 text-sm font-semibold text-[var(--foreground)]">Academic Solutions</Link>
                             <Link to="/business-solutions" onClick={() => { setOpen(false); setMobileSolutionsOpen(false) }} className="py-2 text-sm font-semibold text-[var(--foreground)]">Business Solutions</Link>
-                            {businessServices.map((service) => (
+                            {serviceList.map((service) => (
                               <Link key={service.slug} to={`/business-solutions/${service.slug}`} onClick={() => { setOpen(false); setMobileSolutionsOpen(false) }} className="py-2 text-sm text-[var(--muted)]">{service.title}</Link>
                             ))}
                           </div>
