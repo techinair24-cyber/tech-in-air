@@ -81,7 +81,7 @@ export default function ApprovedReviews({ limit }) {
                 return (
                   <article
                     key={review.id}
-                    className="flex h-full flex-col rounded-2xl border border-slate-200/80 bg-white/80 p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md dark:border-white/10 dark:bg-slate-950/40"
+                    className="flex h-full flex-col rounded-[1.25rem] border border-[var(--border)] bg-[var(--card)] p-6 transition-transform duration-200 hover:-translate-y-1"
                   >
                     <div
                       className="text-lg tracking-wider text-amber-500"
@@ -102,7 +102,7 @@ export default function ApprovedReviews({ limit }) {
                         Review photos are temporarily unavailable.
                       </p>
                     )}
-                    <div className="mt-6 border-t border-slate-200 pt-4 dark:border-slate-700">
+                    <div className="mt-6 border-t border-[var(--border)] pt-4">
                       <p className="break-words font-semibold text-slate-900 dark:text-white">
                         {review.customer_name}
                       </p>

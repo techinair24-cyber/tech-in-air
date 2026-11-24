@@ -23,38 +23,10 @@ export default function AbstractTechnologyVisual() {
             <feGaussianBlur stdDeviation="12" />
           </filter>
         </defs>
-        <motion.path
-          d="M42 348C164 198 278 464 402 312C516 172 596 266 718 116"
-          stroke="url(#tiaFlow)"
-          strokeWidth="18"
-          strokeLinecap="round"
-          initial={{ pathLength: 0, opacity: 0 }}
-          animate={{ pathLength: 1, opacity: 0.9 }}
-          transition={{ duration: 1.5, delay: 0.15, ease: 'easeInOut' }}
-        />
-        <motion.path
-          d="M86 412C204 294 314 386 422 248C522 122 618 188 704 70"
-          stroke="#0071E3"
-          strokeOpacity="0.32"
-          strokeWidth="3"
-          strokeLinecap="round"
-          initial={{ pathLength: 0 }}
-          animate={{ pathLength: 1 }}
-          transition={{ duration: 1.8, delay: 0.35, ease: 'easeInOut' }}
-        />
-        <motion.ellipse
-          cx="392"
-          cy="286"
-          rx="196"
-          ry="78"
-          transform="rotate(-18 392 286)"
-          stroke="#0071E3"
-          strokeOpacity="0.24"
-          strokeWidth="2"
-          initial={{ opacity: 0, scaleX: 0.6 }}
-          animate={{ opacity: 1, scaleX: 1 }}
-          transition={{ duration: 1.1, delay: 0.2 }}
-        />
+        <motion.ellipse cx="380" cy="280" rx="238" ry="92" transform="rotate(-12 380 280)" stroke="url(#tiaFlow)" strokeWidth="26" strokeLinecap="round" initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 0.72 }} transition={{ duration: 1.8, delay: 0.1, ease: 'easeInOut' }} />
+        <motion.ellipse cx="380" cy="280" rx="238" ry="92" transform="rotate(52 380 280)" stroke="#0071E3" strokeOpacity="0.26" strokeWidth="2" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.8, delay: 0.35, ease: 'easeInOut' }} />
+        <motion.ellipse cx="380" cy="280" rx="238" ry="92" transform="rotate(102 380 280)" stroke="#2997FF" strokeOpacity="0.18" strokeWidth="2" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.8, delay: 0.5, ease: 'easeInOut' }} />
+        <motion.circle cx="380" cy="280" r="84" stroke="#0071E3" strokeOpacity="0.12" strokeWidth="1" fill="#0071E3" fillOpacity="0.025" animate={{ r: [78, 88, 78], opacity: [0.5, 0.8, 0.5] }} transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }} />
         {[
           [176, 310], [268, 354], [348, 276], [452, 230],
           [544, 178], [620, 124], [402, 132], [224, 214]

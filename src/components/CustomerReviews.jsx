@@ -20,7 +20,7 @@ const initialForm = {
 }
 
 const inputClasses =
-  'mt-1.5 w-full rounded-xl border border-slate-200 bg-slate-50/80 px-3 py-2.5 text-sm text-slate-900 shadow-sm transition duration-200 placeholder:text-slate-400 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-200 dark:border-slate-700 dark:bg-slate-950/50 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:ring-cyan-500/20'
+  'mt-1.5 w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3.5 py-3 text-sm text-[var(--foreground)] transition duration-200 placeholder:text-[var(--muted)] focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20'
 
 export default function CustomerReviews() {
   const [form, setForm] = useState(initialForm)
@@ -235,7 +235,7 @@ export default function CustomerReviews() {
             </p>
           </div>
 
-          <div className="rounded-3xl border border-slate-200/80 bg-white/80 p-5 shadow-lg shadow-slate-200/50 backdrop-blur-sm dark:border-slate-700 dark:bg-slate-900/60 dark:shadow-black/20 md:p-8">
+          <div className="rounded-[1.25rem] border border-[var(--border)] bg-[var(--card)] p-5 md:p-8">
             <div className="mb-6">
               <h3 className="text-2xl font-semibold text-slate-900 dark:text-white">Write a Review</h3>
               <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
@@ -566,7 +566,7 @@ export default function CustomerReviews() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-5 py-3 font-semibold text-slate-900 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+                className="primary-button mt-6 w-full sm:w-auto disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {isSubmitting ? 'Submitting...' : 'Submit Review'}
               </button>

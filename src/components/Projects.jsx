@@ -33,14 +33,14 @@ export default function Projects(){
               viewport={{once:true}}
               transition={{delay:index*0.04,duration:0.25}}
               onClick={()=>setFilter(c)}
-              className={`px-3 py-1 rounded-md transition-all duration-200 hover:-translate-y-0.5 ${filter===c? 'bg-cyan-400 text-black':'glass text-sm text-slate-700 dark:text-slate-200'}`}
+              className={`rounded-full px-4 py-2 text-sm font-semibold transition-all duration-200 ${filter===c ? 'bg-[var(--accent)] text-white' : 'border border-[var(--border)] bg-[var(--card)] text-[var(--foreground)]'}`}
             >
               {c}
             </motion.button>
           ))}
         </div>
 
-        <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((p, index) => (
             <motion.div key={p.id} initial={{opacity:0,y:18}} whileInView={{opacity:1,y:0}} viewport={{once:true}} transition={{duration:0.35, delay:index*0.06}}>
               <ProjectCard p={p} />

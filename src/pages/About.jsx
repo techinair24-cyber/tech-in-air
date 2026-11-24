@@ -21,14 +21,21 @@ export default function AboutPage() {
       </header>
 
       <section className="py-16 md:py-24">
-        <div className="container grid gap-10 md:grid-cols-[0.7fr_1.3fr]">
-          <p className="text-sm font-semibold text-[var(--accent)]">Our mission</p>
-          <div>
-            <h2 className="text-3xl font-semibold md:text-5xl">Make complex technology clear and useful.</h2>
-            <p className="mt-6 max-w-3xl text-lg leading-8 text-[var(--muted)]">
-              We combine artificial intelligence, software engineering, web and mobile development, data science and automation with clear communication. Our work ranges from academic project development to practical business applications.
+        <div className="container grid gap-8 md:grid-cols-2">
+          <motion.article initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="rounded-[1.25rem] bg-[var(--surface)] p-8 md:p-10">
+            <p className="text-sm font-semibold text-[var(--accent)]">Our Mission</p>
+            <h2 className="mt-5 text-3xl font-semibold md:text-4xl">Make technology accessible, practical and meaningful.</h2>
+            <p className="mt-6 max-w-xl text-lg leading-8 text-[var(--muted)]">
+              Our mission is to develop reliable AI-powered software, innovative digital solutions and technical services that help students, businesses and individuals turn ideas into reality.
             </p>
-          </div>
+          </motion.article>
+          <motion.article initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.08 }} className="border-t border-[var(--border)] pt-8 md:border-l md:border-t-0 md:pl-10 md:pt-10">
+            <p className="text-sm font-semibold text-[var(--accent)]">Our Vision</p>
+            <h2 className="mt-5 text-3xl font-semibold md:text-4xl">Become a trusted technology partner for thoughtful innovation.</h2>
+            <p className="mt-6 max-w-xl text-lg leading-8 text-[var(--muted)]">
+              Our vision is to be recognized for innovation, quality and accessible digital solutions that empower individuals and businesses through artificial intelligence, software development and emerging technologies.
+            </p>
+          </motion.article>
         </div>
       </section>
 
@@ -52,7 +59,7 @@ export default function AboutPage() {
 
       <section className="py-16 md:py-24">
         <div className="container">
-          <p className="mb-3 text-sm font-semibold text-[var(--accent)]">Our project portfolio</p>
+          <p className="mb-3 text-sm font-semibold text-[var(--accent)]">Our Achievements</p>
           <h2 className="text-3xl font-semibold md:text-5xl">Work across software and intelligent technology.</h2>
           <div className="mt-12 grid grid-cols-2 gap-y-10 md:grid-cols-4">
             {[
@@ -96,7 +103,7 @@ export default function AboutPage() {
         <div className="container flex flex-col items-start justify-between gap-8 border-t border-[var(--border)] pt-12 md:flex-row md:items-end">
           <div>
             <p className="mb-3 text-sm font-semibold text-[var(--accent)]">Customer Experience</p>
-            <h2 className="text-3xl font-semibold md:text-5xl">Hear from our customers.</h2>
+            <h2 className="text-3xl font-semibold md:text-5xl">Let's Build Something Together.</h2>
           </div>
           <div className="flex flex-wrap gap-3">
             <Link to="/reviews" className="secondary-button">Read All Reviews</Link>

@@ -49,6 +49,24 @@ export default function Contact() {
           transition={{ duration: 0.45, ease: 'easeOut' }}
           className="space-y-5"
         >
+          <div className="mb-2 overflow-hidden rounded-[1.25rem] border border-[var(--border)] bg-[var(--surface)] p-5">
+            <div className="grid aspect-[16/7] grid-cols-[0.9fr_1.1fr] gap-5">
+              <div className="flex flex-col justify-end rounded-lg border border-[var(--border)] bg-[var(--card)] p-5">
+                <div className="h-2 w-16 rounded bg-[var(--accent)]" />
+                <div className="mt-4 h-7 w-3/4 rounded bg-[var(--foreground)] opacity-90" />
+                <div className="mt-3 h-2 w-full rounded bg-[var(--border)]" />
+              </div>
+              <div className="grid grid-cols-3 gap-3">
+                {[0, 1, 2].map((item) => (
+                  <div key={item} className="rounded-lg border border-[var(--border)] bg-[var(--card)] p-3">
+                    <div className="h-8 w-8 rounded-full border border-[var(--border)]" />
+                    <div className="mt-5 h-2 rounded bg-[var(--border)]" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
           <div>
             <h2 className="text-3xl font-semibold tracking-tight text-slate-900 dark:text-white">
               Have a Project Idea? Let's Build It.

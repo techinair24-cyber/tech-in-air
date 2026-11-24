@@ -3,7 +3,7 @@ import { FaPaperPlane, FaWhatsapp } from 'react-icons/fa6'
 import { Link } from 'react-router-dom'
 
 const inputClasses =
-  'mt-1.5 w-full rounded-xl border border-slate-200 bg-slate-50/80 px-3 py-2.5 text-sm text-slate-900 shadow-sm transition duration-200 placeholder:text-slate-400 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-200 dark:border-slate-700 dark:bg-slate-950/50 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:ring-cyan-500/20'
+  'mt-1.5 w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3.5 py-3 text-sm text-[var(--foreground)] transition duration-200 placeholder:text-[var(--muted)] focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20'
 
 export default function ContactForm() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', type: 'AI / ML', desc: '' })
@@ -16,7 +16,7 @@ export default function ContactForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="rounded-3xl border border-slate-200/80 bg-slate-50/90 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm dark:border-slate-700 dark:bg-slate-900/60 dark:shadow-black/20 md:p-6">
+    <form onSubmit={onSubmit} className="rounded-[1.25rem] border border-[var(--border)] bg-[var(--card)] p-5 md:p-6">
       <div className="mb-5">
         <h3 className="text-2xl font-semibold text-slate-900 dark:text-white">Send your project brief</h3>
       </div>
@@ -88,7 +88,7 @@ export default function ContactForm() {
       <div className="mt-5 flex flex-col gap-3 sm:flex-row">
         <button
           type="submit"
-          className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-4 py-2.5 font-semibold text-slate-900 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:translate-y-0"
+          className="primary-button px-4 py-2.5"
         >
           <FaPaperPlane className="text-sm" />
           Send Project Enquiry

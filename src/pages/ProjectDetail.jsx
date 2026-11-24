@@ -18,11 +18,11 @@ export default function ProjectDetail(){
           <motion.img src={src} alt={project.title} className="w-full rounded-[1.25rem] border border-[var(--border)] object-cover" initial={{opacity:0,y:16}} animate={{opacity:1,y:0}} transition={{duration:0.45}} onError={(e)=>{e.currentTarget.onerror=null;e.currentTarget.src=fallbackSrc}} />
         </div>
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">{project.title}</h1>
-          <div className="mt-2 text-sm text-cyan-600 dark:text-cyan-300">
+          <h1 className="text-4xl font-semibold leading-tight">{project.title}</h1>
+          <div className="mt-3 text-sm font-semibold text-[var(--accent)]">
             {Array.isArray(project.categories) ? project.categories.join(' • ') : project.category} • {project.status}
           </div>
-          <p className="mt-4 text-slate-600 dark:text-slate-300">{project.description}</p>
+          <p className="mt-5 text-lg leading-8 text-[var(--muted)]">{project.description}</p>
           <div className="mt-4">
             <div className="font-semibold text-sm text-slate-800 dark:text-slate-200">Technologies</div>
             <div className="mt-2 flex flex-wrap gap-2">

@@ -5,6 +5,16 @@ import Hero from '../components/Hero'
 import CTA from '../components/CTA'
 import ApprovedReviews from '../components/ApprovedReviews'
 import projects from '../data/projects'
+import {
+  SiAndroid,
+  SiFirebase,
+  SiGithub,
+  SiJavascript,
+  SiOpencv,
+  SiPython,
+  SiReact,
+  SiTensorflow,
+} from 'react-icons/si'
 
 export default function Home() {
   const featuredProjectIds = [11, 8, 2, 3, 6, 9]
@@ -122,9 +132,21 @@ export default function Home() {
         <div className="container">
           <p className="mb-3 text-sm font-semibold text-[var(--accent)]">Technologies</p>
           <h2 className="text-3xl font-semibold md:text-5xl">Technologies We Work With</h2>
-          <div className="mt-10 flex flex-wrap gap-x-8 gap-y-5">
-            {['Python', 'React', 'JavaScript', 'Android', 'Machine Learning', 'Computer Vision', 'Firebase', 'MATLAB'].map((technology) => (
-              <span key={technology} className="text-lg font-medium text-[var(--foreground)]">{technology}</span>
+          <div className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-[1.25rem] border border-[var(--border)] bg-[var(--border)] sm:grid-cols-3 lg:grid-cols-5">
+            {[
+              [SiPython, 'Python'],
+              [SiReact, 'React'],
+              [SiJavascript, 'JavaScript'],
+              [SiAndroid, 'Android'],
+              [SiFirebase, 'Firebase'],
+              [SiTensorflow, 'TensorFlow'],
+              [SiOpencv, 'OpenCV'],
+              [SiGithub, 'GitHub'],
+            ].map(([Icon, technology]) => (
+              <div key={technology} className="flex min-h-28 items-center gap-3 bg-[var(--card)] px-5 transition-colors hover:bg-[var(--surface)]">
+                <Icon className="h-7 w-7 shrink-0 text-[var(--accent)]" aria-hidden="true" />
+                <span className="font-semibold">{technology}</span>
+              </div>
             ))}
           </div>
         </div>
