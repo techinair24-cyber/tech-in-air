@@ -15,6 +15,8 @@ import AdminReviews from './pages/AdminReviews'
 import CustomerReviewEdit from './pages/CustomerReviewEdit'
 import LegalPage from './pages/LegalPage'
 import BusinessSolutionsPage from './pages/BusinessSolutions'
+import BusinessServiceDetailPage from './pages/BusinessServiceDetail'
+import QuotationPage from './pages/Quotation'
 import TechieChatbot from './components/TechieChatbot'
 import SeoMetadata from './components/SeoMetadata'
 import { buildTechieContext } from './data/chatbotContext'
@@ -71,6 +73,10 @@ export default function App() {
   const location = useLocation()
   const isAdminRoute = location.pathname.startsWith('/admin')
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+  }, [location.pathname])
+
   return (
     <div className="min-h-screen bg-[var(--bg)] text-[var(--foreground)] transition-colors duration-200">
       <SeoMetadata />
@@ -89,6 +95,8 @@ export default function App() {
               <Route path="/about" element={<AboutPage />} />
               <Route path="/services" element={<ServicesPage />} />
               <Route path="/business-solutions" element={<BusinessSolutionsPage />} />
+              <Route path="/business-solutions/quotation" element={<QuotationPage />} />
+              <Route path="/business-solutions/:serviceSlug" element={<BusinessServiceDetailPage />} />
               <Route path="/projects" element={<ProjectsPage />} />
               <Route path="/projects/:id" element={<ProjectDetail />} />
               <Route path="/process" element={<ProcessPage />} />

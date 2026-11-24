@@ -17,8 +17,36 @@ const routeMetadata = {
     description: 'Explore Tech in Air project development, project explanation, documentation, demonstrations and hardware setup support for technology projects.',
   },
   '/business-solutions': {
-    title: 'Business Solutions | Website & Online Store Development | Tech In Air',
-    description: 'Tech In Air offers affordable business website, portfolio website and e-commerce development services. Explore packages and request a custom quotation.',
+    title: 'Business Digital Solutions | Websites, Apps & Automation | Tech In Air',
+    description: 'Explore affordable Tech In Air digital services for websites, portfolios, e-commerce, Android apps, business automation and website maintenance.',
+  },
+  '/business-solutions/business-website': {
+    title: 'Business Website Development | Tech In Air',
+    description: 'Professional responsive business and shop websites with WhatsApp integration, enquiry forms and deployment assistance from Tech In Air.',
+  },
+  '/business-solutions/portfolio-website': {
+    title: 'Portfolio Website Development | Tech In Air',
+    description: 'Responsive portfolio websites for students, freelancers, designers, photographers and professionals, with project showcase and contact sections.',
+  },
+  '/business-solutions/ecommerce': {
+    title: 'E-Commerce Website Development | Tech In Air',
+    description: 'Explore WhatsApp catalogue, shopping store and advanced e-commerce website packages for product-based businesses.',
+  },
+  '/business-solutions/android-development': {
+    title: 'Android Application Development | Tech In Air',
+    description: 'Custom Android applications for businesses and startups, including branded apps, authentication, database integrations and APK or AAB delivery.',
+  },
+  '/business-solutions/business-automation': {
+    title: 'Business Automation Solutions | Tech In Air',
+    description: 'Workflow automation, reporting, notifications and integration solutions designed to reduce repetitive business work.',
+  },
+  '/business-solutions/website-maintenance': {
+    title: 'Website Maintenance Services | Tech In Air',
+    description: 'Website health checks, content updates, monitoring and technical support for Tech In Air and compatible third-party websites.',
+  },
+  '/business-solutions/quotation': {
+    title: 'Request a Digital Project Quotation | Tech In Air',
+    description: 'Select a business digital service and package, review requirements and prepare an enquiry for Tech In Air via WhatsApp.',
   },
   '/projects': {
     title: 'Tech in Air Projects | Software, AI/ML, IoT & Embedded Systems',

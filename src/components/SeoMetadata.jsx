@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { getSeoMetadata } from '../seo'
+import { businessServices } from '../data/businessSolutions'
 
 const metaTags = [
   ['name', 'description'],
@@ -65,6 +66,8 @@ export default function SeoMetadata() {
 
   useEffect(() => {
     const metadata = getSeoMetadata(pathname)
+    let structuredData = document.head.querySelector('script[data-tech-in-air-jsonld]')
+    if (structuredData) structuredData.remove()
 
     if (!metadata) {
       document.title = 'Tech in Air'
@@ -88,6 +91,46 @@ export default function SeoMetadata() {
     updateMetaTag('name', 'twitter:image', metadata.image)
     updateMetaTag('name', 'twitter:image:alt', 'Tech in Air logo')
     updateCanonical(metadata.url)
+
+    const service = businessServices.find((item) => pathname === `/business-solutions/${item.slug}`)
+    if (service) {
+      structuredData = document.createElement('script')
+      structuredData.type = 'application/ld+json'
+      structuredData.setAttribute('data-tech-in-air-jsonld', 'true')
+      structuredData.textContent = JSON.stringify({
+        '@context': 'https://schema.org',
+        '@graph': [
+          {
+            '@type': 'Service',
+            name: service.title,
+            description: service.detailedDescription,
+            provider: {
+              '@type': 'Organization',
+              name: 'Tech in Air',
+              url: 'https://tech-in-air.vercel.app',
+            },
+            areaServed: 'India',
+            offers: service.packages.map((pkg) => ({
+              '@type': 'Offer',
+              name: pkg.name,
+              priceSpecification: {
+                '@type': 'PriceSpecification',
+                price: pkg.price,
+              },
+            })),
+          },
+          {
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://tech-in-air.vercel.app/' },
+              { '@type': 'ListItem', position: 2, name: 'Business Solutions', item: 'https://tech-in-air.vercel.app/business-solutions' },
+              { '@type': 'ListItem', position: 3, name: service.title, item: metadata.url },
+            ],
+          },
+        ],
+      })
+      document.head.appendChild(structuredData)
+    }
   }, [pathname])
 
   return null

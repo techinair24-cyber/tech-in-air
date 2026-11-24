@@ -25,6 +25,10 @@ export default function Footer(){
             <li>PPT</li>
             <li>Project Demo</li>
             <li>Hardware Setup</li>
+            <li className="pt-2"><Link to="/business-solutions" className="font-semibold hover:text-cyan-700 dark:hover:text-cyan-300">Business Solutions</Link></li>
+            <li><Link to="/business-solutions/business-website" className="hover:text-cyan-700 dark:hover:text-cyan-300">Business Websites</Link></li>
+            <li><Link to="/business-solutions/ecommerce" className="hover:text-cyan-700 dark:hover:text-cyan-300">E-Commerce</Link></li>
+            <li><Link to="/business-solutions/android-development" className="hover:text-cyan-700 dark:hover:text-cyan-300">Android Apps</Link></li>
           </ul>
         </div>
         <div>
