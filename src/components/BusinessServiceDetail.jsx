@@ -15,6 +15,7 @@ import {
   Bot,
 } from 'lucide-react'
 import { businessServices, PRICING_DISCLAIMER } from '../data/businessSolutions'
+import ServiceVisual from './ServiceVisual'
 
 const iconMap = { store: Store, user: User, cart: ShoppingCart, android: Smartphone, automation: Bot, maintenance: Wrench }
 
@@ -92,8 +93,7 @@ export default function BusinessServiceDetail({ service }) {
         </div>
       </nav>
 
-      <section className="relative border-b border-slate-200/70 py-14 dark:border-slate-800 md:py-20">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(34,211,238,0.12),transparent_25%),radial-gradient(circle_at_85%_30%,rgba(59,130,246,0.10),transparent_22%)]" />
+      <section className="relative border-b border-[var(--border)] py-14 md:py-20">
         <div className="container relative grid items-center gap-8 lg:grid-cols-[1fr_0.7fr]">
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
             <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-cyan-100 text-cyan-700 dark:bg-cyan-500/10 dark:text-cyan-300"><Icon size={28} /></div>
@@ -102,19 +102,14 @@ export default function BusinessServiceDetail({ service }) {
             <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-600 dark:text-slate-300">{service.detailedDescription}</p>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
               <Link to={`/business-solutions/quotation?service=${service.slug}&package=${service.packages[0].id}`} className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-5 py-3 font-semibold text-slate-900">
-                Request a Quote <ArrowRight size={18} />
+                Let's Talk <ArrowRight size={18} />
               </Link>
               <a href="https://wa.me/918310808011" target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-5 py-3 font-semibold text-slate-900 dark:border-slate-700 dark:bg-slate-900 dark:text-white">
                 <MessageCircle size={18} /> WhatsApp
               </a>
             </div>
           </motion.div>
-          <div className="glass rounded-3xl p-6">
-            <p className="text-sm text-slate-500 dark:text-slate-400">Starting price</p>
-            <p className="mt-2 text-3xl font-bold text-slate-900 dark:text-white">{service.startingPrice}</p>
-            {service.pricingUnit === 'month' && <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Monthly billing</p>}
-            <div className="mt-5 grid gap-2">{service.features.map((feature) => <div key={feature} className="flex gap-2 text-sm text-slate-700 dark:text-slate-300"><Check size={16} className="mt-0.5 shrink-0 text-cyan-600" />{feature}</div>)}</div>
-          </div>
+          <ServiceVisual slug={service.slug} title={service.title} />
         </div>
       </section>
 

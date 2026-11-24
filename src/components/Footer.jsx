@@ -14,6 +14,7 @@ export default function Footer(){
           <ul className="mt-4 space-y-3 text-sm text-[var(--muted)]">
             <li><Link to="/about" className="hover:text-[var(--accent)]">About</Link></li>
             <li><Link to="/projects" className="hover:text-[var(--accent)]">Projects</Link></li>
+            <li><Link to="/reviews" className="hover:text-[var(--accent)]">Reviews</Link></li>
             <li><Link to="/business-solutions" className="hover:text-[var(--accent)]">Business Solutions</Link></li>
             <li><Link to="/services" className="hover:text-[var(--accent)]">Academic Solutions</Link></li>
             <li><Link to="/contact" className="hover:text-[var(--accent)]">Contact</Link></li>

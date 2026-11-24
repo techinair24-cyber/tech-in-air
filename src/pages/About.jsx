@@ -1,96 +1,106 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import PageHeader from '../components/PageHeader'
-import AboutVisual from '../components/AboutVisual'
-import CustomerReviews from '../components/CustomerReviews'
 import projects from '../data/projects'
 
-export default function AboutPage(){
+export default function AboutPage() {
+  const engineeringCount = projects.filter((project) => project.categories?.includes('Engineering Main Project')).length
+
   return (
     <div>
-      <PageHeader title="About" subtitle="Technology With Purpose" />
-      <section className="py-12 container grid md:grid-cols-2 gap-8 items-center">
-        <div>
-          <h2 className="text-3xl font-semibold text-slate-900 dark:text-white">Tech in Air</h2>
-          <p className="mt-4 text-slate-600 dark:text-slate-300">Tech in Air is a technology-focused project development initiative based in Bangalore, working across Software, Artificial Intelligence, Machine Learning, IoT and Embedded Systems.</p>
-          <p className="mt-3 text-slate-600 dark:text-slate-300">We turn ideas into working technology — from concept and hardware to software, documentation and demonstrations.</p>
+      <header className="border-b border-[var(--border)] py-16 md:py-24">
+        <div className="container grid gap-10 lg:grid-cols-[1fr_0.75fr] lg:items-end">
+          <div>
+            <p className="mb-4 text-sm font-semibold text-[var(--accent)]">About Tech In Air</p>
+            <h1 className="max-w-4xl text-5xl font-semibold leading-[1.02] tracking-[-0.04em] md:text-7xl">Technology With Purpose.</h1>
+          </div>
+          <p className="max-w-xl text-lg leading-8 text-[var(--muted)]">
+            Tech In Air is an AI and software technology company in Bangalore, helping students, businesses and innovators turn practical ideas into working digital solutions.
+          </p>
         </div>
-        <div>
-          <AboutVisual />
-        </div>
-      </section>
+      </header>
 
-      <section className="py-12 md:py-16">
-        <div className="container">
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.4, ease: 'easeOut' }}
-            className="glass rounded-2xl p-6 md:p-10"
-          >
-            <div className="mx-auto max-w-3xl text-center">
-              <h2 className="text-3xl font-semibold text-slate-900 dark:text-white">OUR PROJECT PORTFOLIO</h2>
-              <p className="mt-3 text-slate-600 dark:text-slate-300">From academic ideas to working technology projects.</p>
-            </div>
-
-            <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {[
-                { value: projects.length, label: 'Total Projects' },
-                { value: '8', label: 'Engineering Main Projects' },
-                { value: '1', label: 'Diploma Main Project' },
-                { value: '3', label: 'Other Projects' },
-              ].map(({ value, label }, index) => (
-                <motion.div
-                  key={label}
-                  initial={{ opacity: 0, y: 12 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.2 }}
-                  transition={{ duration: 0.3, delay: index * 0.05, ease: 'easeOut' }}
-                  className="flex min-h-32 flex-col items-center justify-center rounded-xl border border-slate-200 bg-white/70 p-5 text-center shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md dark:border-white/10 dark:bg-slate-950/40"
-                >
-                  <div className="text-5xl font-bold tracking-tight text-slate-900 dark:text-white">{value}</div>
-                  <div className="mt-2 text-sm text-slate-600 dark:text-slate-300">{label}</div>
-                </motion.div>
-              ))}
-            </div>
-
-            <div className="mt-8 flex flex-col items-center gap-4 text-center">
-              <div>
-                <h3 className="text-xl font-semibold text-slate-900 dark:text-white">Have a project idea?</h3>
-                <p className="mt-1 text-slate-600 dark:text-slate-300">Let's turn it into a working project.</p>
-              </div>
-              <Link
-                to="/contact"
-                className="rounded-md bg-gradient-to-r from-cyan-400 to-blue-500 px-6 py-3 font-semibold text-black transition-transform duration-200 hover:-translate-y-0.5"
-              >
-                Let's Talk
-              </Link>
-            </div>
-          </motion.div>
+      <section className="py-16 md:py-24">
+        <div className="container grid gap-10 md:grid-cols-[0.7fr_1.3fr]">
+          <p className="text-sm font-semibold text-[var(--accent)]">Our mission</p>
+          <div>
+            <h2 className="text-3xl font-semibold md:text-5xl">Make complex technology clear and useful.</h2>
+            <p className="mt-6 max-w-3xl text-lg leading-8 text-[var(--muted)]">
+              We combine artificial intelligence, software engineering, web and mobile development, data science and automation with clear communication. Our work ranges from academic project development to practical business applications.
+            </p>
+          </div>
         </div>
       </section>
 
-      <CustomerReviews />
-      <section className="py-16 md:py-24 surface-section">
+      <section className="surface-section py-16 md:py-24">
         <div className="container">
-          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[var(--accent)]">How We Work</p>
-          <h2 className="section-heading mt-4">From idea to implementation.</h2>
-          <div className="mt-12 grid gap-px overflow-hidden rounded-[1.25rem] border border-[var(--border)] bg-[var(--border)] md:grid-cols-5">
+          <p className="mb-3 text-sm font-semibold text-[var(--accent)]">Our expertise</p>
+          <h2 className="text-3xl font-semibold md:text-5xl">Specialized in building modern digital systems.</h2>
+          <div className="mt-10 grid gap-8 border-t border-[var(--border)] pt-8 sm:grid-cols-2 lg:grid-cols-3">
             {[
-              ['01', 'Discuss', 'Understand the project idea, requirements and objectives.'],
-              ['02', 'Plan', 'Define the technology stack, architecture and implementation approach.'],
-              ['03', 'Develop', 'Build the software, AI model, hardware or complete project system.'],
-              ['04', 'Test & Demo', 'Test the system and prepare the project for demonstration.'],
-              ['05', 'Deliver', 'Provide the developed project with documentation and presentation.']
-            ].map(([number, title, description]) => (
-              <article key={number} className="bg-[var(--card)] p-6">
-                <p className="text-sm font-bold text-[var(--accent)]">{number}</p>
-                <h3 className="mt-5 text-xl font-bold">{title}</h3>
-                <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{description}</p>
-              </article>
+              'Artificial Intelligence & Machine Learning',
+              'Software & Web Development',
+              'Android Application Development',
+              'Data Science & Computer Vision',
+              'Business Automation',
+            ].map((item) => (
+              <h3 key={item} className="text-xl font-semibold">{item}</h3>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 md:py-24">
+        <div className="container">
+          <p className="mb-3 text-sm font-semibold text-[var(--accent)]">Our project portfolio</p>
+          <h2 className="text-3xl font-semibold md:text-5xl">Work across software and intelligent technology.</h2>
+          <div className="mt-12 grid grid-cols-2 gap-y-10 md:grid-cols-4">
+            {[
+              [projects.length, 'Completed project entries'],
+              [projects.filter((project) => project.categories?.some((category) => ['AI / ML', 'Deep Learning'].includes(category))).length, 'AI and ML projects'],
+              [projects.filter((project) => project.categories?.includes('Software') || project.categories?.includes('Android')).length, 'Software and mobile projects'],
+              [engineeringCount, 'Engineering main projects'],
+            ].map(([value, label]) => (
+              <div key={label} className="border-l border-[var(--border)] pl-5 first:border-l-0 first:pl-0 md:first:border-l md:first:pl-5">
+                <p className="text-4xl font-semibold md:text-6xl">{value}</p>
+                <p className="mt-3 max-w-40 text-sm leading-6 text-[var(--muted)]">{label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="surface-section py-16 md:py-24">
+        <div className="container">
+          <p className="mb-3 text-sm font-semibold text-[var(--accent)]">How We Work</p>
+          <h2 className="text-3xl font-semibold md:text-5xl">From idea to implementation.</h2>
+          <div className="mt-12 grid gap-8 md:grid-cols-5">
+            {[
+              ['01', 'Discuss', 'Understand the idea and requirements.'],
+              ['02', 'Plan', 'Choose the approach and technology.'],
+              ['03', 'Develop', 'Build and integrate the solution.'],
+              ['04', 'Test & Demonstrate', 'Validate and prepare the working system.'],
+              ['05', 'Deliver', 'Provide the project, documentation and support.'],
+            ].map(([number, title, description]) => (
+              <motion.article key={number} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.35 }}>
+                <p className="text-sm font-semibold text-[var(--accent)]">{number}</p>
+                <h3 className="mt-5 text-xl font-semibold">{title}</h3>
+                <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{description}</p>
+              </motion.article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 md:py-24">
+        <div className="container flex flex-col items-start justify-between gap-8 border-t border-[var(--border)] pt-12 md:flex-row md:items-end">
+          <div>
+            <p className="mb-3 text-sm font-semibold text-[var(--accent)]">Customer Experience</p>
+            <h2 className="text-3xl font-semibold md:text-5xl">Hear from our customers.</h2>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <Link to="/reviews" className="secondary-button">Read All Reviews</Link>
+            <Link to="/contact" className="primary-button">Let's Talk</Link>
           </div>
         </div>
       </section>

@@ -5,8 +5,8 @@ export const LOGO_URL = `${SITE_URL}/Logo/Tech%20in%20Air%20Logo.png`
 
 const routeMetadata = {
   '/': {
-    title: 'Tech in Air | AI, Software & Digital Solutions',
-    description: 'Tech in Air builds intelligent software, AI systems, applications and digital solutions for academic and business needs in Bangalore.',
+    title: 'Tech In Air | AI, Software & Digital Solutions',
+    description: 'Tech In Air provides AI, software development, web development, Android applications, academic projects and digital business solutions.',
   },
   '/about': {
     title: 'About Tech in Air | Technology Project Development in Bangalore',
@@ -15,6 +15,10 @@ const routeMetadata = {
   '/services': {
     title: 'Tech in Air Services | Software, AI/ML, IoT & Embedded Systems',
     description: 'Explore Tech in Air project development, project explanation, documentation, demonstrations and hardware setup support for technology projects.',
+  },
+  '/reviews': {
+    title: 'Customer Reviews | Tech In Air',
+    description: 'Read approved customer experiences and share feedback about working with Tech In Air.',
   },
   '/business-solutions': {
     title: 'Business Digital Solutions | Websites, Apps & Automation | Tech In Air',

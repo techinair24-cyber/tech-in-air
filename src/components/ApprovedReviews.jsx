@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import ReviewPhotoGallery from './ReviewPhotoGallery'
 import { createReviewPhotoUrls } from '../lib/reviewPhotos'
 
-export default function ApprovedReviews() {
+export default function ApprovedReviews({ limit }) {
   const [reviews, setReviews] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
@@ -35,7 +36,7 @@ export default function ApprovedReviews() {
         }))
 
         if (!isActive) return
-        setReviews(reviewsWithPhotos)
+        setReviews(typeof limit === 'number' ? reviewsWithPhotos.slice(0, limit) : reviewsWithPhotos)
       }
       setIsLoading(false)
     }
@@ -58,10 +59,14 @@ export default function ApprovedReviews() {
           viewport={{ once: true, amount: 0.15 }}
           transition={{ duration: 0.4, ease: 'easeOut' }}
         >
-          <div className="mb-8 text-center">
-            <h2 className="text-3xl font-semibold text-slate-900 dark:text-white">
-              WHAT OUR CUSTOMERS SAY
-            </h2>
+          <div className="mb-10 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="mb-3 text-sm font-semibold text-[var(--accent)]">Customer Experiences</p>
+              <h2 className="text-3xl font-semibold md:text-5xl">What Our Customers Say</h2>
+            </div>
+            {typeof limit === 'number' && (
+              <Link to="/reviews" className="secondary-button w-fit">Read All Reviews</Link>
+            )}
           </div>
 
           {hasError ? (

@@ -18,6 +18,7 @@ import BusinessSolutionsPage from './pages/BusinessSolutions'
 import BusinessServiceDetailPage from './pages/BusinessServiceDetail'
 import QuotationPage from './pages/Quotation'
 import TechieChatbot from './components/TechieChatbot'
+import ReviewsPage from './pages/Reviews'
 import SeoMetadata from './components/SeoMetadata'
 import { buildTechieContext } from './data/chatbotContext'
 import { supabase } from './lib/supabase'
@@ -109,6 +110,7 @@ export default function App() {
               <Route path="/projects/:id" element={<ProjectDetail />} />
               <Route path="/process" element={<ProcessPage />} />
               <Route path="/contact" element={<ContactPage />} />
+              <Route path="/reviews" element={<ReviewsPage />} />
               <Route path="/privacy-policy" element={<LegalPage page="privacyPolicy" />} />
               <Route path="/terms-and-conditions" element={<LegalPage page="termsAndConditions" />} />
               <Route path="/review/edit" element={<CustomerReviewEdit />} />

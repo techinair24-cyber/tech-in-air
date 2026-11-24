@@ -24,12 +24,11 @@ export default function Navbar() {
     { label: 'About', href: '/about' },
     { label: 'Solutions', href: '/business-solutions', dropdown: true },
     { label: 'Projects', href: '/projects' },
-    { label: 'Reviews', href: '/#reviews' },
+    { label: 'Reviews', href: '/reviews' },
     { label: 'Contact', href: '/contact' },
   ]
 
   const isActive = (href) => {
-    if (href === '/#reviews') return location.pathname === '/' && location.hash === '#reviews'
     if (href === '/business-solutions') return location.pathname.startsWith('/business-solutions')
     return location.pathname === href
   }

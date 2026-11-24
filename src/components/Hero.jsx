@@ -19,7 +19,7 @@ export default function Hero(){
           transition={{ duration: 0.45, staggerChildren: 0.08 }}
           className="mx-auto max-w-5xl"
         >
-          <motion.p variants={fadeUp} className="mb-6 text-sm font-semibold text-[var(--accent)]">AI · Software · Digital Solutions</motion.p>
+          <motion.p variants={fadeUp} className="mb-5 text-xs font-bold uppercase tracking-[0.18em] text-[var(--accent)]">Tech In Air</motion.p>
           <motion.h1 variants={fadeUp} className="hero-heading">Building Intelligent Technology.</motion.h1>
           <motion.p variants={fadeUp} className="mx-auto mt-7 max-w-2xl text-lg leading-8 text-[var(--muted)] md:text-xl">We create AI-powered software, modern applications and digital solutions that turn ideas into reality.</motion.p>
           <motion.div variants={fadeUp} className="mt-9 flex flex-wrap justify-center gap-3">
