@@ -2920,3 +2920,45 @@ html.dark .home-review-rating { color: #ffb547; }
     transition: none;
   }
 }
+
+/* Academic technology domain images */
+
+.academic-premium .academic-domain-preview {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  gap: clamp(1.5rem, 4vw, 3rem);
+  padding: clamp(1rem, 2.5vw, 2rem);
+}
+
+.academic-premium .academic-domain-image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  background: var(--surface);
+}
+
+.academic-premium .academic-domain-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 600ms ease;
+}
+
+.academic-premium .academic-domain-image:hover img {
+  transform: scale(1.04);
+}
+
+@media (max-width: 767px) {
+  .academic-premium .academic-domain-preview {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .academic-premium .academic-domain-image img {
+    transition: none;
+    transform: none;
+  }
+}

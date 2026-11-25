@@ -73,6 +73,14 @@ const domains = [
 ]
 
 const fallbackImage = '/Projects/homepage-academic-premium.webp'
+const domainImages = [
+  '/Projects/Holographic AI Brain Over Chip-1.png',
+  '/Projects/Cinematic Developer Workspace Glow-2.png',
+  '/Projects/android-development.webp',
+  '/Projects/Computer Vision Fruit Detection Lab-3.png',
+  '/Projects/IoT Engineering Workshop Prototype Lab-4.png',
+  '/Projects/Collaborative Robotics Lab Workshop-5.png',
+]
 
 function AcademicImage({ source, title, hero = false }) {
   const [failedSource, setFailedSource] = useState(null)
@@ -161,7 +169,6 @@ export default function ServicesPage() {
       : publishedProjects.slice(0, 6)
 
   const selectedDomain = domains[activeDomain]
-  const DomainIcon = selectedDomain.icon
 
   const reveal = {
     initial: reduceMotion ? false : { opacity: 0, y: 18 },
@@ -286,8 +293,12 @@ export default function ServicesPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: reduceMotion ? 0 : 0.3 }}
           >
-            <div className="academic-domain-symbol">
-              <DomainIcon size={88} aria-hidden="true" />
+            <div className="academic-domain-image">
+              <AcademicImage
+                key={activeDomain}
+                source={domainImages[activeDomain]}
+                title={selectedDomain.title}
+              />
             </div>
 
             <div>
