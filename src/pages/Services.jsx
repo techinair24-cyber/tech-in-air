@@ -74,12 +74,12 @@ const domains = [
 
 const fallbackImage = '/Projects/homepage-academic-premium.webp'
 const domainImages = [
-  '/Projects/Holographic AI Brain Over Chip-1.png',
-  '/Projects/Cinematic Developer Workspace Glow-2.png',
+  '/Projects/academic-ai-ml.webp',
+  '/Projects/academic-software.webp',
   '/Projects/android-development.webp',
-  '/Projects/Computer Vision Fruit Detection Lab-3.png',
-  '/Projects/IoT Engineering Workshop Prototype Lab-4.png',
-  '/Projects/Collaborative Robotics Lab Workshop-5.png',
+  '/Projects/academic-data-vision.webp',
+  '/Projects/academic-iot.webp',
+  '/Projects/academic-projects.webp',
 ]
 
 function AcademicImage({ source, title, hero = false }) {
