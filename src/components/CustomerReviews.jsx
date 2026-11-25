@@ -12,12 +12,25 @@ import { cancelReviewPhotoUploads, manageReview, uploadReviewPhotos } from '../l
 
 const initialForm = {
   customerName: '',
+  customerType: '',
   collegeName: '',
   education: '',
   projectName: '',
+  companyName: '',
+  serviceName: '',
   rating: 0,
   review: '',
 }
+
+const serviceOptions = [
+  'Business Website',
+  'Portfolio Website',
+  'E-commerce Solutions',
+  'Android App Development',
+  'Business Automation',
+  'Website Maintenance',
+  'Other Services',
+]
 
 const inputClasses =
   'mt-1.5 w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3.5 py-3 text-sm text-[var(--foreground)] transition duration-200 placeholder:text-[var(--muted)] focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/20'
@@ -110,13 +123,43 @@ export default function CustomerReviews() {
     const reviewText = form.review.trim()
     const errors = {}
 
-    if (!form.customerName.trim()) errors.customerName = 'Please enter your name.'
-    if (!form.collegeName.trim()) errors.collegeName = 'Please enter your college name.'
-    if (!['Engineering', 'Diploma'].includes(form.education)) errors.education = 'Please select your education.'
-    if (!form.projectName) errors.projectName = 'Please select your project.'
-    if (form.rating < 1 || form.rating > 5) errors.rating = 'Please select a rating from 1 to 5 stars.'
-    if (reviewText.length < 10) errors.review = 'Your review must be at least 10 characters.'
-    else if (reviewText.length > 1000) errors.review = 'Your review must be no more than 1000 characters.'
+    if (!form.customerName.trim()) {
+      errors.customerName = 'Please enter your name.'
+    }
+
+    if (!['Student', 'Business', 'Individual'].includes(form.customerType)) {
+      errors.customerType = 'Please select your customer type.'
+    }
+
+    if (form.customerType === 'Student') {
+      if (!form.collegeName.trim()) {
+        errors.collegeName = 'Please enter your college name.'
+      }
+
+      if (!['Engineering', 'Diploma'].includes(form.education)) {
+        errors.education = 'Please select your education.'
+      }
+
+      if (!form.projectName) {
+        errors.projectName = 'Please select your project.'
+      }
+    }
+
+    if (['Business', 'Individual'].includes(form.customerType)) {
+      if (!form.serviceName) {
+        errors.serviceName = 'Please select the service used.'
+      }
+    }
+
+    if (form.rating < 1 || form.rating > 5) {
+      errors.rating = 'Please select a rating from 1 to 5 stars.'
+    }
+
+    if (reviewText.length < 10) {
+      errors.review = 'Your review must be at least 10 characters.'
+    } else if (reviewText.length > 1000) {
+      errors.review = 'Your review must be no more than 1000 characters.'
+    }
 
     setFieldErrors(errors)
     setMessage(null)
@@ -129,9 +172,22 @@ export default function CustomerReviews() {
     try {
       const { editToken } = await manageReview('create', {
         customerName: form.customerName.trim(),
-        collegeName: form.collegeName.trim(),
-        education: form.education,
-        projectName: form.projectName,
+        customerType: form.customerType,
+        collegeName: form.customerType === 'Student'
+          ? form.collegeName.trim()
+          : null,
+        education: form.customerType === 'Student'
+          ? form.education
+          : null,
+        projectName: form.customerType === 'Student'
+          ? form.projectName
+          : null,
+        companyName: form.customerType === 'Business'
+          ? form.companyName.trim() || null
+          : null,
+        serviceName: form.customerType !== 'Student'
+          ? form.serviceName
+          : null,
         rating: form.rating,
         reviewText,
       })
@@ -158,9 +214,22 @@ export default function CustomerReviews() {
             await manageReview('customer-save', {
               editToken,
               customerName: form.customerName.trim(),
-              collegeName: form.collegeName.trim(),
-              education: form.education,
-              projectName: form.projectName,
+              customerType: form.customerType,
+              collegeName: form.customerType === 'Student'
+                ? form.collegeName.trim()
+                : null,
+              education: form.customerType === 'Student'
+                ? form.education
+                : null,
+              projectName: form.customerType === 'Student'
+                ? form.projectName
+                : null,
+              companyName: form.customerType === 'Business'
+                ? form.companyName.trim() || null
+                : null,
+              serviceName: form.customerType !== 'Student'
+                ? form.serviceName
+                : null,
               rating: form.rating,
               reviewText,
               keepPhotoPaths: [],
@@ -233,7 +302,7 @@ export default function CustomerReviews() {
                 Your review will be shared only after it has been approved.
               </p>
               <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
-                Approved reviews may be displayed publicly with your name, project name, rating, review text and any photos you choose to share. See our{' '}
+                Approved reviews may be displayed publicly with your name, customer type, applicable college or company information, project or service name, rating, review text and any photos you choose to share. See our{' '}
                 <Link to="/privacy-policy" className="font-medium text-cyan-800 underline underline-offset-2 hover:text-cyan-700 dark:text-cyan-300 dark:hover:text-cyan-200">
                   Privacy Policy
                 </Link>.
@@ -262,84 +331,196 @@ export default function CustomerReviews() {
                   )}
                 </label>
 
-                <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
-                  College Name
-                  <input
+                <label className="text-sm font-medium text-[var(--foreground)]">
+                  Customer Type *
+
+                  <select
                     required
-                    maxLength={120}
-                    value={form.collegeName}
-                    onChange={(event) => updateField('collegeName', event.target.value)}
+                    value={form.customerType}
                     className={inputClasses}
-                    aria-invalid={Boolean(fieldErrors.collegeName)}
-                    aria-describedby={fieldErrors.collegeName ? 'college-name-error' : undefined}
-                    placeholder="Enter your college name"
-                  />
-                  {fieldErrors.collegeName && (
-                    <span id="college-name-error" className="mt-1 block text-sm text-red-600 dark:text-red-400">
-                      {fieldErrors.collegeName}
+                    aria-invalid={Boolean(fieldErrors.customerType)}
+                    onChange={(event) => {
+                      const customerType = event.target.value
+
+                      setForm((current) => ({
+                        ...current,
+                        customerType,
+                        collegeName: '',
+                        education: '',
+                        projectName: '',
+                        companyName: '',
+                        serviceName: '',
+                      }))
+
+                      setFieldErrors({})
+                      setMessage(null)
+                    }}
+                  >
+                    <option value="" disabled>
+                      Select customer type
+                    </option>
+
+                    <option value="Student">
+                      Student
+                    </option>
+
+                    <option value="Business">
+                      Business / Company
+                    </option>
+
+                    <option value="Individual">
+                      Individual Customer
+                    </option>
+                  </select>
+
+                  {fieldErrors.customerType && (
+                    <span className="mt-1 block text-sm text-red-500">
+                      {fieldErrors.customerType}
                     </span>
                   )}
                 </label>
 
-                <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
-                  Education
-                  <select
-                    required
-                    value={form.education}
-                    onChange={(event) => updateField('education', event.target.value)}
-                    className={`${inputClasses} text-base`}
-                    aria-invalid={Boolean(fieldErrors.education)}
-                    aria-describedby={fieldErrors.education ? 'education-error' : undefined}
-                  >
-                    <option value="" disabled className="bg-white text-base text-slate-900 dark:bg-slate-900 dark:text-slate-100">
-                      Select your education
-                    </option>
-                    {['Engineering', 'Diploma'].map((education) => (
-                      <option
-                        key={education}
-                        value={education}
-                        className="bg-white text-base text-slate-900 dark:bg-slate-900 dark:text-slate-100"
-                      >
-                        {education}
-                      </option>
-                    ))}
-                  </select>
-                  {fieldErrors.education && (
-                    <span id="education-error" className="mt-1 block text-sm text-red-600 dark:text-red-400">
-                      {fieldErrors.education}
-                    </span>
-                  )}
-                </label>
+                {/* STUDENT CUSTOMER FIELDS */}
 
-                <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
-                  Project Name
-                  <select
-                    required
-                    value={form.projectName}
-                    onChange={(event) => updateField('projectName', event.target.value)}
-                    className={`${inputClasses} text-base`}
-                    aria-invalid={Boolean(fieldErrors.projectName)}
-                    aria-describedby={fieldErrors.projectName ? 'project-name-error' : undefined}
-                  >
-                    <option value="" disabled className="bg-white text-base text-slate-900 dark:bg-slate-900 dark:text-slate-100">
-                      Select your project
-                    </option>
-                    {projects.map(({ id, title }) => (
-                      <option
-                        key={id}
-                        value={title}
-                        className="bg-white text-base text-slate-900 dark:bg-slate-900 dark:text-slate-100"
+                {form.customerType === 'Student' && (
+                  <>
+                    <label className="text-sm font-medium text-[var(--foreground)]">
+                      College Name *
+
+                      <input
+                        required
+                        maxLength={120}
+                        value={form.collegeName}
+                        onChange={(event) =>
+                          updateField('collegeName', event.target.value)
+                        }
+                        className={inputClasses}
+                        placeholder="Enter your college name"
+                        aria-invalid={Boolean(fieldErrors.collegeName)}
+                      />
+
+                      {fieldErrors.collegeName && (
+                        <span className="mt-1 block text-sm text-red-500">
+                          {fieldErrors.collegeName}
+                        </span>
+                      )}
+                    </label>
+
+                    <label className="text-sm font-medium text-[var(--foreground)]">
+                      Education *
+
+                      <select
+                        required
+                        value={form.education}
+                        onChange={(event) =>
+                          updateField('education', event.target.value)
+                        }
+                        className={inputClasses}
+                        aria-invalid={Boolean(fieldErrors.education)}
                       >
-                        {title}
+                        <option value="" disabled>
+                          Select your education
+                        </option>
+
+                        <option value="Engineering">
+                          Engineering
+                        </option>
+
+                        <option value="Diploma">
+                          Diploma
+                        </option>
+                      </select>
+
+                      {fieldErrors.education && (
+                        <span className="mt-1 block text-sm text-red-500">
+                          {fieldErrors.education}
+                        </span>
+                      )}
+                    </label>
+
+                    <label className="customer-review-full text-sm font-medium text-[var(--foreground)]">
+                      Academic Project *
+
+                      <select
+                        required
+                        value={form.projectName}
+                        onChange={(event) =>
+                          updateField('projectName', event.target.value)
+                        }
+                        className={inputClasses}
+                        aria-invalid={Boolean(fieldErrors.projectName)}
+                      >
+                        <option value="" disabled>
+                          Select your project
+                        </option>
+
+                        {projects.map(({ id, title }) => (
+                          <option key={id} value={title}>
+                            {title}
+                          </option>
+                        ))}
+                      </select>
+
+                      {fieldErrors.projectName && (
+                        <span className="mt-1 block text-sm text-red-500">
+                          {fieldErrors.projectName}
+                        </span>
+                      )}
+                    </label>
+                  </>
+                )}
+
+                {/* BUSINESS CUSTOMER FIELDS */}
+
+                {form.customerType === 'Business' && (
+                  <label className="customer-review-full text-sm font-medium text-[var(--foreground)]">
+                    Business / Company Name (Optional)
+
+                    <input
+                      maxLength={120}
+                      value={form.companyName}
+                      onChange={(event) =>
+                        updateField('companyName', event.target.value)
+                      }
+                      className={inputClasses}
+                      placeholder="Enter your business name"
+                    />
+                  </label>
+                )}
+
+                {/* BUSINESS AND INDIVIDUAL SERVICES */}
+
+                {['Business', 'Individual'].includes(form.customerType) && (
+                  <label className="customer-review-full text-sm font-medium text-[var(--foreground)]">
+                    Service Used *
+
+                    <select
+                      required
+                      value={form.serviceName}
+                      onChange={(event) =>
+                        updateField('serviceName', event.target.value)
+                      }
+                      className={inputClasses}
+                      aria-invalid={Boolean(fieldErrors.serviceName)}
+                    >
+                      <option value="" disabled>
+                        Select the service used
                       </option>
-                    ))}
-                  </select>
-                  {fieldErrors.projectName && (
-                    <span id="project-name-error" className="mt-1 block text-sm text-red-600 dark:text-red-400">
-                      {fieldErrors.projectName}
-                    </span>
-                  )}
-                </label>
+
+                      {serviceOptions.map((service) => (
+                        <option key={service} value={service}>
+                          {service}
+                        </option>
+                      ))}
+                    </select>
+
+                    {fieldErrors.serviceName && (
+                      <span className="mt-1 block text-sm text-red-500">
+                        {fieldErrors.serviceName}
+                      </span>
+                    )}
+                  </label>
+                )}
 
                 <fieldset
                   aria-describedby={fieldErrors.rating ? 'rating-error' : undefined}
@@ -374,7 +555,7 @@ export default function CustomerReviews() {
                   )}
                 </fieldset>
 
-                <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
+                <label className="customer-review-full text-sm font-medium text-slate-700 dark:text-slate-200">
                   Review
                   <textarea
                     required

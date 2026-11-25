@@ -3773,8 +3773,14 @@ html.dark .home-review-rating { color: #ffb547; }
 
 .customer-review-fields > fieldset,
 .customer-review-fields > section,
-.customer-review-fields > label:nth-child(6) {
+.customer-review-fields > label.customer-review-full,
+.customer-review-fields > label:has(textarea) {
   grid-column: 1 / -1;
+}
+
+.customer-review-fields select option {
+  background: var(--card);
+  color: var(--foreground);
 }
 
 .customer-review-fields input,

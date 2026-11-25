@@ -9,13 +9,26 @@ const inputClasses =
 function getInitialForm(review) {
   return {
     customerName: review.customer_name ?? review.customerName ?? '',
+    customerType: review.customer_type ?? review.customerType ?? 'Student',
     collegeName: review.college_name ?? review.collegeName ?? '',
     education: review.education ?? '',
     projectName: review.project_type ?? review.projectName ?? '',
+    companyName: review.company_name ?? review.companyName ?? '',
+    serviceName: review.service_name ?? review.serviceName ?? '',
     rating: Number(review.rating) || 0,
     reviewText: review.review_text ?? review.reviewText ?? '',
   }
 }
+
+const serviceOptions = [
+  'Business Website',
+  'Portfolio Website',
+  'E-commerce Solutions',
+  'Android App Development',
+  'Business Automation',
+  'Website Maintenance',
+  'Other Services',
+]
 
 export default function ReviewEditForm({
   review,
@@ -78,20 +91,80 @@ export default function ReviewEditForm({
 
   const handleSubmit = (event) => {
     event.preventDefault()
+
     const nextErrors = {}
-    if (!form.customerName.trim()) nextErrors.customerName = 'Please enter the customer name.'
-    if (!form.collegeName.trim()) nextErrors.collegeName = 'Please enter the college name.'
-    if (!['Engineering', 'Diploma'].includes(form.education)) nextErrors.education = 'Please select an education.'
-    if (!form.projectName) nextErrors.projectName = 'Please select a project.'
-    if (!form.rating || form.rating < 1 || form.rating > 5) nextErrors.rating = 'Please select a rating from 1 to 5.'
-    if (form.reviewText.trim().length < 10 || form.reviewText.trim().length > 1000) {
+
+    if (!form.customerName.trim()) {
+      nextErrors.customerName = 'Please enter the customer name.'
+    }
+
+    if (!['Student', 'Business', 'Individual'].includes(form.customerType)) {
+      nextErrors.customerType = 'Please select a customer type.'
+    }
+
+    if (form.customerType === 'Student') {
+      if (!form.collegeName.trim()) {
+        nextErrors.collegeName = 'Please enter the college name.'
+      }
+
+      if (!['Engineering', 'Diploma'].includes(form.education)) {
+        nextErrors.education = 'Please select an education.'
+      }
+
+      if (!form.projectName) {
+        nextErrors.projectName = 'Please select a project.'
+      }
+    }
+
+    if (['Business', 'Individual'].includes(form.customerType)) {
+      if (!form.serviceName) {
+        nextErrors.serviceName = 'Please select a service.'
+      }
+    }
+
+    if (
+      form.customerType === 'Business' &&
+      form.companyName.trim().length > 120
+    ) {
+      nextErrors.companyName = 'Company name is too long.'
+    }
+
+    if (!Number.isInteger(form.rating) || form.rating < 1 || form.rating > 5) {
+      nextErrors.rating = 'Please select a rating from 1 to 5.'
+    }
+
+    if (
+      form.reviewText.trim().length < 10 ||
+      form.reviewText.trim().length > 1000
+    ) {
       nextErrors.reviewText = 'Review text must be between 10 and 1000 characters.'
     }
+
     setErrors(nextErrors)
+
     if (Object.keys(nextErrors).length > 0) return
 
     onSave({
-      form: { ...form, customerName: form.customerName.trim(), collegeName: form.collegeName.trim(), reviewText: form.reviewText.trim() },
+      form: {
+        ...form,
+        customerName: form.customerName.trim(),
+        collegeName: form.customerType === 'Student'
+          ? form.collegeName.trim()
+          : null,
+        education: form.customerType === 'Student'
+          ? form.education
+          : null,
+        projectName: form.customerType === 'Student'
+          ? form.projectName
+          : null,
+        companyName: form.customerType === 'Business'
+          ? form.companyName.trim() || null
+          : null,
+        serviceName: form.customerType !== 'Student'
+          ? form.serviceName
+          : null,
+        reviewText: form.reviewText.trim(),
+      },
       keepPhotoPaths: photoItems.filter((photo) => photo.existing).map(({ path }) => path),
       newPhotos: photoItems.filter((photo) => !photo.existing).map(({ file }) => file),
     })
@@ -120,45 +193,189 @@ export default function ReviewEditForm({
           {errors.customerName && <span className="mt-1 block text-sm text-red-600 dark:text-red-400">{errors.customerName}</span>}
         </label>
         <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
-          College Name
-          <input
-            required
-            maxLength={120}
-            value={form.collegeName}
-            onChange={(event) => updateField('collegeName', event.target.value)}
-            className={inputClasses}
-          />
-          {errors.collegeName && <span className="mt-1 block text-sm text-red-600 dark:text-red-400">{errors.collegeName}</span>}
-        </label>
-        <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
-          Education
+          Customer Type *
+
           <select
             required
-            value={form.education}
-            onChange={(event) => updateField('education', event.target.value)}
+            value={form.customerType}
             className={inputClasses}
+            aria-invalid={Boolean(errors.customerType)}
+            onChange={(event) => {
+              const customerType = event.target.value
+
+              setForm((current) => ({
+                ...current,
+                customerType,
+                collegeName: '',
+                education: '',
+                projectName: '',
+                companyName: '',
+                serviceName: '',
+              }))
+
+              setErrors({})
+            }}
           >
-            <option value="" disabled>Select your education</option>
-            <option value="Engineering">Engineering</option>
-            <option value="Diploma">Diploma</option>
+            <option value="Student">Student</option>
+            <option value="Business">Business / Company</option>
+            <option value="Individual">Individual Customer</option>
           </select>
-          {errors.education && <span className="mt-1 block text-sm text-red-600 dark:text-red-400">{errors.education}</span>}
+
+          {errors.customerType && (
+            <span className="mt-1 block text-sm text-red-500">
+              {errors.customerType}
+            </span>
+          )}
         </label>
-        <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
-          Project Name
-          <select
-            required
-            value={form.projectName}
-            onChange={(event) => updateField('projectName', event.target.value)}
-            className={inputClasses}
-          >
-            <option value="" disabled>Select your project</option>
-            {projects.map(({ id, title: projectTitle }) => (
-              <option key={id} value={projectTitle}>{projectTitle}</option>
-            ))}
-          </select>
-          {errors.projectName && <span className="mt-1 block text-sm text-red-600 dark:text-red-400">{errors.projectName}</span>}
-        </label>
+
+        {/* STUDENT DETAILS */}
+
+        {form.customerType === 'Student' && (
+          <>
+            <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
+              College Name *
+
+              <input
+                required
+                maxLength={120}
+                value={form.collegeName}
+                onChange={(event) =>
+                  updateField('collegeName', event.target.value)
+                }
+                className={inputClasses}
+                aria-invalid={Boolean(errors.collegeName)}
+              />
+
+              {errors.collegeName && (
+                <span className="mt-1 block text-sm text-red-500">
+                  {errors.collegeName}
+                </span>
+              )}
+            </label>
+
+            <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
+              Education *
+
+              <select
+                required
+                value={form.education}
+                onChange={(event) =>
+                  updateField('education', event.target.value)
+                }
+                className={inputClasses}
+                aria-invalid={Boolean(errors.education)}
+              >
+                <option value="">Select education</option>
+                <option value="Engineering">Engineering</option>
+                <option value="Diploma">Diploma</option>
+              </select>
+
+              {errors.education && (
+                <span className="mt-1 block text-sm text-red-500">
+                  {errors.education}
+                </span>
+              )}
+            </label>
+
+            <label className="text-sm font-medium text-slate-700 dark:text-slate-200 sm:col-span-2">
+              Academic Project *
+
+              <select
+                required
+                value={form.projectName}
+                onChange={(event) =>
+                  updateField('projectName', event.target.value)
+                }
+                className={inputClasses}
+                aria-invalid={Boolean(errors.projectName)}
+              >
+                <option value="">Select project</option>
+
+                {form.projectName &&
+                  !projects.some((project) => project.title === form.projectName) && (
+                    <option value={form.projectName}>
+                      {form.projectName}
+                    </option>
+                )}
+
+                {projects.map(({ id, title }) => (
+                  <option key={id} value={title}>
+                    {title}
+                  </option>
+                ))}
+              </select>
+
+              {errors.projectName && (
+                <span className="mt-1 block text-sm text-red-500">
+                  {errors.projectName}
+                </span>
+              )}
+            </label>
+          </>
+        )}
+
+        {/* BUSINESS DETAILS */}
+
+        {form.customerType === 'Business' && (
+          <label className="text-sm font-medium text-slate-700 dark:text-slate-200 sm:col-span-2">
+            Business / Company Name (Optional)
+
+            <input
+              maxLength={120}
+              value={form.companyName}
+              onChange={(event) =>
+                updateField('companyName', event.target.value)
+              }
+              className={inputClasses}
+              aria-invalid={Boolean(errors.companyName)}
+            />
+
+            {errors.companyName && (
+              <span className="mt-1 block text-sm text-red-500">
+                {errors.companyName}
+              </span>
+            )}
+          </label>
+        )}
+
+        {/* SERVICE DETAILS */}
+
+        {['Business', 'Individual'].includes(form.customerType) && (
+          <label className="text-sm font-medium text-slate-700 dark:text-slate-200 sm:col-span-2">
+            Service Used *
+
+            <select
+              required
+              value={form.serviceName}
+              onChange={(event) =>
+                updateField('serviceName', event.target.value)
+              }
+              className={inputClasses}
+              aria-invalid={Boolean(errors.serviceName)}
+            >
+              <option value="">Select service</option>
+
+              {form.serviceName &&
+                !serviceOptions.includes(form.serviceName) && (
+                  <option value={form.serviceName}>
+                    {form.serviceName}
+                  </option>
+              )}
+
+              {serviceOptions.map((service) => (
+                <option key={service} value={service}>
+                  {service}
+                </option>
+              ))}
+            </select>
+
+            {errors.serviceName && (
+              <span className="mt-1 block text-sm text-red-500">
+                {errors.serviceName}
+              </span>
+            )}
+          </label>
+        )}
       </div>
 
       <fieldset>

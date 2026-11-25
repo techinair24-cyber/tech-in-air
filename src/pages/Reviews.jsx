@@ -26,7 +26,7 @@ export default function ReviewsPage() {
             <h1>Trusted by our customers.</h1>
 
             <p className="reviews-hero-description">
-              Real projects. Real experiences.
+              Real customers. Real experiences.
               Discover feedback from customers who have
               worked with Tech In Air.
             </p>
@@ -79,7 +79,7 @@ export default function ReviewsPage() {
                     <h3>Rate your experience</h3>
                     <p>
                       Tell us how satisfied you were with
-                      your project and our support.
+                      our services and support.
                     </p>
                   </div>
                 </div>
@@ -97,9 +97,9 @@ export default function ReviewsPage() {
                 <div>
                   <Camera size={24} />
                   <div>
-                    <h3>Add project photos</h3>
+                    <h3>Add photos</h3>
                     <p>
-                      Include photos of your project if you wish.
+                      Include photos of your project, service or experience if you wish.
                     </p>
                   </div>
                 </div>

@@ -92,7 +92,7 @@ export default function ApprovedReviews({
         let query = supabase
           .from('reviews')
           .select(
-            'id, customer_name, college_name, education, project_type, rating, review_text, photo_paths, created_at'
+            'id, customer_name, customer_type, college_name, education, project_type, company_name, service_name, rating, review_text, photo_paths, created_at'
           )
           .eq('status', 'approved')
           .order('created_at', { ascending: false })
@@ -481,47 +481,79 @@ export default function ApprovedReviews({
                           {customerName}
                         </p>
 
-                        {review.college_name && (
+                        <p className="mt-1 text-xs font-medium text-[var(--accent)]">
+                          {review.customer_type === 'Business'
+                            ? 'Business Customer'
+                            : review.customer_type === 'Individual'
+                              ? 'Individual Customer'
+                              : 'Student'}
+                        </p>
+
+                        {(review.customer_type || 'Student') === 'Student'
+                          && review.college_name && (
                           <p className="mt-1 break-words text-xs leading-5 text-[var(--muted)]">
                             {review.college_name}
+                          </p>
+                        )}
+
+                        {review.customer_type === 'Business'
+                          && review.company_name && (
+                          <p className="mt-1 break-words text-xs leading-5 text-[var(--muted)]">
+                            {review.company_name}
                           </p>
                         )}
                       </div>
                     </div>
 
-                    {/* Education and project details */}
-                    {(review.education ||
-                      review.project_type) && (
-                      <div className="mt-4 flex flex-wrap gap-2">
-                        {review.education && (
-                          <span className="inline-flex max-w-full items-center gap-1.5 rounded-md border border-[var(--border)] px-2.5 py-1.5 text-xs text-[var(--muted)]">
-                            <GraduationCap
-                              size={14}
-                              aria-hidden="true"
-                              className="shrink-0 text-[var(--accent)]"
-                            />
+                    {/* Customer project and service details */}
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {(review.customer_type || 'Student') === 'Student' && (
+                        <>
+                          {review.education && (
+                            <span className="inline-flex max-w-full items-center gap-1.5 rounded-md border border-[var(--border)] px-2.5 py-1.5 text-xs text-[var(--muted)]">
+                              <GraduationCap
+                                size={14}
+                                aria-hidden="true"
+                                className="shrink-0 text-[var(--accent)]"
+                              />
 
-                            <span className="min-w-0 break-words">
-                              {review.education}
+                              <span className="min-w-0 break-words">
+                                {review.education}
+                              </span>
                             </span>
-                          </span>
-                        )}
+                          )}
 
-                        {review.project_type && (
-                          <span className="inline-flex max-w-full items-center gap-1.5 rounded-md border border-[var(--border)] px-2.5 py-1.5 text-xs text-[var(--muted)]">
-                            <Briefcase
-                              size={13}
-                              aria-hidden="true"
-                              className="shrink-0 text-[var(--accent)]"
-                            />
+                          {review.project_type && (
+                            <span className="inline-flex max-w-full items-center gap-1.5 rounded-md border border-[var(--border)] px-2.5 py-1.5 text-xs text-[var(--muted)]">
+                              <Briefcase
+                                size={14}
+                                aria-hidden="true"
+                                className="shrink-0 text-[var(--accent)]"
+                              />
 
-                            <span className="min-w-0 break-words">
-                              {review.project_type}
+                              <span className="min-w-0 break-words">
+                                {review.project_type}
+                              </span>
                             </span>
+                          )}
+                        </>
+                      )}
+
+                      {['Business', 'Individual'].includes(review.customer_type)
+                        && review.service_name && (
+                        <span className="inline-flex max-w-full items-center gap-1.5 rounded-md border border-[var(--border)] px-2.5 py-1.5 text-xs text-[var(--muted)]">
+                          <Briefcase
+                            size={14}
+                            aria-hidden="true"
+                            className="shrink-0 text-[var(--accent)]"
+                          />
+
+                          <span className="min-w-0 break-words">
+                            {review.service_name}
                           </span>
-                        )}
-                      </div>
-                    )}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </motion.article>
               )
