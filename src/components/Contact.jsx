@@ -70,7 +70,7 @@ export default function Contact({ contact = {}, intro = {} }) {
 
           <div>
             <h2 className="text-3xl font-semibold tracking-tight text-slate-900 dark:text-white">
-              {getPageText(intro.heading, 'Letâ€™s Discuss Your Requirements.')}
+              {getPageText(intro.heading, "Let's Discuss Your Requirements.")}
             </h2>
             <p className="mt-3 max-w-xl text-base leading-7 text-slate-600 dark:text-slate-300">
               {getPageText(
@@ -128,10 +128,10 @@ export default function Contact({ contact = {}, intro = {} }) {
 
             <div className="mt-4 flex flex-wrap gap-2">
               {[
-                { name: 'à²•à²¨à³à²¨à²¡', english: 'Kannada' },
-                { name: 'à´®à´²à´¯à´¾à´³à´‚', english: 'Malayalam' },
-                { name: 'à®¤à®®à®¿à®´à¯', english: 'Tamil' },
-                { name: 'à¤¹à¤¿à¤¨à¥à¤¦à¥€', english: 'Hindi' },
+                { name: '\u0C95\u0CA8\u0CCD\u0CA8\u0CA1', english: 'Kannada' },
+                { name: '\u0D2E\u0D32\u0D2F\u0D3E\u0D33\u0D02', english: 'Malayalam' },
+                { name: '\u0BA4\u0BAE\u0BBF\u0BB4\u0BCD', english: 'Tamil' },
+                { name: '\u0939\u093F\u0928\u094D\u0926\u0940', english: 'Hindi' },
                 { name: 'English', english: 'English' },
               ].map((language) => (
                 <div
@@ -163,4 +163,3 @@ export default function Contact({ contact = {}, intro = {} }) {
     </section>
   )
 }
-
