@@ -10,15 +10,34 @@ const inputClasses =
 export default function ContactForm() {
   const { data: academicServices } = usePublishedServices('academic-solutions')
   const { data: businessServices } = usePublishedServices('business-solutions')
-  const [form, setForm] = useState({ name: '', email: '', phone: '', type: 'AI / ML', desc: '' })
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    type: '',
+    desc: '',
+  })
   const [consent, setConsent] = useState(false)
   const [requestState, setRequestState] = useState({ status: 'idle', message: '', whatsappUrl: '' })
-  const serviceOptions = [...new Set([
-    'AI / ML', 'Software', 'Android', 'IoT', 'Embedded', 'Robotics',
+  const academicOptions = [...new Set([
+    'AI / ML',
+    'Software',
+    'Android',
+    'IoT',
+    'Embedded',
+    'Robotics',
     ...(academicServices || []).map((service) => service.title),
+  ].filter(Boolean))]
+
+  const businessOptions = [...new Set([
+    'Business Website',
+    'Portfolio Website',
+    'E-commerce Solutions',
+    'Android App Development',
+    'Business Automation',
+    'Website Maintenance',
     ...(businessServices || []).map((service) => service.title),
-    'Other',
-  ])]
+  ].filter(Boolean))]
 
   const onSubmit = async (e) => {
     e.preventDefault()
@@ -35,7 +54,7 @@ export default function ContactForm() {
         requirements: form.desc,
         source: 'website',
       })
-      const text = `Name: ${form.name}\nEmail: ${form.email}\nPhone: ${form.phone}\nProject Type: ${form.type}\nDescription: ${form.desc}`
+      const text = `Name: ${form.name}\nEmail: ${form.email}\nPhone: ${form.phone}\nService Required: ${form.type}\nRequirements: ${form.desc}`
       setRequestState({
         status: 'accepted',
         message: 'Your enquiry has been received. You can also continue the conversation on WhatsApp.',
@@ -49,7 +68,13 @@ export default function ContactForm() {
   return (
     <form onSubmit={onSubmit} className="rounded-[1.25rem] border border-[var(--border)] bg-[var(--card)] p-5 md:p-6">
       <div className="mb-5">
-        <h3 className="text-2xl font-semibold text-slate-900 dark:text-white">Send your project brief</h3>
+        <h3 className="text-2xl font-semibold text-slate-900 dark:text-white">
+          Send an Enquiry
+        </h3>
+
+        <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
+          Tell us what you need, and we’ll help you find the right technology solution.
+        </p>
       </div>
 
       <div className="grid gap-4">
@@ -93,25 +118,56 @@ export default function ContactForm() {
         </label>
 
         <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
-          Project Type
+          Service Required
+
           <select
+            required
             value={form.type}
             onChange={(e) => setForm({ ...form, type: e.target.value })}
             className={inputClasses}
           >
-            {serviceOptions.map((option) => <option key={option}>{option}</option>)}
+            <option value="" disabled>
+              Select a service
+            </option>
+
+            <optgroup label="Academic Solutions">
+              {academicOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </optgroup>
+
+            <optgroup label="Business Solutions">
+              {businessOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </optgroup>
+
+            <optgroup label="Other Requirements">
+              <option value="Custom Technology Solution">
+                Custom Technology Solution
+              </option>
+              <option value="General Enquiry">
+                General Enquiry
+              </option>
+              <option value="Other">Other</option>
+            </optgroup>
           </select>
         </label>
 
         <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
-          Project Description
+          Your Requirements
+
           <textarea
             value={form.desc}
             maxLength={5000}
             onChange={(e) => setForm({ ...form, desc: e.target.value })}
             className={`${inputClasses} min-h-[120px] resize-y`}
             rows={5}
-            placeholder="Tell us about your project idea, goals, timeline, and requirements."
+            placeholder="Tell us about your requirements, goals, expected timeline and preferred budget."
           />
         </label>
       </div>
@@ -123,7 +179,7 @@ export default function ContactForm() {
           className="primary-button px-4 py-2.5 disabled:cursor-not-allowed disabled:opacity-60"
         >
           <FaPaperPlane className="text-sm" />
-          {requestState.status === 'loading' ? 'Sending enquiry…' : requestState.status === 'accepted' ? 'Enquiry received' : 'Send Project Enquiry'}
+          {requestState.status === 'loading' ? 'Sending enquiry…' : requestState.status === 'accepted' ? 'Enquiry received' : 'Send Enquiry'}
         </button>
 
         <a
@@ -138,7 +194,7 @@ export default function ContactForm() {
       </div>
       <label className="mt-4 flex items-start gap-2 text-sm text-slate-600 dark:text-slate-300">
         <input type="checkbox" checked={consent} onChange={(event) => setConsent(event.target.checked)} required className="mt-1 h-4 w-4 accent-cyan-600" />
-        <span>I consent to Tech In Air storing these details to respond to my project enquiry.</span>
+        <span>I consent to Tech In Air storing these details to respond to my enquiry.</span>
       </label>
       {requestState.message && (
         <div role={requestState.status === 'error' ? 'alert' : 'status'} className={`mt-4 rounded-lg px-3 py-2 text-sm ${requestState.status === 'error' ? 'bg-red-50 text-red-700 dark:bg-red-950/40 dark:text-red-300' : 'bg-emerald-50 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300'}`}>
@@ -147,7 +203,7 @@ export default function ContactForm() {
         </div>
       )}
       <p className="mt-4 text-sm text-slate-600 dark:text-slate-300">
-        Please review our <Link to="/terms-and-conditions" className="font-medium text-cyan-800 underline underline-offset-2 hover:text-cyan-700 dark:text-cyan-300 dark:hover:text-cyan-200">Terms &amp; Conditions</Link> before sending your project enquiry.
+        Please review our <Link to="/terms-and-conditions" className="font-medium text-cyan-800 underline underline-offset-2 hover:text-cyan-700 dark:text-cyan-300 dark:hover:text-cyan-200">Terms &amp; Conditions</Link> before sending your enquiry.
       </p>
     </form>
   )

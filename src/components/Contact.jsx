@@ -1,5 +1,6 @@
-import React from 'react'
+﻿import React from 'react'
 import { motion } from 'framer-motion'
+import { Languages } from 'lucide-react'
 import { SiWhatsapp, SiInstagram, SiGmail } from 'react-icons/si'
 import { FiArrowUpRight } from 'react-icons/fi'
 import ContactForm from './ContactForm'
@@ -57,30 +58,25 @@ export default function Contact({ contact = {}, intro = {} }) {
           transition={{ duration: 0.45, ease: 'easeOut' }}
           className="space-y-5"
         >
-          <div className="mb-2 overflow-hidden rounded-[1.25rem] border border-[var(--border)] bg-[var(--surface)] p-5">
-            <div className="grid aspect-[16/7] grid-cols-[0.9fr_1.1fr] gap-5">
-              <div className="flex flex-col justify-end rounded-lg border border-[var(--border)] bg-[var(--card)] p-5">
-                <div className="h-2 w-16 rounded bg-[var(--accent)]" />
-                <div className="mt-4 h-7 w-3/4 rounded bg-[var(--foreground)] opacity-90" />
-                <div className="mt-3 h-2 w-full rounded bg-[var(--border)]" />
-              </div>
-              <div className="grid grid-cols-3 gap-3">
-                {[0, 1, 2].map((item) => (
-                  <div key={item} className="rounded-lg border border-[var(--border)] bg-[var(--card)] p-3">
-                    <div className="h-8 w-8 rounded-full border border-[var(--border)]" />
-                    <div className="mt-5 h-2 rounded bg-[var(--border)]" />
-                  </div>
-                ))}
-              </div>
-            </div>
+          <div className="mb-2 overflow-hidden rounded-[1.25rem] border border-[var(--border)] bg-[var(--surface)]">
+            <img
+              src="/Images/contact-workspace.png"
+              alt="Tech in Air technology development workspace"
+              className="aspect-[16/8] w-full object-cover"
+              loading="lazy"
+              decoding="async"
+            />
           </div>
 
           <div>
             <h2 className="text-3xl font-semibold tracking-tight text-slate-900 dark:text-white">
-              {getPageText(intro.heading, 'Have a Project Idea? Let’s Build It.')}
+              {getPageText(intro.heading, 'Letâ€™s Discuss Your Requirements.')}
             </h2>
             <p className="mt-3 max-w-xl text-base leading-7 text-slate-600 dark:text-slate-300">
-              {getPageText(intro.description, 'Tell us about your project idea, requirements or technology challenge. Tech in Air can help turn the concept into a working project.')}
+              {getPageText(
+                intro.description,
+                'Whether you need an academic project, a business website, an Android application or a custom technology solution, we are here to help.'
+              )}
             </p>
           </div>
 
@@ -112,6 +108,47 @@ export default function Contact({ contact = {}, intro = {} }) {
               </motion.a>
             ))}
           </div>
+
+          <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5">
+            <div className="flex items-center gap-3">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-blue-500/20 bg-blue-500/10 text-[var(--accent)]">
+                <Languages size={23} />
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-[var(--foreground)]">
+                  Multilingual Support
+                </h3>
+
+                <p className="text-sm text-[var(--muted)]">
+                  Speak in your preferred language.
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-4 flex flex-wrap gap-2">
+              {[
+                { name: 'à²•à²¨à³à²¨à²¡', english: 'Kannada' },
+                { name: 'à´®à´²à´¯à´¾à´³à´‚', english: 'Malayalam' },
+                { name: 'à®¤à®®à®¿à®´à¯', english: 'Tamil' },
+                { name: 'à¤¹à¤¿à¤¨à¥à¤¦à¥€', english: 'Hindi' },
+                { name: 'English', english: 'English' },
+              ].map((language) => (
+                <div
+                  key={language.english}
+                  title={language.english}
+                  className="rounded-lg border border-blue-500/20 bg-blue-500/5 px-3 py-2 text-sm font-medium text-[var(--foreground)]"
+                >
+                  {language.name}
+                </div>
+              ))}
+            </div>
+
+            <p className="mt-4 text-sm leading-6 text-[var(--muted)]">
+              Discuss your project or business requirements
+              comfortably in any of these five languages.
+            </p>
+          </div>
         </motion.div>
 
         <motion.div
@@ -126,3 +163,4 @@ export default function Contact({ contact = {}, intro = {} }) {
     </section>
   )
 }
+
