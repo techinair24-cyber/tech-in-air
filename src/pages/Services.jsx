@@ -1,128 +1,471 @@
-import React from 'react'
+
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
+import {
+  Cpu,
+  Code2,
+  Smartphone,
+  Eye,
+  CircuitBoard,
+  GraduationCap,
+  ArrowUpRight,
+  ArrowRight,
+  CheckCircle2,
+} from 'lucide-react'
+
 import projects from '../data/projects'
 import services from '../data/services'
 import PublishedPageSections from '../components/PublishedPageSections'
-import { usePublishedPage, usePublishedProjects, usePublishedServices } from '../lib/publicContent'
+
+import {
+  getPublicMediaUrl,
+  usePublishedPage,
+  usePublishedProjects,
+  usePublishedServices,
+} from '../lib/publicContent'
+
 import { getPageText } from '../lib/pageContent.mjs'
 
-export default function ServicesPage() {
-  const { content } = usePublishedPage('academic-solutions')
-  const { data: academicServiceRecords } = usePublishedServices('academic-solutions')
-  const { data: publishedProjects } = usePublishedProjects()
-  const hero = content?.hero && typeof content.hero === 'object' ? content.hero : {}
-  const pageServices = Array.isArray(content?.services)
-    ? content.services.filter((service) => service && typeof service === 'object' && typeof service.title === 'string')
-      .map((service) => ({
-        id: service.id || service.title,
-        title: service.title,
-        description: getPageText(service.description),
-      }))
-    : services
-  const academicServices = academicServiceRecords === null || academicServiceRecords.length === 0
-    ? pageServices
-    : academicServiceRecords.map((service) => ({
-      id: service.id,
-      title: service.title,
-      description: service.shortDescription || service.detailedDescription,
-    }))
-  const academicProjects = publishedProjects === null
-    ? [11, 8, 9, 2, 4, 12].map((id) => projects.find((project) => project.id === id)).filter(Boolean)
-    : publishedProjects.slice(0, 6)
+const domains = [
+  {
+    icon: Cpu,
+    title: 'Artificial Intelligence & Machine Learning',
+    shortTitle: 'AI & ML',
+    description: 'Classification, prediction, analytics and practical AI applications.',
+    technologies: ['Python', 'Machine Learning', 'TensorFlow'],
+  },
+  {
+    icon: Code2,
+    title: 'Software & Web Development',
+    shortTitle: 'Software & Web',
+    description: 'Reliable applications and responsive web systems.',
+    technologies: ['React', 'JavaScript', 'Python'],
+  },
+  {
+    icon: Smartphone,
+    title: 'Android Applications',
+    shortTitle: 'Android',
+    description: 'Mobile interfaces and functional app workflows.',
+    technologies: ['Android Studio', 'Kotlin', 'Firebase'],
+  },
+  {
+    icon: Eye,
+    title: 'Data Science & Computer Vision',
+    shortTitle: 'Data & Vision',
+    description: 'Image analysis, data processing and visual intelligence.',
+    technologies: ['OpenCV', 'Python', 'Data Analytics'],
+  },
+  {
+    icon: CircuitBoard,
+    title: 'IoT & Embedded Systems',
+    shortTitle: 'IoT & Embedded',
+    description: 'Supporting sensor, hardware and connected-system projects.',
+    technologies: ['Arduino', 'ESP32', 'Sensors'],
+  },
+  {
+    icon: GraduationCap,
+    title: 'Diploma & Engineering Projects',
+    shortTitle: 'Academic Projects',
+    description: 'Technical implementation and guidance aligned to academic requirements.',
+    technologies: ['Planning', 'Development', 'Demonstration'],
+  },
+]
+
+const fallbackImage = '/Projects/homepage-academic-premium.webp'
+
+function AcademicImage({ source, title, hero = false }) {
+  const [failedSource, setFailedSource] = useState(null)
+
+  const resolved = getPublicMediaUrl(source) || source || ''
+
+  const currentSource =
+    resolved && failedSource !== resolved
+      ? resolved
+      : hero && failedSource !== fallbackImage
+        ? fallbackImage
+        : ''
+
+  if (!currentSource) {
+    return (
+      <div className="academic-image-fallback">
+        <Cpu size={48} aria-hidden="true" />
+      </div>
+    )
+  }
 
   return (
-    <div>
-      <header className="border-b border-[var(--border)] py-16 md:py-24">
-        <div className="container grid gap-10 lg:grid-cols-[1fr_0.72fr] lg:items-end">
-          <div>
-            <p className="mb-4 text-sm font-semibold text-[var(--accent)]">Academic Solutions</p>
-            <h1 className="max-w-4xl text-5xl font-semibold leading-[1.02] tracking-[-0.04em] md:text-7xl">{getPageText(hero.heading, 'Turn your academic ideas into working technology.')}</h1>
-          </div>
-          <div>
-            <p className="max-w-xl text-lg leading-8 text-[var(--muted)]">
-              {getPageText(hero.description, 'AI, software and engineering project development with clear planning, technical guidance and demonstration support.')}
+    <img
+      src={currentSource}
+      alt={title}
+      loading={hero ? 'eager' : 'lazy'}
+      decoding="async"
+      onError={() => {
+        if (currentSource === fallbackImage) {
+          setFailedSource(fallbackImage)
+        } else {
+          setFailedSource(resolved)
+        }
+      }}
+    />
+  )
+}
+
+export default function ServicesPage() {
+  const reduceMotion = useReducedMotion()
+  const [activeDomain, setActiveDomain] = useState(0)
+
+  const { content } = usePublishedPage('academic-solutions')
+
+  const { data: academicServiceRecords } =
+    usePublishedServices('academic-solutions')
+
+  const { data: publishedProjects } = usePublishedProjects()
+
+  const hero =
+    content?.hero && typeof content.hero === 'object'
+      ? content.hero
+      : {}
+
+  const pageServices = Array.isArray(content?.services)
+    ? content.services
+        .filter(
+          (service) =>
+            service &&
+            typeof service === 'object' &&
+            typeof service.title === 'string'
+        )
+        .map((service) => ({
+          id: service.id || service.title,
+          title: service.title,
+          description: getPageText(service.description),
+        }))
+    : services
+
+  const academicServices =
+    academicServiceRecords === null ||
+    academicServiceRecords.length === 0
+      ? pageServices
+      : academicServiceRecords.map((service) => ({
+          id: service.id,
+          title: service.title,
+          description:
+            service.shortDescription || service.detailedDescription,
+        }))
+
+  const academicProjects =
+    publishedProjects === null
+      ? [11, 8, 9, 2, 4, 12]
+          .map((id) => projects.find((project) => project.id === id))
+          .filter(Boolean)
+      : publishedProjects.slice(0, 6)
+
+  const selectedDomain = domains[activeDomain]
+  const DomainIcon = selectedDomain.icon
+
+  const reveal = {
+    initial: reduceMotion ? false : { opacity: 0, y: 18 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true, amount: 0.12 },
+    transition: { duration: reduceMotion ? 0 : 0.45 },
+  }
+
+  return (
+    <div className="academic-premium">
+
+      {/* CINEMATIC ACADEMIC HERO */}
+
+      <header className="academic-hero">
+        <div className="container">
+
+          <motion.div className="academic-hero-copy" {...reveal}>
+            <p className="solutions-kicker">
+              Engineering · Innovation · Technology
             </p>
-            <Link to="/contact" className="primary-button mt-8">Let's Talk</Link>
-          </div>
+
+            <h1>
+              {getPageText(
+                hero.heading,
+                'Imagine. Develop. Innovate.'
+              )}
+            </h1>
+
+            <p className="solutions-intro">
+              {getPageText(
+                hero.description,
+                'AI, software and engineering project development with clear planning, technical guidance and demonstration support.'
+              )}
+            </p>
+
+            <div className="solutions-actions">
+              <Link to="/contact" className="primary-button">
+                Discuss Your Project
+                <ArrowUpRight size={18} />
+              </Link>
+
+              <a href="#academic-domains" className="secondary-button">
+                Explore Technology Domains
+              </a>
+            </div>
+          </motion.div>
+
+          <motion.div className="academic-hero-image" {...reveal}>
+            <AcademicImage
+              source={hero.image || hero.imagePath || fallbackImage}
+              title={getPageText(
+                hero.imageAlt,
+                'Advanced engineering and robotics laboratory'
+              )}
+              hero
+            />
+
+            <div className="academic-image-caption">
+              <GraduationCap size={28} />
+              <div>
+                <strong>From Concept to Creation</strong>
+                <span>Practical engineering. Meaningful learning.</span>
+              </div>
+            </div>
+          </motion.div>
+
         </div>
       </header>
 
-      <PublishedPageSections content={content} services={academicServices} projects={publishedProjects || projects} serviceBasePath={null} excludedTypes={['hero']} />
+      <PublishedPageSections
+        content={content}
+        services={academicServices}
+        projects={publishedProjects || projects}
+        serviceBasePath={null}
+        excludedTypes={['hero']}
+      />
 
-      <section className="py-16 md:py-24">
+      {/* INTERACTIVE TECHNOLOGY DOMAINS */}
+
+      <section
+        id="academic-domains"
+        className="solutions-section scroll-mt-28"
+      >
         <div className="container">
-          <p className="mb-3 text-sm font-semibold text-[var(--accent)]">Project Development</p>
-          <h2 className="text-3xl font-semibold md:text-5xl">Support for your complete project journey.</h2>
-          <div className="mt-12 divide-y divide-[var(--border)] border-y border-[var(--border)]">
-            {[
-              ['Artificial Intelligence & Machine Learning', 'Classification, prediction, analytics and practical AI applications.'],
-              ['Software & Web Development', 'Reliable applications and responsive web systems.'],
-              ['Android Applications', 'Mobile interfaces and functional app workflows.'],
-              ['Data Science & Computer Vision', 'Image analysis, data processing and visual intelligence.'],
-              ['IoT & Embedded Systems', 'Supporting sensor, hardware and connected-system projects.'],
-              ['Diploma & Engineering Projects', 'Technical implementation aligned to academic requirements.'],
-            ].map(([title, description], index) => (
-              <motion.article key={title} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.32, delay: index * 0.03 }} className="grid gap-3 py-7 md:grid-cols-[70px_0.75fr_1fr] md:gap-6">
-                <span className="text-sm font-semibold text-[var(--accent)]">{String(index + 1).padStart(2, '0')}</span>
-                <h3 className="text-xl font-semibold">{title}</h3>
-                <p className="leading-7 text-[var(--muted)]">{description}</p>
+
+          <motion.div className="solutions-heading academic-centered" {...reveal}>
+            <p className="solutions-kicker">Project Development</p>
+            <h2>Choose your technology domain.</h2>
+            <p className="solutions-intro">
+              Explore the technologies that can bring your ideas to life.
+            </p>
+          </motion.div>
+
+          <div className="academic-domain-grid">
+            {domains.map((domain, index) => {
+              const Icon = domain.icon
+
+              return (
+                <button
+                  key={domain.title}
+                  type="button"
+                  aria-pressed={activeDomain === index}
+                  onClick={() => setActiveDomain(index)}
+                  className={`academic-domain-button ${
+                    activeDomain === index ? 'is-active' : ''
+                  }`}
+                >
+                  <Icon size={30} aria-hidden="true" />
+                  <strong>{domain.shortTitle}</strong>
+                  <span>
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                </button>
+              )
+            })}
+          </div>
+
+          <motion.article
+            key={activeDomain}
+            className="academic-domain-preview"
+            initial={reduceMotion ? false : { opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: reduceMotion ? 0 : 0.3 }}
+          >
+            <div className="academic-domain-symbol">
+              <DomainIcon size={88} aria-hidden="true" />
+            </div>
+
+            <div>
+              <p className="solutions-kicker">
+                Selected Technology Domain
+              </p>
+
+              <h3>{selectedDomain.title}</h3>
+
+              <p className="solutions-intro">
+                {selectedDomain.description}
+              </p>
+
+              <div className="academic-technology-tags">
+                {selectedDomain.technologies.map((technology) => (
+                  <span key={technology}>{technology}</span>
+                ))}
+              </div>
+
+              <Link to="/contact" className="academic-text-link">
+                Discuss a Project
+                <ArrowUpRight size={18} />
+              </Link>
+            </div>
+          </motion.article>
+
+        </div>
+      </section>
+
+      {/* STUDENT SUPPORT */}
+
+      <section className="solutions-section academic-support">
+        <div className="container academic-support-grid">
+
+          <motion.div {...reveal}>
+            <p className="solutions-kicker">Student Support</p>
+            <h2>Clarity at every stage.</h2>
+            <p className="solutions-intro">
+              Technical guidance to help you understand,
+              develop and demonstrate your project.
+            </p>
+          </motion.div>
+
+          <div className="academic-support-items">
+            {academicServices.length === 0 && (
+              <p className="solutions-intro">
+                No academic services are currently published.
+              </p>
+            )}
+
+            {academicServices.map((service) => (
+              <motion.article
+                key={service.id || service.title}
+                {...reveal}
+              >
+                <CheckCircle2 size={23} aria-hidden="true" />
+
+                <div>
+                  <h3>{service.title}</h3>
+                  <p>{service.description}</p>
+                </div>
               </motion.article>
             ))}
           </div>
+
         </div>
       </section>
 
-      <section className="surface-section py-16 md:py-24">
-        <div className="container grid gap-10 md:grid-cols-[0.7fr_1.3fr]">
-          <div>
-            <p className="text-sm font-semibold text-[var(--accent)]">Student Support</p>
-            <h2 className="mt-3 text-3xl font-semibold md:text-4xl">Clarity at every stage.</h2>
-          </div>
-          <div className="grid gap-6 sm:grid-cols-2">
-            {academicServices.length === 0 && <p className="text-[var(--muted)]">No academic services are currently published.</p>}
-            {academicServices.map((service) => (
-              <article key={service.id || service.title} className="border-t border-[var(--border)] pt-5">
-                <h3 className="text-lg font-semibold">{service.title}</h3>
-                <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{service.description}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* PROJECT JOURNEY */}
 
-      <section className="py-16 md:py-24">
+      <section className="solutions-section">
         <div className="container">
-          <div className="mb-10 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-            <div>
-              <p className="mb-3 text-sm font-semibold text-[var(--accent)]">Featured Academic Projects</p>
-              <h2 className="text-3xl font-semibold md:text-5xl">Explore relevant work.</h2>
-            </div>
-            <Link to="/projects" className="secondary-button w-fit">View All Projects</Link>
+
+          <div className="solutions-heading academic-centered">
+            <p className="solutions-kicker">Your Project Journey</p>
+            <h2>From idea to demonstration.</h2>
           </div>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {academicProjects.map((project) => (
-              <Link key={project.id} to={`/projects/${project.id}`} className="group">
-                <div className="aspect-[16/10] overflow-hidden rounded-[1.25rem] bg-[var(--surface)]">
-                  <img src={project.image} alt={project.title} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.015]" />
-                </div>
-                <p className="mt-4 text-xs font-semibold uppercase tracking-[0.12em] text-[var(--accent)]">{project.categories.slice(0, 2).join(' · ')}</p>
-                <h3 className="mt-2 text-xl font-semibold">{project.title}</h3>
-              </Link>
+
+          <div className="academic-journey-grid">
+            {[
+              ['01', 'Discuss', 'Understand the project idea.'],
+              ['02', 'Plan', 'Select the technical approach.'],
+              ['03', 'Develop', 'Implement the working system.'],
+              ['04', 'Demonstrate', 'Test, explain and demonstrate.'],
+            ].map(([number, title, description]) => (
+              <motion.article key={number} {...reveal}>
+                <span>{number}</span>
+                <h3>{title}</h3>
+                <p>{description}</p>
+              </motion.article>
             ))}
           </div>
+
         </div>
       </section>
 
-      <section className="pb-16 md:pb-24">
-        <div className="container flex flex-col items-start justify-between gap-8 border-t border-[var(--border)] pt-12 md:flex-row md:items-end">
-          <div>
-            <p className="mb-3 text-sm font-semibold text-[var(--accent)]">Next Step</p>
-            <h2 className="text-3xl font-semibold md:text-5xl">Tell us what you want to build.</h2>
+      {/* FEATURED PROJECTS */}
+
+      <section className="solutions-section">
+        <div className="container">
+
+          <div className="academic-project-heading">
+            <div>
+              <p className="solutions-kicker">
+                Featured Academic Projects
+              </p>
+              <h2>Explore real project work.</h2>
+            </div>
+
+            <Link to="/projects" className="secondary-button">
+              View All Projects
+              <ArrowRight size={17} />
+            </Link>
           </div>
-          <Link to="/contact" className="primary-button">Let's Talk</Link>
+
+          {academicProjects.length === 0 && (
+            <p className="solutions-intro">
+              No featured projects are currently available.
+            </p>
+          )}
+
+          <div className="academic-project-grid">
+            {academicProjects.map((project) => (
+              <motion.article key={project.id} {...reveal}>
+                <Link
+                  to={`/projects/${project.slug || project.id}`}
+                  className="academic-project-link"
+                >
+                  <div className="academic-project-image">
+                    <AcademicImage
+                      source={
+                        project.image ||
+                        project.imagePath ||
+                        project.image_paths?.[0]
+                      }
+                      title={project.title}
+                    />
+                  </div>
+
+                  <p className="solutions-kicker">
+                    {Array.isArray(project.categories)
+                      ? project.categories.slice(0, 2).join(' · ')
+                      : getPageText(project.category)}
+                  </p>
+
+                  <div className="academic-project-title">
+                    <h3>{project.title}</h3>
+                    <ArrowUpRight size={21} aria-hidden="true" />
+                  </div>
+                </Link>
+              </motion.article>
+            ))}
+          </div>
+
         </div>
       </section>
+
+      {/* ACADEMIC CTA */}
+
+      <section className="solutions-section">
+        <div className="container">
+          <motion.div className="solutions-final-cta" {...reveal}>
+            <div>
+              <p className="solutions-kicker">Your Next Step</p>
+              <h2>Tell us what you want to build.</h2>
+              <p className="solutions-intro">
+                Explore your idea with practical technical guidance.
+              </p>
+            </div>
+
+            <Link to="/contact" className="primary-button">
+              Discuss Your Project
+              <ArrowUpRight size={18} />
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
     </div>
   )
 }

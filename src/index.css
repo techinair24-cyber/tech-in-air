@@ -1994,3 +1994,745 @@ html.dark .home-review-rating { color: #ffb547; }
     transform: none;
   }
 }
+
+/* =========================================
+   TECH IN AIR - SOLUTIONS PAGES
+   ========================================= */
+
+.business-premium,
+.academic-premium {
+  overflow: hidden;
+}
+
+/* SHARED BRAND STYLING */
+
+:is(.business-premium, .academic-premium) .solutions-section {
+  padding-block: clamp(3.5rem, 6vw, 5.5rem);
+}
+
+:is(.business-premium, .academic-premium) .solutions-kicker {
+  margin: 0;
+  color: var(--accent);
+  font-size: 0.76rem;
+  font-weight: 750;
+  letter-spacing: 0.14em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+:is(.business-premium, .academic-premium) h1 {
+  margin: 1rem 0 0;
+  color: var(--foreground);
+  font-size: clamp(2.8rem, 5.5vw, 5.5rem);
+  font-weight: 750;
+  letter-spacing: -0.06em;
+  line-height: 1.04;
+}
+
+:is(.business-premium, .academic-premium) h2 {
+  margin: 0.8rem 0 0;
+  color: var(--foreground);
+  font-size: clamp(2rem, 3.8vw, 3.4rem);
+  font-weight: 750;
+  letter-spacing: -0.045em;
+  line-height: 1.15;
+}
+
+:is(.business-premium, .academic-premium) .solutions-intro {
+  margin: 1.15rem 0 0;
+  color: var(--muted);
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+:is(.business-premium, .academic-premium) .solutions-heading {
+  max-width: 54rem;
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+}
+
+:is(.business-premium, .academic-premium) .solutions-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.85rem;
+  margin-top: 1.8rem;
+}
+
+:is(.business-premium, .academic-premium) .solutions-actions a {
+  gap: 0.6rem;
+}
+
+:is(.business-premium, .academic-premium) button:focus-visible,
+:is(.business-premium, .academic-premium) a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+/* =========================================
+   BUSINESS SOLUTIONS
+   ========================================= */
+
+.business-premium .business-hero {
+  padding-block: clamp(3rem, 7vw, 6rem);
+  background: radial-gradient(
+    ellipse at 90% 35%,
+    color-mix(in srgb, var(--accent) 10%, transparent),
+    transparent 55%
+  );
+}
+
+.business-premium .business-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
+  align-items: center;
+  gap: clamp(2rem, 5vw, 5rem);
+}
+
+.business-premium .business-hero-image {
+  position: relative;
+  isolation: isolate;
+  min-width: 0;
+  aspect-ratio: 5 / 4;
+  overflow: hidden;
+  border-radius: 1rem;
+  background: var(--surface-strong);
+}
+
+.business-premium .business-hero-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.business-premium .business-image-caption,
+.academic-premium .academic-image-caption {
+  position: absolute;
+  z-index: 2;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.1rem;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 0.8rem;
+  background: rgba(4, 13, 27, 0.8);
+  backdrop-filter: blur(12px);
+}
+
+.business-image-caption > svg,
+.academic-image-caption > svg {
+  flex-shrink: 0;
+  color: #66b5ff;
+}
+
+.business-image-caption strong,
+.academic-image-caption strong {
+  display: block;
+  font-size: 1rem;
+}
+
+.business-image-caption span,
+.academic-image-caption span {
+  display: block;
+  margin-top: 0.25rem;
+  color: #b8c9dd;
+  font-size: 0.8rem;
+}
+
+/* Interactive business catalogue */
+
+.business-premium .business-catalogue {
+  display: grid;
+  grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+  align-items: start;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+}
+
+.business-premium .business-service-menu {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--border);
+}
+
+.business-premium .business-service-option {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.4rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  border-left: 3px solid transparent;
+  background: transparent;
+  color: var(--foreground);
+  cursor: pointer;
+  transition: background 200ms ease, border-color 200ms ease;
+}
+
+.business-premium .business-service-option > svg {
+  flex-shrink: 0;
+  color: var(--accent);
+}
+
+.business-premium .business-service-option > span {
+  flex: 1;
+  min-width: 0;
+}
+
+.business-premium .business-service-option small {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--muted);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+}
+
+.business-premium .business-service-option strong {
+  display: block;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.business-premium .business-service-option:hover,
+.business-premium .business-service-option.is-active {
+  background: color-mix(
+    in srgb,
+    var(--accent) 9%,
+    transparent
+  );
+  border-left-color: var(--accent);
+}
+
+.business-premium .business-service-option.is-active strong {
+  color: var(--accent);
+}
+
+.business-premium .business-service-preview {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background: var(--card);
+}
+
+.business-premium .business-preview-visual {
+  position: relative;
+  overflow: hidden;
+  background: var(--surface-strong);
+}
+
+.business-premium .business-preview-visual > img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.business-premium .business-preview-copy {
+  padding: clamp(1.4rem, 3vw, 2.5rem);
+}
+
+.business-premium .business-preview-copy h3 {
+  margin: 0.8rem 0 0;
+  color: var(--foreground);
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  font-weight: 750;
+  letter-spacing: -0.045em;
+  line-height: 1.15;
+}
+
+.business-premium .business-price {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-top: 1.8rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.business-premium .business-price span {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.business-premium .business-price strong {
+  color: var(--accent);
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  font-weight: 750;
+  letter-spacing: -0.04em;
+}
+
+/* Business development process */
+
+.business-premium .business-approach {
+  background: var(--surface);
+}
+
+.business-premium .business-approach-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 2rem;
+}
+
+.business-premium .business-approach-grid article {
+  padding-top: 1.5rem;
+  border-top: 2px solid var(--accent);
+}
+
+.business-premium .business-approach-grid article > span {
+  color: var(--accent);
+  font-size: 2.5rem;
+  font-weight: 650;
+  letter-spacing: -0.05em;
+}
+
+.business-premium .business-approach-grid h3 {
+  margin-top: 1rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.business-premium .business-approach-grid p {
+  margin-top: 0.7rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+/* =========================================
+   ACADEMIC SOLUTIONS
+   ========================================= */
+
+.academic-premium .academic-hero {
+  padding-block: clamp(3rem, 6vw, 5rem);
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    color-mix(in srgb, var(--accent) 10%, transparent),
+    transparent 65%
+  );
+}
+
+.academic-premium .academic-hero-copy {
+  max-width: 64rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.academic-premium .academic-hero-copy .solutions-intro {
+  max-width: 46rem;
+  margin-inline: auto;
+}
+
+.academic-premium .academic-hero-copy .solutions-actions {
+  justify-content: center;
+}
+
+.academic-premium .academic-hero-image {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  aspect-ratio: 21 / 9;
+  margin-top: 3rem;
+  border-radius: 1rem;
+  background: var(--surface-strong);
+}
+
+.academic-premium .academic-hero-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.academic-premium .academic-image-caption {
+  right: auto;
+  max-width: calc(100% - 3rem);
+}
+
+.academic-premium .academic-centered {
+  margin-inline: auto;
+  text-align: center;
+}
+
+/* Technology domain selection */
+
+.academic-premium .academic-domain-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.academic-premium .academic-domain-button {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 9rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  padding: 1rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 0.65rem;
+  background: transparent;
+  color: var(--foreground);
+  text-align: center;
+  cursor: pointer;
+  transition: background 200ms ease, border-color 200ms ease;
+}
+
+.academic-premium .academic-domain-button svg {
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.academic-premium .academic-domain-button strong {
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.academic-premium .academic-domain-button > span {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.7rem;
+  color: var(--muted);
+  font-size: 0.65rem;
+}
+
+.academic-premium .academic-domain-button:hover,
+.academic-premium .academic-domain-button.is-active {
+  border-color: var(--accent);
+  background: color-mix(
+    in srgb,
+    var(--accent) 9%,
+    transparent
+  );
+}
+
+.academic-premium .academic-domain-preview {
+  display: grid;
+  grid-template-columns: minmax(0, 0.55fr) minmax(0, 1.45fr);
+  align-items: center;
+  gap: 2rem;
+  margin-top: 1.5rem;
+  padding: clamp(1.5rem, 4vw, 3rem);
+  border: 1px solid var(--border);
+  border-radius: 0.8rem;
+  background: radial-gradient(
+    ellipse at 0% 50%,
+    color-mix(in srgb, var(--accent) 12%, transparent),
+    transparent 65%
+  ), var(--card);
+}
+
+.academic-premium .academic-domain-symbol {
+  display: grid;
+  min-height: 10rem;
+  place-items: center;
+  color: var(--accent);
+}
+
+.academic-premium .academic-domain-preview h3 {
+  margin-top: 0.8rem;
+  font-size: clamp(1.6rem, 3vw, 2.6rem);
+  font-weight: 750;
+  letter-spacing: -0.04em;
+  line-height: 1.2;
+}
+
+.academic-premium .academic-technology-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 1.4rem;
+}
+
+.academic-premium .academic-technology-tags span {
+  padding: 0.45rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 0.4rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.academic-premium .academic-text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-top: 1.5rem;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* Student support */
+
+.academic-premium .academic-support {
+  background: var(--surface);
+}
+
+.academic-premium .academic-support-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr);
+  gap: clamp(2rem, 5vw, 4rem);
+}
+
+.academic-premium .academic-support-items {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.academic-premium .academic-support-items article {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  padding-block: 1.25rem;
+  border-top: 1px solid var(--border);
+}
+
+.academic-premium .academic-support-items svg {
+  flex-shrink: 0;
+  color: var(--accent);
+}
+
+.academic-premium .academic-support-items h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.academic-premium .academic-support-items p {
+  margin-top: 0.65rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.75;
+}
+
+/* Academic journey */
+
+.academic-premium .academic-journey-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.academic-premium .academic-journey-grid article {
+  position: relative;
+  text-align: center;
+}
+
+.academic-premium .academic-journey-grid article > span {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: 4.5rem;
+  height: 4.5rem;
+  margin-inline: auto;
+  place-items: center;
+  border: 1px solid var(--accent);
+  border-radius: 50%;
+  background: var(--bg);
+  color: var(--accent);
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.academic-premium .academic-journey-grid article:not(:last-child)::after {
+  position: absolute;
+  top: 2.25rem;
+  left: calc(50% + 2.25rem);
+  right: calc(-50% + 0.75rem);
+  height: 1px;
+  background: var(--border);
+  content: '';
+}
+
+.academic-premium .academic-journey-grid h3 {
+  margin-top: 1.2rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.academic-premium .academic-journey-grid p {
+  margin-top: 0.6rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+/* Featured academic projects */
+
+.academic-premium .academic-project-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.academic-premium .academic-project-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2rem;
+}
+
+.academic-premium .academic-project-link {
+  display: block;
+  min-width: 0;
+}
+
+.academic-premium .academic-project-image {
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  margin-bottom: 1.2rem;
+  border-radius: 0.7rem;
+  background: var(--surface-strong);
+}
+
+.academic-premium .academic-project-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 650ms ease;
+}
+
+.academic-premium .academic-project-link:hover img {
+  transform: scale(1.05);
+}
+
+.academic-premium .academic-image-fallback {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+  color: var(--accent);
+  background: var(--surface-strong);
+}
+
+.academic-premium .academic-project-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  margin-top: 0.7rem;
+}
+
+.academic-premium .academic-project-title h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.academic-premium .academic-project-title svg {
+  flex-shrink: 0;
+  color: var(--accent);
+}
+
+/* SHARED FINAL CTA */
+
+:is(.business-premium, .academic-premium) .solutions-final-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: clamp(1.8rem, 4vw, 3.5rem);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background: radial-gradient(
+    ellipse at 100% 0%,
+    color-mix(in srgb, var(--accent) 15%, transparent),
+    transparent 65%
+  ), var(--surface);
+}
+
+:is(.business-premium, .academic-premium) .solutions-final-cta > a {
+  flex-shrink: 0;
+}
+
+/* TABLET */
+
+@media (max-width: 1023px) {
+  .academic-premium .academic-domain-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .academic-premium .academic-project-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .business-premium .business-approach-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* MOBILE */
+
+@media (max-width: 767px) {
+  .business-premium .business-hero-grid,
+  .business-premium .business-catalogue,
+  .academic-premium .academic-domain-preview,
+  .academic-premium .academic-support-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .business-premium .business-service-option {
+    padding: 1rem 0.8rem;
+  }
+
+  .academic-premium .academic-hero-image {
+    aspect-ratio: 4 / 3;
+    margin-top: 2rem;
+  }
+
+  .academic-premium .academic-domain-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .academic-premium .academic-domain-symbol {
+    min-height: 6rem;
+  }
+
+  .academic-premium .academic-support-items,
+  .academic-premium .academic-project-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .academic-premium .academic-journey-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 2rem;
+  }
+
+  .academic-premium .academic-journey-grid article::after {
+    display: none;
+  }
+
+  .academic-premium .academic-project-heading,
+  :is(.business-premium, .academic-premium) .solutions-final-cta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .business-premium .business-image-caption,
+  .academic-premium .academic-image-caption {
+    right: 0.8rem;
+    bottom: 0.8rem;
+    left: 0.8rem;
+    max-width: none;
+    padding: 0.85rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .academic-premium .academic-project-image img {
+    transition: none;
+  }
+
+  .academic-premium .academic-project-link:hover img {
+    transform: none;
+  }
+}
