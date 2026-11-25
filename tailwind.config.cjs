@@ -5,10 +5,10 @@ module.exports = {
     extend: {
       colors: {
         brand: {
-          50: '#e6fbff',
-          100: '#c9f7ff',
-          500: '#00d2ff',
-          700: '#00a3d9'
+          50: '#eaf3ff',
+          100: '#d6e8ff',
+          500: '#2997ff',
+          700: '#0068d9'
         }
       },
       fontFamily: {

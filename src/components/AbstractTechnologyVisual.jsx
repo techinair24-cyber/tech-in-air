@@ -1,48 +1,86 @@
 import React from 'react'
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 
 export default function AbstractTechnologyVisual() {
+  const reduceMotion = useReducedMotion()
+  const signalTransition = reduceMotion
+    ? { duration: 0 }
+    : { duration: 3.8, repeat: Infinity, ease: 'linear' }
+
   return (
     <div className="technology-visual" aria-hidden="true">
-      <div className="technology-visual-glow" />
       <motion.svg
-        viewBox="0 0 760 520"
+        viewBox="0 0 640 520"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        initial={{ opacity: 0, scale: 0.98 }}
+        initial={reduceMotion ? false : { opacity: 0, y: 12, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.8, ease: 'easeOut' }}
+        transition={{ duration: reduceMotion ? 0 : 0.8, ease: 'easeOut' }}
       >
         <defs>
-          <linearGradient id="tiaFlow" x1="80" y1="80" x2="680" y2="450" gradientUnits="userSpaceOnUse">
-            <stop stopColor="#2997FF" stopOpacity="0.2" />
-            <stop offset="0.48" stopColor="#0071E3" stopOpacity="0.9" />
-            <stop offset="1" stopColor="#2997FF" stopOpacity="0.18" />
+          <linearGradient id="processorSurface" x1="196" y1="145" x2="438" y2="376" gradientUnits="userSpaceOnUse">
+            <stop stopColor="var(--surface-strong)" />
+            <stop offset="1" stopColor="var(--surface)" />
           </linearGradient>
-          <filter id="tiaSoft" x="-30%" y="-30%" width="160%" height="160%">
-            <feGaussianBlur stdDeviation="12" />
+          <filter id="processorGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="18" />
           </filter>
         </defs>
-        <motion.ellipse cx="380" cy="280" rx="238" ry="92" transform="rotate(-12 380 280)" stroke="url(#tiaFlow)" strokeWidth="26" strokeLinecap="round" initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 0.72 }} transition={{ duration: 1.8, delay: 0.1, ease: 'easeInOut' }} />
-        <motion.ellipse cx="380" cy="280" rx="238" ry="92" transform="rotate(52 380 280)" stroke="#0071E3" strokeOpacity="0.26" strokeWidth="2" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.8, delay: 0.35, ease: 'easeInOut' }} />
-        <motion.ellipse cx="380" cy="280" rx="238" ry="92" transform="rotate(102 380 280)" stroke="#2997FF" strokeOpacity="0.18" strokeWidth="2" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.8, delay: 0.5, ease: 'easeInOut' }} />
-        <motion.circle cx="380" cy="280" r="84" stroke="#0071E3" strokeOpacity="0.12" strokeWidth="1" fill="#0071E3" fillOpacity="0.025" animate={{ r: [78, 88, 78], opacity: [0.5, 0.8, 0.5] }} transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }} />
-        {[
-          [176, 310], [268, 354], [348, 276], [452, 230],
-          [544, 178], [620, 124], [402, 132], [224, 214]
-        ].map(([cx, cy], index) => (
-          <motion.circle
-            key={`${cx}-${cy}`}
-            cx={cx}
-            cy={cy}
-            r={index % 3 === 0 ? 7 : 4.5}
-            fill="#0071E3"
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: [0.35, 0.9, 0.35], scale: [0.8, 1.15, 0.8] }}
-            transition={{ duration: 3.2, delay: index * 0.14, repeat: Infinity, ease: 'easeInOut' }}
-          />
-        ))}
-        <circle cx="392" cy="286" r="70" fill="#0071E3" fillOpacity="0.08" filter="url(#tiaSoft)" />
+        <path d="M320 84V153M320 367V438M143 260H198M442 260H497M194 130L231 168M409 352L446 390M446 130L409 168M231 352L194 390" stroke="#2997FF" strokeOpacity="0.48" strokeWidth="1.5" />
+        <path d="M320 84H274V104M320 438H368V416M143 260H118V224M497 260H522V296M194 130H162V109M446 390H478V411M446 130H478V109M194 390H162V411" stroke="var(--border)" strokeWidth="1.5" />
+        <circle cx="320" cy="260" r="125" fill="#2997FF" fillOpacity="0.1" filter="url(#processorGlow)" />
+
+        <motion.path d="M320 84V153M143 260H198M497 260H442M320 438V367" stroke="#2997FF" strokeWidth="1.5" strokeOpacity="0.68" initial={reduceMotion ? false : { pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: reduceMotion ? 0 : 0.75, delay: reduceMotion ? 0 : 0.18 }} />
+        <motion.circle
+          r="3.5"
+          fill="#2997FF"
+          animate={reduceMotion ? { cx: 247, cy: 260 } : { cx: [202, 247], cy: [260, 260] }}
+          transition={signalTransition}
+        />
+        <motion.circle
+          r="3.5"
+          fill="#2997FF"
+          animate={reduceMotion ? { cx: 320, cy: 186 } : { cx: [320, 320], cy: [150, 186] }}
+          transition={signalTransition}
+        />
+
+        <rect x="198" y="153" width="244" height="214" rx="22" fill="url(#processorSurface)" stroke="#2997FF" strokeOpacity="0.55" strokeWidth="1.5" />
+        <rect x="215" y="170" width="210" height="180" rx="14" stroke="var(--border)" strokeWidth="1" />
+        <path d="M243 219H276M364 219H397M243 302H276M364 302H397M320 188V205M320 315V332" stroke="#2997FF" strokeOpacity="0.72" strokeWidth="2" strokeLinecap="round" />
+        <rect x="276" y="205" width="88" height="110" rx="12" fill="#0068D9" fillOpacity="0.16" stroke="#2997FF" strokeOpacity="0.72" />
+        <path d="M296 236H344M296 252H344M296 268H333M296 284H338" stroke="#2997FF" strokeOpacity="0.72" strokeWidth="3" strokeLinecap="round" />
+        <text x="320" y="339" fill="var(--foreground)" fontSize="10" fontWeight="600" letterSpacing="2" textAnchor="middle">INTELLIGENT CORE</text>
+
+        <g fill="var(--surface)" stroke="#2997FF" strokeOpacity="0.66">
+          <rect x="245" y="56" width="64" height="32" rx="9" />
+          <rect x="88" y="244" width="62" height="32" rx="9" />
+          <rect x="490" y="244" width="62" height="32" rx="9" />
+          <rect x="287" y="432" width="66" height="32" rx="9" />
+          <rect x="126" y="92" width="72" height="32" rx="9" />
+          <rect x="442" y="396" width="78" height="32" rx="9" />
+          <rect x="442" y="92" width="78" height="32" rx="9" />
+          <rect x="126" y="396" width="72" height="32" rx="9" />
+        </g>
+        <g fill="var(--foreground)" fontSize="10" fontWeight="600" letterSpacing="1.1" textAnchor="middle">
+          <text x="277" y="76">AI</text>
+          <text x="119" y="264">ML</text>
+          <text x="521" y="264">DATA</text>
+          <text x="320" y="452">IoT</text>
+          <text x="162" y="112">SOFTWARE</text>
+          <text x="481" y="416">APPLICATIONS</text>
+          <text x="481" y="112">APPS</text>
+          <text x="162" y="416">DATA</text>
+        </g>
+        <g fill="#2997FF">
+          <circle cx="320" cy="84" r="3" />
+          <circle cx="143" cy="260" r="3" />
+          <circle cx="497" cy="260" r="3" />
+          <circle cx="320" cy="438" r="3" />
+          <circle cx="194" cy="130" r="3" />
+          <circle cx="446" cy="390" r="3" />
+          <circle cx="446" cy="130" r="3" />
+          <circle cx="194" cy="390" r="3" />
+        </g>
       </motion.svg>
     </div>
   )
