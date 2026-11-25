@@ -1292,3 +1292,26 @@ html.dark .home-review-rating { color: #ffb547; }
 .site-footer-column ul, .site-footer-column address { font-size: .95rem; }
 @media (max-width: 767px) { .hero-layout { padding-block: 2rem 3rem; } .capability-item--feature { min-height: 15rem; } .capability-item--horizontal { min-height: 0; } }
 @media (prefers-reduced-motion: reduce) { .featured-project-card:hover, .solution-panel:hover, .home-review-card:hover, .technology-item:hover, .primary-button:hover, .secondary-button:hover { transform: none; } }
+
+/* Responsive capabilities grid: override legacy bento spans. */
+.public-site #capabilities .capability-grid {
+  display: grid;
+  width: 100%;
+  grid-template-columns: minmax(0, 1fr) !important;
+  grid-auto-rows: 1fr !important;
+  gap: 1.25rem;
+}
+.public-site #capabilities .capability-grid > .capability-item {
+  grid-column: auto;
+  grid-row: auto;
+  min-width: 0;
+  min-height: 13rem;
+}
+.public-site #capabilities .capability-item h3 { font-size: 1.25rem; }
+.public-site #capabilities .capability-item p { font-size: 1rem; }
+@media (min-width: 600px) {
+  .public-site #capabilities .capability-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+}
+@media (min-width: 1024px) {
+  .public-site #capabilities .capability-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+}
