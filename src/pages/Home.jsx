@@ -219,53 +219,117 @@ export default function Home() {
 
       <motion.section id="solutions" className="home-section" {...motionProps}>
         <div className="container">
-          <SectionHeading
-            eyebrow="Solutions"
-            title={heading(solutionsSection, 'Technology for learning and business.')}
-            description={getPageText(solutionsSection?.description)}
-          />
-          <div className="home-solutions-grid !gap-6">
+          <div className="solutions-editorial-heading">
+            <p className="home-eyebrow">Our Solutions</p>
+            <h2 className="section-heading">
+              {heading(solutionsSection, 'Solutions Built for You')}
+            </h2>
+            {getPageText(solutionsSection?.description) && (
+              <p className="home-section-description">
+                {getPageText(solutionsSection?.description)}
+              </p>
+            )}
+          </div>
+
+          <div className="solutions-editorial-grid">
             {solutions.map((item, index) => {
               const record = Array.isArray(item)
-                ? { label: item[0], title: item[1], description: item[2], href: item[3] }
-                : typeof item === 'string' ? { title: item } : item || {}
+                ? {
+                    label: item[0],
+                    title: item[1],
+                    description: item[2],
+                    href: item[3],
+                  }
+                : typeof item === 'string'
+                  ? { title: item }
+                  : item || {}
+
               const fallback = defaultSolutions[index] || defaultSolutions[0]
+
               const label = getPageText(record.label, fallback.label)
               const title = getPageText(record.title, fallback.title)
-              const description = getPageText(record.description, fallback.description)
-              const image = getPageText(record.image) || getPageText(record.imagePath) || (index === 0 ? solutionsSection?.image || fallback.image : fallback.image)
-              const imageAlt = getPageText(record.imageAlt, getPageText(solutionsSection?.imageAlt, fallback.imageAlt))
+              const description = getPageText(
+                record.description,
+                fallback.description
+              )
+
+              const image =
+                getPageText(record.image) ||
+                getPageText(record.imagePath) ||
+                (index === 0
+                  ? solutionsSection?.image || fallback.image
+                  : fallback.image)
+
+              const imageAlt = getPageText(
+                record.imageAlt,
+                getPageText(
+                  solutionsSection?.imageAlt,
+                  fallback.imageAlt
+                )
+              )
+
               const href = getSafeInternalPath(record.href, publicPaths) || fallback.href
               const ctaLabel = getPageText(record.ctaLabel, fallback.ctaLabel)
-              const highlights = Array.isArray(record.highlights) && record.highlights.length
-                ? record.highlights.filter((highlight) => typeof highlight === 'string')
-                : fallback.highlights
 
               return (
-                <article key={record.id || title || index} className={`solution-panel ${index % 2 ? 'solution-panel--reverse' : ''}`}>
-                  <div className="solution-image relative">
+                <motion.article
+                  key={record.id || `${title}-${index}`}
+                  className="solutions-editorial-item"
+                  initial={reduceMotion ? false : { opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.15 }}
+                  transition={{
+                    duration: reduceMotion ? 0 : 0.5,
+                    delay: reduceMotion ? 0 : index * 0.12,
+                  }}
+                >
+                  <Link
+                    to={href}
+                    className="solutions-editorial-image"
+                    aria-label={ctaLabel}
+                  >
                     <SolutionImage
                       src={image}
                       fallback={fallback.image}
                       alt={imageAlt}
                       fallbackAlt={fallback.imageAlt}
                     />
-                    <span aria-hidden="true" className="absolute bottom-4 left-4 z-10 rounded-md border border-white/20 bg-[#07111f]/90 px-3 py-2 text-xs font-semibold tracking-widest text-white">{String(index + 1).padStart(2, '0')}</span>
-                  </div>
-                  <div className="solution-content">
-                    <p className="home-eyebrow">{label}</p>
+
+                    <span
+                      className="solutions-editorial-number"
+                      aria-hidden="true"
+                    >
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+
+                    <span
+                      className="solutions-editorial-arrow"
+                      aria-hidden="true"
+                    >
+                      <FiArrowUpRight />
+                    </span>
+                  </Link>
+
+                  <div className="solutions-editorial-content">
+                    <p className="solutions-editorial-label">
+                      {label}
+                    </p>
+
                     <h3>{title}</h3>
-                    <p className="solution-description">{description}</p>
-                    <ul className="solution-highlights">
-                      {highlights.map((highlight, highlightIndex) => (
-                        <li key={`${highlight}-${highlightIndex}`}>{highlight}</li>
-                      ))}
-                    </ul>
-                    <Link to={href} className="text-link">
-                      {ctaLabel}<FiArrowUpRight aria-hidden="true" />
+
+                    <p className="solutions-editorial-description">
+                      {description}
+                    </p>
+
+                    <Link
+                      to={href}
+                      className="solutions-editorial-link"
+                    >
+                      <span>{ctaLabel}</span>
+                      <FiArrowUpRight aria-hidden="true" />
                     </Link>
                   </div>
-                </article>
+                </motion.article>
               )
             })}
           </div>
