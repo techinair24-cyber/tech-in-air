@@ -217,25 +217,16 @@ export default function CustomerReviews() {
   }
 
   return (
-    <section id="customer-reviews" className="py-12 md:py-16">
-      <div className="container">
+    <section id="customer-reviews" className="customer-review-form">
+      <div className="w-full">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.15 }}
           transition={{ duration: 0.4, ease: 'easeOut' }}
-          className="mx-auto max-w-3xl"
+          className="w-full min-w-0"
         >
-          <div className="mb-8 text-center">
-            <p className="text-sm font-semibold tracking-[0.18em] text-cyan-700 dark:text-cyan-300">
-              WHAT OUR CUSTOMERS SAY
-            </p>
-            <p className="mt-3 text-slate-600 dark:text-slate-300">
-              Share your experience with Tech in Air.
-            </p>
-          </div>
-
-          <div className="rounded-[1.25rem] border border-[var(--border)] bg-[var(--card)] p-5 md:p-8">
+          <div className="customer-review-form-content">
             <div className="mb-6">
               <h3 className="text-2xl font-semibold text-slate-900 dark:text-white">Write a Review</h3>
               <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
@@ -250,7 +241,7 @@ export default function CustomerReviews() {
             </div>
 
             <form onSubmit={handleSubmit} noValidate>
-              <div className="grid gap-5">
+              <div className="customer-review-fields">
                 <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
                   Customer Name
                   <input
@@ -566,7 +557,7 @@ export default function CustomerReviews() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="primary-button mt-6 w-full sm:w-auto disabled:cursor-not-allowed disabled:opacity-60"
+                className="primary-button customer-review-submit disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {isSubmitting ? 'Submitting...' : 'Submit Review'}
               </button>
