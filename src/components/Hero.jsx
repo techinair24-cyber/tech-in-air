@@ -6,7 +6,7 @@ import { getPublicMediaUrl, usePublishedPage } from '../lib/publicContent'
 import { getPageText, getSafeInternalPath } from '../lib/pageContent.mjs'
 
 const publicPaths = new Set(['/contact', '/projects', '/services', '/business-solutions', '/business-solutions/quotation'])
-const defaultHeroImage = '/Projects/tech-in-air-hero.webp'
+const defaultHeroImage = '/Projects/homepage-hero-premium.webp'
 
 export default function Hero(){
   const reduceMotion = useReducedMotion()
@@ -20,7 +20,7 @@ export default function Hero(){
   const secondaryCta = hero.secondaryCta && typeof hero.secondaryCta === 'object' ? hero.secondaryCta : {}
   const primaryHref = getSafeInternalPath(primaryCta.href, publicPaths) || '/business-solutions'
   const secondaryHref = getSafeInternalPath(secondaryCta.href, publicPaths) || '/projects'
-  const defaultHeroAlt = 'A cinematic Tech In Air workspace with AI, software and connected technology'
+  const defaultHeroAlt = 'A sculptural neural processor core with glass components and electric-blue lighting'
   const heroImageAlt = usingDefaultHeroFallback ? defaultHeroAlt : getPageText(hero.imageAlt, defaultHeroAlt)
   const heroBrand = getPageText(hero.eyebrow, getPageText(hero.brand, 'Tech In Air'))
   const heroTitle = getPageText(hero.title, getPageText(hero.heading, 'Your ideas. Our technology.'))

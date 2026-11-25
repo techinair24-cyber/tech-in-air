@@ -1,11 +1,11 @@
 import React from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 
-const defaultImage = '/Projects/tech-in-air-hero.webp'
+const defaultImage = '/Projects/homepage-hero-premium.webp'
 
 export default function AbstractTechnologyVisual({
   src = defaultImage,
-  alt = 'A cinematic Tech In Air workspace with AI, software and connected technology',
+  alt = 'A sculptural neural processor core with glass components and electric-blue lighting',
   onError,
 }) {
   const reduceMotion = useReducedMotion()
@@ -20,8 +20,8 @@ export default function AbstractTechnologyVisual({
       <img
         src={src}
         alt={alt}
-        width="1536"
-        height="1024"
+        width="1448"
+        height="1086"
         sizes="(min-width: 768px) 48vw, 100vw"
         loading="eager"
         fetchpriority="high"

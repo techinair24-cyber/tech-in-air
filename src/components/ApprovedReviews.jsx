@@ -95,7 +95,7 @@ export default function ApprovedReviews({ limit, title = 'What Our Customers Say
                     className={`flex h-full flex-col rounded-[1.25rem] border border-[var(--border)] bg-[var(--card)] p-6 transition-transform duration-200 hover:-translate-y-1 ${isHomepage ? 'home-review-card' : ''}`}
                   >
                     <div
-                      className={`text-lg tracking-wider ${isHomepage ? 'text-[var(--accent)]' : 'text-amber-500'}`}
+                      className={`text-lg tracking-wider ${isHomepage ? 'home-review-rating text-[var(--accent)]' : 'text-amber-500'}`}
                       role="img"
                       aria-label={`${rating} out of 5 stars`}
                     >

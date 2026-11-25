@@ -37,8 +37,8 @@ const defaultSolutions = [
     description: 'Engineering and diploma project development, technical guidance and demonstrations for practical AI, software and engineering ideas.',
     href: '/services',
     ctaLabel: 'Explore Academic Solutions',
-    image: '/Projects/tech-in-air-about.webp',
-    imageAlt: 'Technology workspaces and digital solutions by Tech In Air',
+    image: '/Projects/homepage-academic-premium.webp',
+    imageAlt: 'Robotics, embedded systems and intelligent computing in an advanced engineering lab',
     highlights: ['Engineering and diploma projects', 'AI, software and technical solutions', 'Project guidance and demonstrations'],
   },
   {
@@ -47,8 +47,8 @@ const defaultSolutions = [
     description: 'Practical web, mobile and automation services to help businesses present their work and serve customers online.',
     href: '/business-solutions',
     ctaLabel: 'Explore Business Solutions',
-    image: '/Projects/tech-in-air-hero.webp',
-    imageAlt: 'A cinematic Tech In Air workspace with AI, software and connected technology',
+    image: '/Projects/homepage-business-premium.webp',
+    imageAlt: 'Laptop and smartphone displaying a connected digital business workspace',
     highlights: ['Business websites and Android apps', 'E-commerce and business automation', 'Website maintenance and support'],
   },
 ]
@@ -82,7 +82,7 @@ function SectionHeading({ eyebrow, title, description }) {
   )
 }
 
-function SolutionImage({ src, fallback, alt }) {
+function SolutionImage({ src, fallback, alt, fallbackAlt }) {
   const resolvedSrc = getPublicMediaUrl(src) || fallback
   const [image, setImage] = useState(resolvedSrc)
   const [imageFailed, setImageFailed] = useState(false)
@@ -107,7 +107,7 @@ function SolutionImage({ src, fallback, alt }) {
     ? <div className="solution-image-fallback" aria-hidden="true"><FiCpu /></div>
     : <img
         src={image}
-        alt={usingFallback ? 'Tech In Air technology solutions' : alt}
+        alt={usingFallback ? fallbackAlt : alt}
         loading="lazy"
         onError={handleError}
       />
@@ -242,7 +242,12 @@ export default function Home() {
               return (
                 <article key={record.id || title || index} className={`solution-panel ${index % 2 ? 'solution-panel--reverse' : ''}`}>
                   <div className="solution-image">
-                    <SolutionImage src={image} fallback={fallback.image} alt={imageAlt} />
+                    <SolutionImage
+                      src={image}
+                      fallback={fallback.image}
+                      alt={imageAlt}
+                      fallbackAlt={fallback.imageAlt}
+                    />
                   </div>
                   <div className="solution-content">
                     <p className="home-eyebrow">{label}</p>
@@ -277,11 +282,16 @@ export default function Home() {
               const title = getPageText(capability.title) || getPageText(capability.name)
               const description = getPageText(capability.description)
               const Icon = capabilityIcons[index % capabilityIcons.length]
+              const capabilityLayout = index === 0
+                ? 'capability-item--feature'
+                : index === 1 || index === 2
+                  ? 'capability-item--horizontal'
+                  : ''
               if (!title) return null
               return (
                 <motion.article
                   key={capability.id || title}
-                  className="capability-item"
+                  className={`capability-item ${capabilityLayout}`}
                   whileHover={reduceMotion ? undefined : { y: -3 }}
                   transition={{ duration: reduceMotion ? 0 : 0.2 }}
                 >
