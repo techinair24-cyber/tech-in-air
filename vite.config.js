@@ -31,6 +31,7 @@ function routeSeoPages() {
 }
 
 export default defineConfig({
+  publicDir: 'Public',
   plugins: [react(), routeSeoPages()],
   server: {
     port: 5173
