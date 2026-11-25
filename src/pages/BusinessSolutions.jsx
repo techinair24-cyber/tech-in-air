@@ -272,17 +272,11 @@ export default function BusinessSolutionsPage() {
                 >
 
                   <div className="business-preview-visual">
-                    {selectedService.image ? (
-                      <BusinessImage
-                        image={selectedService.image}
-                        title={selectedService.title}
-                      />
-                    ) : (
-                      <ServiceVisual
-                        slug={selectedService.slug}
-                        title={selectedService.title}
-                      />
-                    )}
+                    <ServiceVisual
+                      slug={selectedService.slug}
+                      title={selectedService.title}
+                      image={selectedService.image}
+                    />
                   </div>
 
                   <div className="business-preview-copy">

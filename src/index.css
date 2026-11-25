@@ -2736,3 +2736,187 @@ html.dark .home-review-rating { color: #ffb547; }
     transform: none;
   }
 }
+
+/* ========================================
+   PREMIUM SOLUTIONS MEGA MENU
+   ======================================== */
+
+.solutions-mega-wrapper {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: min(720px, calc(100vw - 48px));
+  margin-left: max(-360px, calc(-50vw + 24px));
+  padding-top: 2px;
+}
+
+.solutions-mega-menu {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-height: calc(100dvh - 100px);
+  overflow-y: auto;
+  padding: 1.25rem;
+  gap: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: 0.85rem;
+  background: var(--bg);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.22);
+}
+
+.solutions-mega-academic,
+.solutions-mega-business {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.solutions-mega-business {
+  padding-left: 1.5rem;
+  border-left: 1px solid var(--border);
+}
+
+.solutions-mega-image {
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 2.5 / 1;
+  border-radius: 0.45rem;
+  background: var(--surface);
+}
+
+.solutions-mega-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 500ms ease;
+}
+
+.solutions-mega-image:hover img {
+  transform: scale(1.06);
+}
+
+.solutions-mega-label {
+  margin-top: 1.1rem;
+  color: var(--accent);
+  font-size: 0.65rem;
+  font-weight: 750;
+  letter-spacing: 0.12em;
+}
+
+.solutions-mega-title {
+  display: block;
+  margin-top: 0.4rem;
+  color: var(--foreground);
+  font-size: 1.3rem;
+  font-weight: 750;
+  letter-spacing: -0.035em;
+}
+
+.solutions-mega-title:hover {
+  color: var(--accent);
+}
+
+.solutions-mega-description {
+  margin-top: 0.45rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+.solutions-mega-domains,
+.solutions-mega-services {
+  display: grid;
+  gap: 0.2rem;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+.solutions-mega-domains span,
+.solutions-mega-services a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.55rem 0.3rem;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.solutions-mega-services a {
+  border-radius: 0.3rem;
+  transition: background 180ms ease, color 180ms ease;
+}
+
+.solutions-mega-services a:hover {
+  background: var(--surface);
+  color: var(--accent);
+}
+
+.solutions-mega-services a span {
+  color: var(--accent);
+}
+
+.solutions-mega-link {
+  display: block;
+  margin-top: auto;
+  padding-top: 1.25rem;
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+/* PROFESSIONAL SERVICE IMAGES */
+
+.premium-service-visual {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  border-radius: 0.8rem;
+  background: var(--surface);
+}
+
+.premium-service-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 600ms ease;
+}
+
+.premium-service-visual:hover img {
+  transform: scale(1.035);
+}
+
+.business-preview-visual .premium-service-visual {
+  aspect-ratio: 16 / 9;
+  border-radius: 0;
+}
+
+.service-visual-placeholder {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  place-items: center;
+  color: var(--muted);
+  text-align: center;
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .solutions-mega-wrapper {
+    position: fixed;
+    top: 70px;
+    left: 50%;
+    width: min(720px, calc(100vw - 32px));
+    margin-left: 0;
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .solutions-mega-image img,
+  .premium-service-visual img {
+    transition: none;
+  }
+}

@@ -11,6 +11,15 @@ const publicNavigationPaths = new Set([
   '/', '/about', '/services', '/business-solutions', '/projects', '/reviews', '/contact',
 ])
 
+const shortServiceTitles = {
+  'business-website': 'Business Websites',
+  'portfolio-website': 'Portfolio Websites',
+  ecommerce: 'E-commerce Solutions',
+  'android-development': 'Android App Development',
+  'business-automation': 'Business Automation',
+  'website-maintenance': 'Website Maintenance',
+}
+
 export default function Navbar() {
   const { content } = usePublishedPage('home')
   const { data: publishedServices } = usePublishedServices('business-solutions')
@@ -50,7 +59,13 @@ export default function Navbar() {
   const logo = getPublicMediaUrl(brand.logoPath || brand.logo) || '/Logo/TA%20logo.png'
 
   const isActive = (href) => {
-    if (href === '/business-solutions') return location.pathname.startsWith('/business-solutions')
+    if (href === '/business-solutions') {
+      return (
+        location.pathname === '/services' ||
+        location.pathname.startsWith('/business-solutions')
+      )
+    }
+
     return location.pathname === href
   }
 
@@ -85,22 +100,105 @@ export default function Navbar() {
                 <AnimatePresence>
                   {solutionsOpen && (
                     <motion.div
-                      role="menu"
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 6 }}
-                      transition={{ duration: 0.16, ease: 'easeOut' }}
-                      className="absolute left-1/2 top-full w-64 -translate-x-1/2 pt-2"
+                      transition={{ duration: 0.18, ease: 'easeOut' }}
+                      className="solutions-mega-wrapper"
                     >
-                      <div className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-2 shadow-[0_18px_50px_rgba(0,0,0,0.12)]">
-                        <Link to="/services" role="menuitem" onClick={() => setSolutionsOpen(false)} className="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[var(--foreground)] hover:bg-[var(--surface)]">Academic Solutions</Link>
-                        <Link to="/business-solutions" role="menuitem" onClick={() => setSolutionsOpen(false)} className="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[var(--foreground)] hover:bg-[var(--surface)]">Business Solutions</Link>
-                        <div className="my-1 border-t border-[var(--border)]" />
-                        {serviceList.map((service) => (
-                          <Link key={service.slug} to={`/business-solutions/${service.slug}`} role="menuitem" onClick={() => setSolutionsOpen(false)} className="block rounded-lg px-3 py-2.5 text-sm text-[var(--muted)] hover:bg-[var(--surface)] hover:text-[var(--foreground)]">
-                            {service.title}
+                      <div className="solutions-mega-menu">
+                        <div className="solutions-mega-academic">
+                          <Link
+                            to="/services"
+                            onClick={() => setSolutionsOpen(false)}
+                            className="solutions-mega-image"
+                          >
+                            <img
+                              src="/Projects/homepage-academic-premium.webp"
+                              alt="Academic engineering solutions"
+                            />
                           </Link>
-                        ))}
+
+                          <p className="solutions-mega-label">FOR STUDENTS</p>
+
+                          <Link
+                            to="/services"
+                            onClick={() => setSolutionsOpen(false)}
+                            className="solutions-mega-title"
+                          >
+                            Academic Solutions
+                          </Link>
+
+                          <p className="solutions-mega-description">
+                            Engineering, diploma and technology projects.
+                          </p>
+
+                          <div className="solutions-mega-domains">
+                            <span>AI &amp; Machine Learning</span>
+                            <span>Software &amp; Web Development</span>
+                            <span>IoT &amp; Embedded Systems</span>
+                            <span>Android Applications</span>
+                            <span>Data Science &amp; Computer Vision</span>
+                          </div>
+
+                          <Link
+                            to="/services"
+                            onClick={() => setSolutionsOpen(false)}
+                            className="solutions-mega-link"
+                          >
+                            Explore Academic Solutions ↗
+                          </Link>
+                        </div>
+
+                        <div className="solutions-mega-business">
+                          <Link
+                            to="/business-solutions"
+                            onClick={() => setSolutionsOpen(false)}
+                            className="solutions-mega-image"
+                          >
+                            <img
+                              src="/Projects/homepage-business-premium.webp"
+                              alt="Digital business solutions"
+                            />
+                          </Link>
+
+                          <p className="solutions-mega-label">FOR BUSINESSES</p>
+
+                          <Link
+                            to="/business-solutions"
+                            onClick={() => setSolutionsOpen(false)}
+                            className="solutions-mega-title"
+                          >
+                            Business Solutions
+                          </Link>
+
+                          <p className="solutions-mega-description">
+                            Professional digital services for growing businesses.
+                          </p>
+
+                          <div className="solutions-mega-services">
+                            {serviceList.map((service) => (
+                              <Link
+                                key={service.slug}
+                                to={`/business-solutions/${service.slug}`}
+                                onClick={() => setSolutionsOpen(false)}
+                              >
+                                {service.navigationLabel ||
+                                  shortServiceTitles[service.slug] ||
+                                  service.title}
+                                <span>↗</span>
+                              </Link>
+                            ))}
+                          </div>
+
+                          <Link
+                            to="/business-solutions"
+                            onClick={() => setSolutionsOpen(false)}
+                            className="solutions-mega-link"
+                          >
+                            Explore Business Solutions ↗
+                          </Link>
+                        </div>
                       </div>
                     </motion.div>
                   )}
@@ -157,7 +255,11 @@ export default function Navbar() {
                             <Link to="/services" onClick={() => { setOpen(false); setMobileSolutionsOpen(false) }} className="py-2 text-sm font-semibold text-[var(--foreground)]">Academic Solutions</Link>
                             <Link to="/business-solutions" onClick={() => { setOpen(false); setMobileSolutionsOpen(false) }} className="py-2 text-sm font-semibold text-[var(--foreground)]">Business Solutions</Link>
                             {serviceList.map((service) => (
-                              <Link key={service.slug} to={`/business-solutions/${service.slug}`} onClick={() => { setOpen(false); setMobileSolutionsOpen(false) }} className="py-2 text-sm text-[var(--muted)]">{service.title}</Link>
+                              <Link key={service.slug} to={`/business-solutions/${service.slug}`} onClick={() => { setOpen(false); setMobileSolutionsOpen(false) }} className="py-2 text-sm text-[var(--muted)]">
+                                {service.navigationLabel ||
+                                  shortServiceTitles[service.slug] ||
+                                  service.title}
+                              </Link>
                             ))}
                           </div>
                         </motion.div>
