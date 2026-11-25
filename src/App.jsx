@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Routes, Route, useLocation, useNavigate } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Home from './pages/Home'
@@ -10,10 +10,9 @@ import ProjectsPage from './pages/Projects'
 import ProjectDetail from './pages/ProjectDetail'
 import ProcessPage from './pages/Process'
 import ContactPage from './pages/Contact'
-import AdminLogin from './pages/AdminLogin'
-import AdminReviews from './pages/AdminReviews'
 import CustomerReviewEdit from './pages/CustomerReviewEdit'
 import LegalPage from './pages/LegalPage'
+import NotFoundPage from './pages/NotFound'
 import BusinessSolutionsPage from './pages/BusinessSolutions'
 import BusinessServiceDetailPage from './pages/BusinessServiceDetail'
 import QuotationPage from './pages/Quotation'
@@ -21,62 +20,13 @@ import TechieChatbot from './components/TechieChatbot'
 import ReviewsPage from './pages/Reviews'
 import SeoMetadata from './components/SeoMetadata'
 import { buildTechieContext } from './data/chatbotContext'
-import { supabase } from './lib/supabase'
 import OpeningAnimation from './components/OpeningAnimation'
 import PublicAnnouncementBanner from './components/PublicAnnouncementBanner'
 import PublicOfferBanner from './components/PublicOfferBanner'
 import PublishedPage from './pages/PublishedPage'
 
-function AdminReviewsPlaceholder() {
-  const navigate = useNavigate()
-  const [isAuthorized, setIsAuthorized] = useState(false)
-
-  useEffect(() => {
-    let isActive = true
-
-    const verifyAdmin = async () => {
-      try {
-        const { data, error } = await supabase.auth.getUser()
-        if (error) throw error
-
-        if (data.user?.app_metadata?.role === 'admin') {
-          if (isActive) setIsAuthorized(true)
-          return
-        }
-
-        const { error: signOutError } = await supabase.auth.signOut()
-        if (signOutError) throw signOutError
-        if (isActive) {
-          navigate('/admin/login', {
-            replace: true,
-            state: { message: 'You are not authorized to access the admin area.' },
-          })
-        }
-      } catch (error) {
-        console.error('Unable to verify admin access:', error)
-        if (isActive) {
-          navigate('/admin/login', {
-            replace: true,
-            state: { message: 'Unable to verify admin access. Please sign in again.' },
-          })
-        }
-      }
-    }
-
-    verifyAdmin()
-    return () => {
-      isActive = false
-    }
-  }, [navigate])
-
-  if (!isAuthorized) return null
-
-  return <AdminReviews />
-}
-
 export default function App() {
   const location = useLocation()
-  const isAdminRoute = location.pathname.startsWith('/admin')
 
   useEffect(() => {
     if (location.hash) {
@@ -89,21 +39,20 @@ export default function App() {
   }, [location.pathname, location.hash])
 
   useEffect(() => {
-    if (isAdminRoute) return undefined
     const intervalId = window.setInterval(() => {
       window.dispatchEvent(new Event('tech-in-air:public-content-refresh'))
     }, 60_000)
     return () => window.clearInterval(intervalId)
-  }, [isAdminRoute])
+  }, [])
 
   return (
-    <div className={`min-h-screen bg-[var(--bg)] text-[var(--foreground)] transition-colors duration-200 ${isAdminRoute ? '' : 'public-site'}`}>
+    <div className="public-site min-h-screen bg-[var(--bg)] text-[var(--foreground)] transition-colors duration-200">
       <OpeningAnimation />
       <SeoMetadata />
-      {!isAdminRoute && <Navbar />}
-      <main className={isAdminRoute ? '' : 'pt-24 md:pt-28'}>
-        {!isAdminRoute && <PublicAnnouncementBanner />}
-        {!isAdminRoute && <PublicOfferBanner />}
+      <Navbar />
+      <main className="pt-24 md:pt-28">
+        <PublicAnnouncementBanner />
+        <PublicOfferBanner />
         <AnimatePresence mode="wait">
           <motion.div
             key={location.pathname}
@@ -127,15 +76,14 @@ export default function App() {
               <Route path="/privacy-policy" element={<LegalPage page="privacyPolicy" />} />
               <Route path="/terms-and-conditions" element={<LegalPage page="termsAndConditions" />} />
               <Route path="/review/edit" element={<CustomerReviewEdit />} />
-              <Route path="/admin/login" element={<AdminLogin />} />
-              <Route path="/admin/reviews" element={<AdminReviewsPlaceholder />} />
+              <Route path="/admin/*" element={<NotFoundPage />} />
               <Route path="*" element={<PublishedPage />} />
             </Routes>
           </motion.div>
         </AnimatePresence>
       </main>
-      {!isAdminRoute && <Footer />}
-      {!isAdminRoute && <TechieChatbot context={buildTechieContext} />}
+      <Footer />
+      <TechieChatbot context={buildTechieContext} />
     </div>
   )
 }

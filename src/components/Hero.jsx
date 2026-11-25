@@ -6,23 +6,40 @@ import { getPublicMediaUrl, usePublishedPage } from '../lib/publicContent'
 import { getPageText, getSafeInternalPath } from '../lib/pageContent.mjs'
 
 const publicPaths = new Set(['/contact', '/projects', '/services', '/business-solutions', '/business-solutions/quotation'])
+const defaultHeroImage = '/Projects/tech-in-air-hero.webp'
 
 export default function Hero(){
   const reduceMotion = useReducedMotion()
   const { content } = usePublishedPage('home')
   const hero = content?.hero && typeof content.hero === 'object' && !Array.isArray(content.hero) ? content.hero : {}
-  const heroImage = getPublicMediaUrl(hero.image || hero.imagePath)
-  const heroImageAlt = getPageText(hero.imageAlt, 'Technology solutions by Tech In Air')
+  const publishedHeroImage = getPublicMediaUrl(hero.image || hero.imagePath)
+  const [heroImage, setHeroImage] = useState(publishedHeroImage || defaultHeroImage)
   const [heroImageFailed, setHeroImageFailed] = useState(false)
+  const [usingDefaultHeroFallback, setUsingDefaultHeroFallback] = useState(!publishedHeroImage)
   const primaryCta = hero.primaryCta && typeof hero.primaryCta === 'object' ? hero.primaryCta : {}
   const secondaryCta = hero.secondaryCta && typeof hero.secondaryCta === 'object' ? hero.secondaryCta : {}
   const primaryHref = getSafeInternalPath(primaryCta.href, publicPaths) || '/business-solutions'
   const secondaryHref = getSafeInternalPath(secondaryCta.href, publicPaths) || '/projects'
-  const showHeroImage = Boolean(heroImage && !heroImageFailed)
+  const defaultHeroAlt = 'A cinematic Tech In Air workspace with AI, software and connected technology'
+  const heroImageAlt = usingDefaultHeroFallback ? defaultHeroAlt : getPageText(hero.imageAlt, defaultHeroAlt)
+  const heroBrand = getPageText(hero.eyebrow, getPageText(hero.brand, 'Tech In Air'))
+  const heroTitle = getPageText(hero.title, getPageText(hero.heading, 'Your ideas. Our technology.'))
+  const showHeroImage = !heroImageFailed
 
   useEffect(() => {
+    setHeroImage(publishedHeroImage || defaultHeroImage)
     setHeroImageFailed(false)
-  }, [heroImage])
+    setUsingDefaultHeroFallback(!publishedHeroImage)
+  }, [publishedHeroImage])
+
+  const handleHeroImageError = () => {
+    if (heroImage !== defaultHeroImage) {
+      setUsingDefaultHeroFallback(true)
+      setHeroImage(defaultHeroImage)
+      return
+    }
+    setHeroImageFailed(true)
+  }
 
   const fadeUp = {
     hidden: { opacity: 0, y: 18 },
@@ -39,10 +56,10 @@ export default function Hero(){
           className="hero-copy"
         >
           <motion.div variants={fadeUp} className="hero-branding">
-            <p className="hero-brand">{getPageText(hero.eyebrow, 'Tech In Air')}</p>
+            <p className="hero-brand">{heroBrand}</p>
             <p className="hero-tagline">{getPageText(hero.tagline, 'Tech Made Simple')}</p>
           </motion.div>
-          <motion.h1 variants={fadeUp} className="hero-heading">{getPageText(hero.title, 'Your ideas. Our technology.')}</motion.h1>
+          <motion.h1 variants={fadeUp} className="hero-heading">{heroTitle}</motion.h1>
           <motion.p variants={fadeUp} className="hero-description">{getPageText(hero.description, 'Intelligent software, AI and digital solutions built for the real world.')}</motion.p>
           <motion.div variants={fadeUp} className="hero-actions">
             <Link to={primaryHref} className="primary-button">{getPageText(primaryCta.label, 'Explore Solutions')}</Link>
@@ -51,15 +68,13 @@ export default function Hero(){
         </motion.div>
         <div className="hero-visual-column">
           {showHeroImage
-            ? <img
+            ? <AbstractTechnologyVisual
                 key={heroImage}
                 src={heroImage}
                 alt={heroImageAlt}
-                loading="eager"
-                className="hero-published-image"
-                onError={() => setHeroImageFailed(true)}
+                onError={handleHeroImageError}
               />
-            : <AbstractTechnologyVisual />}
+            : <div className="hero-image-fallback" aria-hidden="true" />}
         </div>
       </div>
     </section>

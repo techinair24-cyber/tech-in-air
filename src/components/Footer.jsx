@@ -37,44 +37,47 @@ export default function Footer(){
     { label: 'Contact', href: '/contact' },
   ]
   const tagline = typeof brand.tagline === 'string' && brand.tagline.trim() ? brand.tagline : 'Tech Made Simple'
+  const currentYear = new Date().getFullYear()
   const copyright = typeof footer.copyright === 'string' && footer.copyright.trim()
-    ? footer.copyright
-    : '© 2023 Tech In Air. All rights reserved.'
+    ? footer.copyright.replace(/\b(?:19|20)\d{2}\b/g, String(currentYear))
+    : `© ${currentYear} Tech In Air. All rights reserved.`
 
   return (
-    <footer className="mt-16 border-t border-[var(--border)] py-12">
-      <div className="container grid gap-10 md:grid-cols-4">
-        <div>
-          <img src={logo} alt={brandName} className="h-24 w-48 object-contain" />
-          <p className="mt-3 text-sm font-medium text-[var(--muted)]">{tagline}</p>
-          {typeof footer.description === 'string' && <p className="mt-3 max-w-xs text-sm leading-6 text-[var(--muted)]">{footer.description}</p>}
+    <footer className="site-footer">
+      <div className="container site-footer-grid">
+        <div className="site-footer-brand">
+          <Link to="/" className="site-footer-logo-link" aria-label={`${brandName} home`}>
+            <img src={logo} alt={brandName} width="224" height="160" loading="lazy" />
+          </Link>
+          <p className="site-footer-tagline">{tagline}</p>
+          {typeof footer.description === 'string' && footer.description.trim() && (
+            <p className="site-footer-description">{footer.description}</p>
+          )}
         </div>
-        <div>
-          <div className="font-semibold">Explore</div>
-          <ul className="mt-4 space-y-3 text-sm text-[var(--muted)]">
-            {exploreLinks.map((item) => <li key={item.href}><Link to={item.href} className="hover:text-[var(--accent)]">{item.label}</Link></li>)}
+        <div className="site-footer-column">
+          <h2>Explore</h2>
+          <ul>
+            {exploreLinks.map((item) => <li key={item.href}><Link to={item.href}>{item.label}</Link></li>)}
           </ul>
         </div>
-        <div>
-          <div className="font-semibold">Contact</div>
-          <div className="mt-4 space-y-3 text-sm text-[var(--muted)]">
+        <div className="site-footer-column">
+          <h2>Contact</h2>
+          <address>
             <p>{location}</p>
-            <p><a href={emailHref} className="hover:text-[var(--accent)]">{email.replace(/^mailto:/, '')}</a></p>
-            <p><a href={phoneHref} className="hover:text-[var(--accent)]">{phone}</a></p>
-            <p><a href={instagram} target="_blank" rel="noreferrer" className="hover:text-[var(--accent)]">Instagram</a></p>
-          </div>
+            <p><a href={emailHref}>{email.replace(/^mailto:/, '')}</a></p>
+            <p><a href={phoneHref}>{phone}</a></p>
+            <p><a href={instagram} target="_blank" rel="noreferrer">Instagram</a></p>
+          </address>
         </div>
-        <div>
-          <div className="font-semibold">Legal</div>
-          <ul className="mt-4 space-y-3 text-sm text-[var(--muted)]">
-            <li><Link to="/privacy-policy" className="hover:text-[var(--accent)]">Privacy Policy</Link></li>
-            <li><Link to="/terms-and-conditions" className="hover:text-[var(--accent)]">Terms &amp; Conditions</Link></li>
+        <div className="site-footer-column">
+          <h2>Legal</h2>
+          <ul>
+            <li><Link to="/privacy-policy">Privacy Policy</Link></li>
+            <li><Link to="/terms-and-conditions">Terms &amp; Conditions</Link></li>
           </ul>
         </div>
       </div>
-      <div className="container mt-10 border-t border-[var(--border)] pt-6 text-sm text-[var(--muted)]">
-        {copyright}
-      </div>
+      <div className="container site-footer-bottom">{copyright}</div>
     </footer>
   )
 }
