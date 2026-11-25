@@ -10,7 +10,6 @@ import {
   CircuitBoard,
   GraduationCap,
   ArrowUpRight,
-  ArrowRight,
   CheckCircle2,
 } from 'lucide-react'
 
@@ -395,66 +394,49 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* FEATURED PROJECTS */}
+      {/* FEATURED PROJECT */}
 
-      <section className="solutions-section">
-        <div className="container">
+      {academicProjects.length > 0 && (
+        <section className="solutions-section">
+          <div className="container">
+            <motion.div
+              className="academic-featured-single"
+              {...reveal}
+            >
+              <div className="academic-featured-image">
+                <AcademicImage
+                  source={
+                    academicProjects[0].image ||
+                    academicProjects[0].imagePath ||
+                    academicProjects[0].image_paths?.[0]
+                  }
+                  title={academicProjects[0].title}
+                />
+              </div>
 
-          <div className="academic-project-heading">
-            <div>
-              <p className="solutions-kicker">
-                Featured Academic Projects
-              </p>
-              <h2>Explore real project work.</h2>
-            </div>
+              <div className="academic-featured-copy">
+                <p className="solutions-kicker">
+                  Featured Academic Project
+                </p>
 
-            <Link to="/projects" className="secondary-button">
-              View All Projects
-              <ArrowRight size={17} />
-            </Link>
-          </div>
+                <h2>Explore our innovations.</h2>
 
-          {academicProjects.length === 0 && (
-            <p className="solutions-intro">
-              No featured projects are currently available.
-            </p>
-          )}
+                <h3>{academicProjects[0].title}</h3>
 
-          <div className="academic-project-grid">
-            {academicProjects.map((project) => (
-              <motion.article key={project.id} {...reveal}>
-                <Link
-                  to={`/projects/${project.slug || project.id}`}
-                  className="academic-project-link"
-                >
-                  <div className="academic-project-image">
-                    <AcademicImage
-                      source={
-                        project.image ||
-                        project.imagePath ||
-                        project.image_paths?.[0]
-                      }
-                      title={project.title}
-                    />
-                  </div>
+                <p className="solutions-intro">
+                  Explore our practical technology projects
+                  and engineering solutions.
+                </p>
 
-                  <p className="solutions-kicker">
-                    {Array.isArray(project.categories)
-                      ? project.categories.slice(0, 2).join(' · ')
-                      : getPageText(project.category)}
-                  </p>
-
-                  <div className="academic-project-title">
-                    <h3>{project.title}</h3>
-                    <ArrowUpRight size={21} aria-hidden="true" />
-                  </div>
+                <Link to="/projects" className="primary-button">
+                  View All Projects
+                  <ArrowUpRight size={18} />
                 </Link>
-              </motion.article>
-            ))}
+              </div>
+            </motion.div>
           </div>
-
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ACADEMIC CTA */}
 
