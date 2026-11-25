@@ -1,129 +1,511 @@
-import React from 'react'
+
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
+import {
+  FiArrowUpRight,
+  FiTarget,
+  FiEye,
+  FiCpu,
+  FiCode,
+  FiSmartphone,
+  FiBarChart2,
+  FiZap,
+  FiMessageSquare,
+  FiLayers,
+  FiCheckCircle,
+  FiPackage,
+} from 'react-icons/fi'
+
 import PublishedPageSections from '../components/PublishedPageSections'
 import projects from '../data/projects'
-import { getPublicMediaUrl, usePublishedPage, usePublishedProjects } from '../lib/publicContent'
+import {
+  getPublicMediaUrl,
+  usePublishedPage,
+  usePublishedProjects,
+} from '../lib/publicContent'
 import { getPageText } from '../lib/pageContent.mjs'
 
-export default function AboutPage() {
-  const { content } = usePublishedPage('about')
-  const { data: publishedProjects } = usePublishedProjects()
-  const hero = content?.hero && typeof content.hero === 'object' ? content.hero : {}
-  const mission = content?.mission && typeof content.mission === 'object' ? content.mission : {}
-  const vision = content?.vision && typeof content.vision === 'object' ? content.vision : {}
-  const projectList = publishedProjects === null ? projects : publishedProjects
-  const engineeringCount = projectList.filter((project) => project.categories?.includes('Engineering Main Project')).length
-  const heroImage = getPublicMediaUrl(hero.image || hero.imagePath)
+const expertise = [
+  {
+    icon: FiCpu,
+    title: 'Artificial Intelligence & Machine Learning',
+    description: 'Intelligent systems for prediction, classification and practical decision-making.',
+  },
+  {
+    icon: FiCode,
+    title: 'Software & Web Development',
+    description: 'Responsive websites and dependable software built around real requirements.',
+  },
+  {
+    icon: FiSmartphone,
+    title: 'Android Application Development',
+    description: 'Modern mobile applications with intuitive interfaces and reliable integrations.',
+  },
+  {
+    icon: FiBarChart2,
+    title: 'Data Science',
+    description: 'Transforming complex information into meaningful and actionable insights.',
+  },
+  {
+    icon: FiEye,
+    title: 'Computer Vision',
+    description: 'Intelligent image recognition, visual analysis and monitoring solutions.',
+  },
+  {
+    icon: FiZap,
+    title: 'Business Automation',
+    description: 'Simplifying everyday operations through connected digital workflows.',
+  },
+]
+
+const process = [
+  {
+    number: '01',
+    icon: FiMessageSquare,
+    title: 'Discuss',
+    description: 'Understand the idea, goals and requirements.',
+  },
+  {
+    number: '02',
+    icon: FiLayers,
+    title: 'Plan',
+    description: 'Choose the right technology and development approach.',
+  },
+  {
+    number: '03',
+    icon: FiCode,
+    title: 'Develop',
+    description: 'Build and integrate the required solution.',
+  },
+  {
+    number: '04',
+    icon: FiCheckCircle,
+    title: 'Test',
+    description: 'Validate functionality and prepare demonstrations.',
+  },
+  {
+    number: '05',
+    icon: FiPackage,
+    title: 'Deliver',
+    description: 'Provide the solution, documentation and support.',
+  },
+]
+
+function AnimatedCounter({ value, reduceMotion }) {
+  const [count, setCount] = useState(0)
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    if (!visible) return
+
+    if (reduceMotion || value === 0) {
+      setCount(value)
+      return
+    }
+
+    let frame
+    let start
+    const duration = 1100
+
+    const animate = (timestamp) => {
+      if (start === undefined) start = timestamp
+
+      const progress = Math.min(
+        (timestamp - start) / duration,
+        1
+      )
+
+      const eased = 1 - Math.pow(1 - progress, 3)
+
+      setCount(Math.round(value * eased))
+
+      if (progress < 1) {
+        frame = requestAnimationFrame(animate)
+      }
+    }
+
+    frame = requestAnimationFrame(animate)
+
+    return () => cancelAnimationFrame(frame)
+  }, [value, visible, reduceMotion])
 
   return (
-    <div>
-      <header className="border-b border-[var(--border)] py-16 md:py-24">
-        <div className={`container grid gap-10 ${heroImage ? 'lg:grid-cols-[1fr_0.75fr_0.6fr]' : 'lg:grid-cols-[1fr_0.75fr]'} lg:items-end`}>
-          <div>
-            <p className="mb-4 text-sm font-semibold text-[var(--accent)]">About Tech In Air</p>
-            <h1 className="max-w-4xl text-5xl font-semibold leading-[1.02] tracking-[-0.04em] md:text-7xl">{getPageText(hero.heading, 'Technology With Purpose.')}</h1>
-          </div>
-          <p className="max-w-xl text-lg leading-8 text-[var(--muted)]">
-            {getPageText(hero.description, 'Tech In Air is an AI and software technology company in Bangalore, helping students, businesses and innovators turn practical ideas into working digital solutions.')}
-          </p>
-          {heroImage && <img src={heroImage} alt={getPageText(hero.imageAlt)} loading="lazy" className="max-h-72 w-full rounded-2xl border border-[var(--border)] object-cover" />}
+    <motion.span
+      className="about-counter"
+      onViewportEnter={() => setVisible(true)}
+      viewport={{ once: true }}
+      aria-label={String(value)}
+    >
+      <span aria-hidden="true">{count}</span>
+    </motion.span>
+  )
+}
+
+export default function AboutPage() {
+  const reduceMotion = useReducedMotion()
+  const { content } = usePublishedPage('about')
+  const { data: publishedProjects } = usePublishedProjects()
+
+  const hero =
+    content?.hero && typeof content.hero === 'object'
+      ? content.hero
+      : {}
+
+  const mission =
+    content?.mission && typeof content.mission === 'object'
+      ? content.mission
+      : {}
+
+  const vision =
+    content?.vision && typeof content.vision === 'object'
+      ? content.vision
+      : {}
+
+  const projectList =
+    publishedProjects === null ? projects : publishedProjects
+
+  const engineeringProjects = projectList.filter(
+    (project) =>
+      project.categories?.includes('Engineering Main Project')
+  )
+
+  const diplomaProjects = projectList.filter(
+    (project) =>
+      !project.categories?.includes('Engineering Main Project') &&
+      project.categories?.includes('Diploma Main Project')
+  )
+
+  const engineeringCount = engineeringProjects.length
+  const diplomaCount = diplomaProjects.length
+
+  const otherCount =
+    projectList.length - engineeringCount - diplomaCount
+
+  const achievements = [
+    [projectList.length, 'Total Projects'],
+    [engineeringCount, 'Engineering Main Projects'],
+    [diplomaCount, 'Diploma Main Projects'],
+    [otherCount, 'Other Projects'],
+  ]
+
+  const fallbackImage = '/Projects/homepage-hero-premium.webp'
+
+  const heroImage =
+    getPublicMediaUrl(hero.image || hero.imagePath) ||
+    fallbackImage
+
+  const [imageFailed, setImageFailed] = useState(false)
+
+  useEffect(() => {
+    setImageFailed(false)
+  }, [heroImage])
+
+  const reveal = {
+    initial: reduceMotion ? false : { opacity: 0, y: 22 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true, amount: 0.12 },
+    transition: {
+      duration: reduceMotion ? 0 : 0.5,
+      ease: 'easeOut',
+    },
+  }
+
+  return (
+    <div className="about-premium">
+
+      {/* HERO */}
+
+      <header className="about-hero">
+        <div className="container about-hero-grid">
+
+          <motion.div className="about-hero-copy" {...reveal}>
+            <p className="about-eyebrow">
+              About Tech In Air
+            </p>
+
+            <h1>
+              {getPageText(
+                hero.heading,
+                'Technology With Purpose.'
+              )}
+            </h1>
+
+            <p className="about-hero-description">
+              {getPageText(
+                hero.description,
+                'Tech In Air is an independent technology initiative based in Bangalore, helping students, businesses and innovators turn practical ideas into working digital solutions.'
+              )}
+            </p>
+
+            <div className="about-brand-signature">
+              <span />
+              Tech Made Simple.
+            </div>
+
+            <div className="about-hero-actions">
+              <Link to="/projects" className="primary-button">
+                Explore Our Work
+                <FiArrowUpRight aria-hidden="true" />
+              </Link>
+
+              <Link to="/contact" className="secondary-button">
+                Contact Us
+              </Link>
+            </div>
+          </motion.div>
+
+          <motion.div className="about-hero-visual" {...reveal}>
+            {!imageFailed ? (
+              <img
+                src={heroImage}
+                alt={getPageText(
+                  hero.imageAlt,
+                  'Technology and intelligent digital innovation'
+                )}
+                loading="eager"
+                decoding="async"
+                onError={(event) => {
+                  if (
+                    event.currentTarget.getAttribute('src') !==
+                    fallbackImage
+                  ) {
+                    event.currentTarget.src = fallbackImage
+                  } else {
+                    setImageFailed(true)
+                  }
+                }}
+              />
+            ) : (
+              <div className="about-image-fallback">
+                <FiCpu aria-hidden="true" />
+              </div>
+            )}
+
+            <div className="about-visual-caption">
+              <span>TECH IN AIR</span>
+              <strong>Ideas. Innovation. Impact.</strong>
+            </div>
+          </motion.div>
+
         </div>
       </header>
 
-      <PublishedPageSections content={content} projects={projectList} excludedTypes={['hero']} />
+      {/* ACHIEVEMENTS */}
 
-      <section className="py-16 md:py-24">
-        <div className="container grid gap-8 md:grid-cols-2">
-          <motion.article initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="rounded-[1.25rem] bg-[var(--surface)] p-8 md:p-10">
-            <p className="text-sm font-semibold text-[var(--accent)]">Our Mission</p>
-            <h2 className="mt-5 text-3xl font-semibold md:text-4xl">{getPageText(mission.heading, 'Make technology accessible, practical and meaningful.')}</h2>
-            <p className="mt-6 max-w-xl text-lg leading-8 text-[var(--muted)]">
-              {getPageText(mission.description, 'Our mission is to develop reliable AI-powered software, innovative digital solutions and technical services that help students, businesses and individuals turn ideas into reality.')}
-            </p>
-          </motion.article>
-          <motion.article initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.08 }} className="border-t border-[var(--border)] pt-8 md:border-l md:border-t-0 md:pl-10 md:pt-10">
-            <p className="text-sm font-semibold text-[var(--accent)]">Our Vision</p>
-            <h2 className="mt-5 text-3xl font-semibold md:text-4xl">{getPageText(vision.heading, 'Become a trusted technology partner for thoughtful innovation.')}</h2>
-            <p className="mt-6 max-w-xl text-lg leading-8 text-[var(--muted)]">
-              {getPageText(vision.description, 'Our vision is to be recognized for innovation, quality and accessible digital solutions that empower individuals and businesses through artificial intelligence, software development and emerging technologies.')}
-            </p>
-          </motion.article>
-        </div>
-      </section>
-
-      <section className="surface-section py-16 md:py-24">
+      <section className="about-achievements">
         <div className="container">
-          <p className="mb-3 text-sm font-semibold text-[var(--accent)]">Our expertise</p>
-          <h2 className="text-3xl font-semibold md:text-5xl">Specialized in building modern digital systems.</h2>
-          <div className="mt-10 grid gap-8 border-t border-[var(--border)] pt-8 sm:grid-cols-2 lg:grid-cols-3">
-            {[
-              'Artificial Intelligence & Machine Learning',
-              'Software & Web Development',
-              'Android Application Development',
-              'Data Science & Computer Vision',
-              'Business Automation',
-            ].map((item) => (
-              <h3 key={item} className="text-xl font-semibold">{item}</h3>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      <section className="py-16 md:py-24">
-        <div className="container">
-          <p className="mb-3 text-sm font-semibold text-[var(--accent)]">Our Achievements</p>
-          <h2 className="text-3xl font-semibold md:text-5xl">Work across software and intelligent technology.</h2>
-          <div className="mt-12 grid grid-cols-2 gap-y-10 md:grid-cols-4">
-            {[
-              [projectList.length, 'Published project entries'],
-              [projectList.filter((project) => project.categories?.some((category) => ['AI / ML', 'Deep Learning'].includes(category))).length, 'AI and ML projects'],
-              [projectList.filter((project) => project.categories?.includes('Software') || project.categories?.includes('Android')).length, 'Software and mobile projects'],
-              [engineeringCount, 'Engineering main projects'],
-            ].map(([value, label]) => (
-              <div key={label} className="border-l border-[var(--border)] pl-5 first:border-l-0 first:pl-0 md:first:border-l md:first:pl-5">
-                <p className="text-4xl font-semibold md:text-6xl">{value}</p>
-                <p className="mt-3 max-w-40 text-sm leading-6 text-[var(--muted)]">{label}</p>
+          <div className="about-stat-grid">
+            {achievements.map(([value, label]) => (
+              <div key={label} className="about-stat">
+                <AnimatedCounter
+                  value={value}
+                  reduceMotion={reduceMotion}
+                />
+                <p>{label}</p>
               </div>
             ))}
           </div>
+
         </div>
       </section>
 
-      <section className="surface-section py-16 md:py-24">
+      {/* ADMIN PUBLISHED CONTENT */}
+
+      <PublishedPageSections
+        content={content}
+        projects={projectList}
+        excludedTypes={['hero']}
+      />
+
+      {/* MISSION AND VISION */}
+
+      <section className="about-section">
         <div className="container">
-          <p className="mb-3 text-sm font-semibold text-[var(--accent)]">How We Work</p>
-          <h2 className="text-3xl font-semibold md:text-5xl">From idea to implementation.</h2>
-          <div className="mt-12 grid gap-8 md:grid-cols-5">
-            {[
-              ['01', 'Discuss', 'Understand the idea and requirements.'],
-              ['02', 'Plan', 'Choose the approach and technology.'],
-              ['03', 'Develop', 'Build and integrate the solution.'],
-              ['04', 'Test & Demonstrate', 'Validate and prepare the working system.'],
-              ['05', 'Deliver', 'Provide the project, documentation and support.'],
-            ].map(([number, title, description]) => (
-              <motion.article key={number} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.35 }}>
-                <p className="text-sm font-semibold text-[var(--accent)]">{number}</p>
-                <h3 className="mt-5 text-xl font-semibold">{title}</h3>
-                <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{description}</p>
-              </motion.article>
-            ))}
+
+          <motion.div className="about-section-heading" {...reveal}>
+            <p className="about-eyebrow">Our Purpose</p>
+            <h2>Driven by meaningful innovation.</h2>
+          </motion.div>
+
+          <div className="about-purpose-grid">
+
+            <motion.article className="about-purpose-item" {...reveal}>
+              <div className="about-purpose-top">
+                <span className="about-icon">
+                  <FiTarget aria-hidden="true" />
+                </span>
+                <span className="about-index">01</span>
+              </div>
+
+              <p className="about-eyebrow">Our Mission</p>
+
+              <h3>
+                {getPageText(
+                  mission.heading,
+                  'Make technology accessible, practical and meaningful.'
+                )}
+              </h3>
+
+              <p className="about-body-text">
+                {getPageText(
+                  mission.description,
+                  'Our mission is to develop reliable AI-powered software, innovative digital solutions and technical services that help students, businesses and individuals turn ideas into reality.'
+                )}
+              </p>
+            </motion.article>
+
+            <motion.article className="about-purpose-item" {...reveal}>
+              <div className="about-purpose-top">
+                <span className="about-icon">
+                  <FiEye aria-hidden="true" />
+                </span>
+                <span className="about-index">02</span>
+              </div>
+
+              <p className="about-eyebrow">Our Vision</p>
+
+              <h3>
+                {getPageText(
+                  vision.heading,
+                  'Become a trusted technology partner for thoughtful innovation.'
+                )}
+              </h3>
+
+              <p className="about-body-text">
+                {getPageText(
+                  vision.description,
+                  'Our vision is to be recognized for innovation, quality and accessible digital solutions that empower individuals and businesses through artificial intelligence, software development and emerging technologies.'
+                )}
+              </p>
+            </motion.article>
+
           </div>
         </div>
       </section>
 
-      <section className="py-16 md:py-24">
-        <div className="container flex flex-col items-start justify-between gap-8 border-t border-[var(--border)] pt-12 md:flex-row md:items-end">
-          <div>
-            <p className="mb-3 text-sm font-semibold text-[var(--accent)]">Customer Experience</p>
-            <h2 className="text-3xl font-semibold md:text-5xl">Let's Build Something Together.</h2>
+      {/* EXPERTISE */}
+
+      <section className="about-section about-surface">
+        <div className="container">
+
+          <motion.div className="about-section-heading" {...reveal}>
+            <p className="about-eyebrow">Our Expertise</p>
+            <h2>Technology that turns ideas into reality.</h2>
+            <p className="about-body-text">
+              Combining modern tools, practical engineering
+              and intelligent software development.
+            </p>
+          </motion.div>
+
+          <div className="about-expertise-grid">
+            {expertise.map((item, index) => {
+              const Icon = item.icon
+
+              return (
+                <motion.article
+                  key={item.title}
+                  className="about-expertise-item"
+                  {...reveal}
+                >
+                  <div className="about-purpose-top">
+                    <span className="about-icon">
+                      <Icon aria-hidden="true" />
+                    </span>
+                    <span className="about-index">
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                  </div>
+
+                  <h3>{item.title}</h3>
+                  <p>{item.description}</p>
+                </motion.article>
+              )
+            })}
           </div>
-          <div className="flex flex-wrap gap-3">
-            <Link to="/reviews" className="secondary-button">Read All Reviews</Link>
-            <Link to="/contact" className="primary-button">Let's Talk</Link>
-          </div>
+
         </div>
       </section>
+
+      {/* DEVELOPMENT PROCESS */}
+
+      <section className="about-section">
+        <div className="container">
+
+          <motion.div className="about-section-heading" {...reveal}>
+            <p className="about-eyebrow">How We Work</p>
+            <h2>From idea to implementation.</h2>
+            <p className="about-body-text">
+              A clear and structured approach to building
+              practical technology.
+            </p>
+          </motion.div>
+
+          <div className="about-process-grid">
+            {process.map((step) => {
+              const Icon = step.icon
+
+              return (
+                <motion.article
+                  key={step.number}
+                  className="about-process-step"
+                  {...reveal}
+                >
+                  <div className="about-process-icon">
+                    <Icon aria-hidden="true" />
+                  </div>
+
+                  <p className="about-eyebrow">
+                    STEP {step.number}
+                  </p>
+
+                  <h3>{step.title}</h3>
+                  <p className="about-process-description">
+                    {step.description}
+                  </p>
+                </motion.article>
+              )
+            })}
+          </div>
+
+        </div>
+      </section>
+
+      {/* CONTACT CTA */}
+
+      <section className="about-section">
+        <div className="container">
+
+          <motion.div className="about-contact-cta" {...reveal}>
+            <div>
+              <p className="about-eyebrow">
+                Let's Connect
+              </p>
+
+              <h2>Let's Build Something Together.</h2>
+
+              <p>
+                Have an idea, academic project or business
+                requirement? Let's explore what we can create.
+              </p>
+            </div>
+
+            <div className="about-cta-actions">
+              <Link to="/contact" className="primary-button">
+                Let's Talk
+                <FiArrowUpRight aria-hidden="true" />
+              </Link>
+
+              <Link to="/reviews" className="secondary-button">
+                Read Customer Reviews
+              </Link>
+            </div>
+          </motion.div>
+
+        </div>
+      </section>
+
     </div>
   )
 }

@@ -1518,3 +1518,479 @@ html.dark .home-review-rating { color: #ffb547; }
     transform: none;
   }
 }
+
+/* =========================================
+   TECH IN AIR - PREMIUM ABOUT PAGE
+   ========================================= */
+
+.about-premium {
+  overflow: hidden;
+}
+
+.about-premium .about-hero {
+  position: relative;
+  padding-block: clamp(3rem, 7vw, 6rem);
+  background: radial-gradient(
+    ellipse at 85% 40%,
+    color-mix(in srgb, var(--accent) 9%, transparent),
+    transparent 55%
+  );
+}
+
+.about-premium .about-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(2rem, 5vw, 5rem);
+}
+
+.about-premium .about-eyebrow {
+  margin: 0;
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 750;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.about-premium .about-hero h1 {
+  margin: 1.2rem 0 0;
+  font-size: clamp(3rem, 5.5vw, 5.8rem);
+  font-weight: 750;
+  letter-spacing: -0.065em;
+  line-height: 1.02;
+  color: var(--foreground);
+}
+
+.about-premium .about-hero-description {
+  max-width: 38rem;
+  margin: 1.6rem 0 0;
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  line-height: 1.85;
+  color: var(--muted);
+}
+
+.about-premium .about-brand-signature {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 1.8rem;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.about-premium .about-brand-signature span {
+  width: 2rem;
+  height: 2px;
+  background: var(--accent);
+}
+
+.about-premium .about-hero-actions,
+.about-premium .about-cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  margin-top: 2rem;
+}
+
+.about-premium .about-hero-visual {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-width: 0;
+  aspect-ratio: 5 / 4;
+  border: 1px solid var(--border);
+  border-radius: 1.2rem;
+  background: var(--surface-strong);
+}
+
+.about-premium .about-hero-visual img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 700ms ease;
+}
+
+.about-premium .about-hero-visual:hover img {
+  transform: scale(1.04);
+}
+
+.about-premium .about-hero-visual::after {
+  position: absolute;
+  inset: 0;
+  content: '';
+  background: linear-gradient(
+    to top,
+    rgba(2, 8, 20, 0.88),
+    transparent 55%
+  );
+  pointer-events: none;
+}
+
+.about-premium .about-image-fallback {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+  color: var(--accent);
+  font-size: 5rem;
+}
+
+.about-premium .about-visual-caption {
+  position: absolute;
+  z-index: 2;
+  left: 1.75rem;
+  bottom: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  color: #ffffff;
+}
+
+.about-premium .about-visual-caption span {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: #80bdff;
+}
+
+.about-premium .about-visual-caption strong {
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+}
+
+/* Achievement counters */
+
+.about-premium .about-achievements {
+  padding-block: 2.5rem;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.about-premium .about-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.about-premium .about-stat {
+  min-width: 0;
+  padding: 1rem;
+  text-align: center;
+  border-right: 1px solid var(--border);
+}
+
+.about-premium .about-stat:last-child {
+  border-right: none;
+}
+
+.about-premium .about-counter {
+  display: block;
+  color: var(--accent);
+  font-size: clamp(2.8rem, 5vw, 4.5rem);
+  font-weight: 750;
+  line-height: 1;
+  letter-spacing: -0.06em;
+  font-variant-numeric: tabular-nums;
+}
+
+.about-premium .about-stat p {
+  margin: 1rem 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Shared section styling */
+
+.about-premium .about-section {
+  padding-block: clamp(3.5rem, 6vw, 5.5rem);
+}
+
+.about-premium .about-surface {
+  background: var(--surface);
+}
+
+.about-premium .about-section-heading {
+  max-width: 52rem;
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+}
+
+.about-premium .about-section-heading h2,
+.about-premium .about-contact-cta h2 {
+  margin: 0.9rem 0 0;
+  color: var(--foreground);
+  font-size: clamp(2rem, 3.8vw, 3.5rem);
+  font-weight: 750;
+  line-height: 1.12;
+  letter-spacing: -0.045em;
+}
+
+.about-premium .about-body-text {
+  margin: 1rem 0 0;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.85;
+}
+
+/* Mission and vision */
+
+.about-premium .about-purpose-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(2rem, 5vw, 4rem);
+}
+
+.about-premium .about-purpose-item {
+  min-width: 0;
+  padding-block: 1.75rem;
+  border-top: 2px solid var(--accent);
+}
+
+.about-premium .about-purpose-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.75rem;
+}
+
+.about-premium .about-icon {
+  display: grid;
+  width: 3.5rem;
+  height: 3.5rem;
+  place-items: center;
+  color: var(--accent);
+  font-size: 1.65rem;
+  border: 1px solid
+    color-mix(in srgb, var(--accent) 25%, var(--border));
+  border-radius: 0.9rem;
+  background: color-mix(
+    in srgb,
+    var(--accent) 8%,
+    transparent
+  );
+}
+
+.about-premium .about-index {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.about-premium .about-purpose-item h3 {
+  margin: 0.9rem 0 0;
+  font-size: clamp(1.6rem, 2.8vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.2;
+}
+
+/* Expertise */
+
+.about-premium .about-expertise-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+}
+
+.about-premium .about-expertise-item {
+  min-width: 0;
+  padding: clamp(1.4rem, 3vw, 2.2rem);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  transition: background 250ms ease;
+}
+
+.about-premium .about-expertise-item:hover {
+  background: color-mix(
+    in srgb,
+    var(--accent) 6%,
+    transparent
+  );
+}
+
+.about-premium .about-expertise-item h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.about-premium .about-expertise-item p {
+  margin: 0.9rem 0 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.75;
+}
+
+/* Development timeline */
+
+.about-premium .about-process-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.about-premium .about-process-step {
+  position: relative;
+  min-width: 0;
+}
+
+.about-premium .about-process-step:not(:last-child)::after {
+  position: absolute;
+  top: 1.75rem;
+  left: 4.2rem;
+  right: -0.8rem;
+  height: 1px;
+  content: '';
+  background: linear-gradient(
+    90deg,
+    var(--accent),
+    var(--border)
+  );
+}
+
+.about-premium .about-process-icon {
+  display: grid;
+  width: 3.5rem;
+  height: 3.5rem;
+  margin-bottom: 1.5rem;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  font-size: 1.4rem;
+  background: var(--bg);
+}
+
+.about-premium .about-process-step h3 {
+  margin: 0.7rem 0 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.about-premium .about-process-description {
+  margin: 0.7rem 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+/* Contact CTA */
+
+.about-premium .about-contact-cta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 2rem;
+  padding: clamp(2rem, 5vw, 4rem);
+  border: 1px solid var(--border);
+  border-radius: 1.2rem;
+  background: radial-gradient(
+    ellipse at 100% 0%,
+    color-mix(in srgb, var(--accent) 16%, transparent),
+    transparent 65%
+  ), var(--surface);
+}
+
+.about-premium .about-contact-cta p:not(.about-eyebrow) {
+  max-width: 40rem;
+  margin: 1rem 0 0;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+.about-premium .about-cta-actions {
+  flex-direction: column;
+  align-items: stretch;
+  margin: 0;
+}
+
+/* Tablet */
+
+@media (max-width: 1023px) {
+  .about-premium .about-hero-grid {
+    gap: 2rem;
+  }
+
+  .about-premium .about-expertise-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .about-premium .about-process-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    row-gap: 2.5rem;
+  }
+
+  .about-premium .about-process-step::after {
+    display: none;
+  }
+
+  .about-premium .about-contact-cta {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .about-premium .about-cta-actions {
+    flex-direction: row;
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 767px) {
+  .about-premium .about-hero-grid,
+  .about-premium .about-purpose-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .about-premium .about-stat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 1.5rem;
+  }
+
+  .about-premium .about-stat:nth-child(2) {
+    border-right: none;
+  }
+
+  .about-premium .about-stat p {
+    font-size: 0.8rem;
+  }
+
+  .about-premium .about-expertise-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .about-premium .about-process-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+  }
+
+  .about-premium .about-process-step {
+    padding-left: 4.8rem;
+  }
+
+  .about-premium .about-process-icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .about-premium .about-cta-actions {
+    flex-direction: column;
+  }
+
+  .about-premium .about-hero-visual {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-premium .about-hero-visual img {
+    transition: none;
+  }
+
+  .about-premium .about-hero-visual:hover img {
+    transform: none;
+  }
+}
