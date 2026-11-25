@@ -1,8 +1,8 @@
 import { createClient } from 'npm:@supabase/supabase-js@2'
 import {
   getNextReviewStatus,
-  hasAdminRole,
   isReviewStatus,
+  listAdminReviews,
   matchesActiveEditToken,
   hashEditToken,
   hashRateLimitKey,
@@ -11,6 +11,8 @@ import {
   normalizePhotoSelection,
   normalizeReviewInput as validateReviewInput,
   validatePhotoPath as validateReviewPhotoPath,
+  RequestError,
+  verifyAdminRequest,
 } from './core.mjs'
 
 const corsHeaders = {
@@ -30,23 +32,17 @@ const mimeExtensions: Record<string, string> = {
 
 type ReviewInput = {
   customerName: string
-  collegeName: string
-  education: 'Engineering' | 'Diploma'
-  projectName: string
+  customerType: 'Student' | 'Business' | 'Individual'
+  collegeName: string | null
+  education: 'Engineering' | 'Diploma' | null
+  projectName: string | null
+  companyName: string | null
+  serviceName: string | null
   rating: number
   reviewText: string
 }
 
 type RequestBody = Record<string, unknown> & { action?: unknown }
-
-class RequestError extends Error {
-  status: number
-
-  constructor(message: string, status = 400) {
-    super(message)
-    this.status = status
-  }
-}
 
 function jsonResponse(body: unknown, status = 200, additionalHeaders: Record<string, string> = {}) {
   return new Response(JSON.stringify(body), {
@@ -79,21 +75,11 @@ function getServiceClient() {
 }
 
 async function authorizeAdmin(request: Request) {
-  const authorization = request.headers.get('authorization')
-  const supabaseUrl = Deno.env.get('SUPABASE_URL')
-  const anonKey = Deno.env.get('SUPABASE_ANON_KEY')
-  if (!authorization?.startsWith('Bearer ') || !supabaseUrl || !anonKey) {
-    throw new RequestError('Administrator authentication is required.', 401)
-  }
-
-  const authClient = createClient(supabaseUrl, anonKey, {
-    auth: { autoRefreshToken: false, persistSession: false },
-    global: { headers: { Authorization: authorization } },
+  await verifyAdminRequest(request, {
+    supabaseUrl: Deno.env.get('SUPABASE_URL'),
+    anonKey: Deno.env.get('SUPABASE_ANON_KEY'),
+    createClient,
   })
-  const { data, error } = await authClient.auth.getUser()
-  if (error || !hasAdminRole(data.user)) {
-    throw new RequestError('Administrator access is required.', 403)
-  }
 }
 
 function getClientIdentifier(request: Request) {
@@ -143,7 +129,7 @@ async function getCustomerReview(service: ReturnType<typeof getServiceClient>, t
 
   const { data: review, error } = await service
     .from('reviews')
-    .select('id, customer_name, college_name, education, project_type, rating, review_text, photo_paths, status')
+    .select('id, customer_name, customer_type, college_name, education, project_type, company_name, service_name, rating, review_text, photo_paths, status')
     .eq('id', credential.review_id)
     .maybeSingle()
   if (error) throw error
@@ -158,7 +144,7 @@ async function getAdminReview(service: ReturnType<typeof getServiceClient>, revi
   if (!id || id.length > 100) throw new RequestError('A valid review is required.')
   const { data, error } = await service
     .from('reviews')
-    .select('id, customer_name, college_name, education, project_type, rating, review_text, photo_paths, status')
+    .select('id, customer_name, customer_type, college_name, education, project_type, company_name, service_name, rating, review_text, photo_paths, status')
     .eq('id', id)
     .maybeSingle()
   if (error) throw error
@@ -307,7 +293,16 @@ async function saveReview(
   body: RequestBody,
   isCustomer: boolean,
 ) {
-  const input = normalizeReviewInput(body)
+  const input = normalizeReviewInput({
+    ...body,
+    customerType: body.customerType ?? review.customer_type ?? 'Student',
+    companyName: body.companyName === undefined
+      ? review.company_name
+      : body.companyName,
+    serviceName: body.serviceName === undefined
+      ? review.service_name
+      : body.serviceName,
+  })
   const existingPaths = Array.isArray(review.photo_paths)
     ? review.photo_paths.filter((path): path is string => typeof path === 'string')
     : []
@@ -329,9 +324,12 @@ async function saveReview(
 
   const updates: Record<string, unknown> = {
     customer_name: input.customerName,
+    customer_type: input.customerType,
     college_name: input.collegeName,
     education: input.education,
     project_type: input.projectName,
+    company_name: input.companyName,
+    service_name: input.serviceName,
     rating: input.rating,
     review_text: input.reviewText,
     photo_paths: nextPhotoPaths,
@@ -345,7 +343,7 @@ async function saveReview(
   if (isCustomer) updateQuery = updateQuery.eq('status', review.status)
 
   const { data: updatedReview, error: updateError } = await updateQuery
-    .select('id, customer_name, college_name, education, project_type, rating, review_text, photo_paths, status')
+    .select('id, customer_name, customer_type, college_name, education, project_type, company_name, service_name, rating, review_text, photo_paths, status')
     .maybeSingle()
   if (updateError) throw updateError
   if (!updatedReview) {
@@ -411,36 +409,75 @@ Deno.serve(async (request) => {
 
   try {
     const action = stringValue(body.action)
+    if (action === 'admin-list') {
+      await authorizeAdmin(request)
+      const service = getServiceClient()
+      return jsonResponse(await listAdminReviews(service, body))
+    }
+
     const service = getServiceClient()
 
     if (action === 'create') {
-      await enforceRateLimit(service, request, 'review-create', 5, 60 * 60)
+      await enforceRateLimit(
+        service,
+        request,
+        'review-create',
+        5,
+        60 * 60
+      )
+
       const input = normalizeReviewInput(body)
       const token = makeEditToken()
       const tokenHash = await hashEditToken(token)
-      const { error } = await service.rpc('create_customer_review_with_edit_token', {
-        p_customer_name: input.customerName,
-        p_college_name: input.collegeName,
-        p_education: input.education,
-        p_project_type: input.projectName,
-        p_rating: input.rating,
-        p_review_text: input.reviewText,
-        p_edit_token_hash: tokenHash,
-      })
+
+      const { error } = await service.rpc(
+        'create_universal_customer_review',
+        {
+          p_customer_name: input.customerName,
+          p_customer_type: input.customerType,
+          p_college_name: input.collegeName,
+          p_education: input.education,
+          p_project_type: input.projectName,
+          p_company_name: input.companyName,
+          p_service_name: input.serviceName,
+          p_rating: input.rating,
+          p_review_text: input.reviewText,
+          p_edit_token_hash: tokenHash,
+        }
+      )
+
       if (error) throw error
       return jsonResponse({ editToken: token }, 201)
     }
 
     if (action === 'customer-load') {
-      await enforceRateLimit(service, request, 'customer-token', 60, 15 * 60)
-      const review = await getCustomerReview(service, stringValue(body.editToken))
-      const photos = await createSignedPhotoUrls(service, review.photo_paths ?? [])
+      await enforceRateLimit(
+        service,
+        request,
+        'customer-token',
+        60,
+        15 * 60
+      )
+
+      const review = await getCustomerReview(
+        service,
+        stringValue(body.editToken)
+      )
+
+      const photos = await createSignedPhotoUrls(
+        service,
+        review.photo_paths ?? []
+      )
+
       return jsonResponse({
         review: {
           customerName: review.customer_name,
+          customerType: review.customer_type ?? 'Student',
           collegeName: review.college_name ?? '',
           education: review.education ?? '',
-          projectName: review.project_type,
+          projectName: review.project_type ?? '',
+          companyName: review.company_name ?? '',
+          serviceName: review.service_name ?? '',
           rating: review.rating,
           reviewText: review.review_text,
           status: review.status,
