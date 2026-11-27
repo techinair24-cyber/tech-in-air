@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import projects from '../data/projects'
 import { supabase } from './supabase'
 import { createPublicContentCache } from './publicContentCache.mjs'
 import { createPublicContentApi } from './publicContentApi.mjs'
@@ -16,7 +17,11 @@ export function getPublicMediaUrl(path) {
   return supabase?.storage.from('site-media').getPublicUrl(normalizedPath).data.publicUrl || ''
 }
 
-const publicContentApi = createPublicContentApi(supabase, getPublicMediaUrl)
+const publicContentApi = createPublicContentApi(
+  supabase,
+  getPublicMediaUrl,
+  projects
+)
 
 export const fetchPublishedPage = (slug) => publicContentApi.fetchPublishedPage(slug)
 export const fetchPublishedAnnouncements = (location) => publicContentApi.fetchPublishedAnnouncements(location)

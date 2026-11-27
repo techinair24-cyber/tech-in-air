@@ -24,6 +24,7 @@ import {
   usePublishedPage,
   usePublishedProjects,
 } from '../lib/publicContent'
+import { getProjectStatistics } from '../lib/projectModel.mjs'
 import { getPageText } from '../lib/pageContent.mjs'
 
 const expertise = [
@@ -165,28 +166,14 @@ export default function AboutPage() {
   const projectList =
     publishedProjects === null ? projects : publishedProjects
 
-  const engineeringProjects = projectList.filter(
-    (project) =>
-      project.categories?.includes('Engineering Main Project')
-  )
-
-  const diplomaProjects = projectList.filter(
-    (project) =>
-      !project.categories?.includes('Engineering Main Project') &&
-      project.categories?.includes('Diploma Main Project')
-  )
-
-  const engineeringCount = engineeringProjects.length
-  const diplomaCount = diplomaProjects.length
-
-  const otherCount =
-    projectList.length - engineeringCount - diplomaCount
+  const projectStatistics = getProjectStatistics(projectList)
 
   const achievements = [
-    [projectList.length, 'Total Projects'],
-    [engineeringCount, 'Engineering Main Projects'],
-    [diplomaCount, 'Diploma Main Projects'],
-    [otherCount, 'Other Projects'],
+    [projectStatistics.total, 'Total Projects'],
+    [projectStatistics.engineering, 'Engineering Main Projects'],
+    [projectStatistics.diploma, 'Diploma Main Projects'],
+    [projectStatistics.competition, 'Competition Projects'],
+    [projectStatistics.business, 'Business Projects'],
   ]
 
   const fallbackImage = '/Projects/homepage-hero-premium.webp'

@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from 'framer-motion'
 import { Search, ArrowUpRight, ArrowRight } from 'lucide-react'
 import projectsData from '../data/projects'
 import { usePublishedProjects } from '../lib/publicContent'
+import { getProjectFilterCategories } from '../lib/projectModel.mjs'
 
 const fallbackImage = new URL(
   '../assets/projects/placeholder.svg',
@@ -83,12 +84,10 @@ export default function Projects() {
     ? projectsData
     : publishedProjects
 
-  const categories = useMemo(() => [
-    'All',
-    ...new Set(
-      projects.flatMap((project) => project.categories || [])
-    ),
-  ], [projects])
+  const categories = useMemo(
+    () => getProjectFilterCategories(projects),
+    [projects]
+  )
 
   const activeFilter = categories.includes(filter)
     ? filter
@@ -124,10 +123,6 @@ export default function Projects() {
       value: projects.filter(
         (p) => p.status?.toLowerCase() === 'completed'
       ).length,
-    },
-    {
-      label: 'Technology Domains',
-      value: categories.length - 1,
     },
     {
       label: 'Technologies Used',

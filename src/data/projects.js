@@ -2,6 +2,7 @@ const projects = [
   {
     id: 1,
     title: 'AI Enabled Smart Air Quality Monitoring System',
+    classification: 'Engineering Main Project',
     categories: ['AI / ML','IoT'],
     status: 'Completed',
     description: 'An IoT-based air quality monitoring system designed to monitor environmental conditions and air pollution parameters using sensors, embedded hardware and cloud connectivity.',
@@ -11,6 +12,7 @@ const projects = [
   {
     id: 2,
     title: 'Heart Attack Prediction',
+    classification: 'Engineering Main Project',
     categories: ['AI / ML'],
     status: 'Completed',
     description: 'A machine learning-based predictive system designed to analyze relevant health-related input parameters and estimate heart attack risk using a trained classification model.',
@@ -20,7 +22,8 @@ const projects = [
   {
     id: 3,
     title: 'Daily Shop Android E-Commerce Application',
-    categories: ['Software','Android'],
+    classification: 'Business Project',
+    categories: ['Software','Android App'],
     status: 'Completed',
     description: 'An Android-based e-commerce application designed to provide a modern shopping experience with product categories, product management and digital commerce functionality.',
     image: '/Projects/daily-shop.png',
@@ -29,6 +32,7 @@ const projects = [
   {
     id: 4,
     title: 'Automatic Banana Ripening Identifier',
+    classification: 'Diploma Main Project',
     categories: ['AI / ML'],
     status: 'Completed',
     description: 'An intelligent system designed to identify banana ripening stages using image-based analysis and machine learning techniques.',
@@ -38,6 +42,7 @@ const projects = [
   {
     id: 5,
     title: 'Line Follower Robot',
+    classification: 'Competition Project',
     categories: ['Embedded'],
     status: 'Completed',
     description: 'An autonomous robotic system designed to detect and follow a predefined path using sensors, a microcontroller and motor control.',
@@ -47,6 +52,7 @@ const projects = [
   {
     id: 6,
     title: 'Phishing Detection Using Machine Learning',
+    classification: 'Engineering Main Project',
     categories: ['AI / ML'],
     status: 'Completed',
     description: 'A machine learning-based cybersecurity project designed to identify potentially malicious or phishing-related inputs using classification techniques.',
@@ -56,6 +62,7 @@ const projects = [
   {
     id: 7,
     title: 'IR Wireless Underwater Communication System',
+    classification: 'Engineering Main Project',
     categories: ['IoT','Embedded'],
     status: 'Completed',
     description: 'A communication system exploring infrared-based wireless data transmission in an underwater environment.',
@@ -65,6 +72,7 @@ const projects = [
   {
     id: 8,
     title: 'IoT and AI-Based Water Quality Monitoring and Intelligent Purification Recommendation System',
+    classification: 'Engineering Main Project',
     categories: ['AI / ML','IoT'],
     status: 'Completed',
     description: 'An IoT and AI-based system that monitors water quality in real time using pH, TDS, turbidity, and flow sensors. The STM32F103C8T6 collects and processes the sensor readings, while the ESP8266 provides Wi-Fi connectivity for sending data to the cloud. An AI model analyzes the water-quality parameters and provides suitable purification recommendations such as RO, UV, or sediment filtration. A mobile Android app displays the water-quality readings in real time.',
@@ -74,6 +82,7 @@ const projects = [
   {
     id: 9,
     title: 'Deep Learning-Based Pest Detection System Using Sound Analytics',
+    classification: 'Engineering Main Project',
     categories: ['AI / ML','Deep Learning'],
     status: 'Completed',
     description: 'A deep learning-based research project exploring sound analytics for identifying agricultural pest activity and supporting intelligent pest detection.',
@@ -83,6 +92,7 @@ const projects = [
   {
     id: 10,
     title: 'Smart Wearable Reader for Blind (Smart Sight)',
+    classification: 'Engineering Main Project',
     categories: ['IoT'],
     status: 'Completed',
     description: 'An IoT-based smart wearable assistive system designed to help visually impaired users identify and understand their surroundings. The system uses wearable sensing and intelligent processing to provide useful information to the user through an accessible real-time interface.',
@@ -92,6 +102,7 @@ const projects = [
   {
     id: 11,
     title: 'AI-Enabled Drone-Based Crop Disease Detection and Monitoring System',
+    classification: 'Engineering Main Project',
     categories: ['AI / ML','Agriculture','Drone'],
     status: 'Completed',
     description: 'An AI-enabled drone-based system designed to capture crop imagery, identify potential disease symptoms, and support ongoing crop health monitoring. Aerial imaging and computer-vision analysis help users detect affected areas and track field conditions.',
@@ -101,7 +112,8 @@ const projects = [
   {
     id: 12,
     title: 'Hybrid AI Based Smart EV Charging Station Using MATLAB',
-    categories: ['Engineering Main Project'],
+    classification: 'Engineering Main Project',
+    categories: [],
     status: 'Completed',
     description: 'A prototype concept for a hybrid AI-based smart EV charging station using MATLAB. It explores renewable energy integration, battery storage, EV charging-load analysis, and AI-based energy management through simulation.',
     image: '/Projects/Hybrid AI Based Smart EV Charging Station Using MATLAB.png',

@@ -102,19 +102,33 @@ test('published service reads include only published enabled services and availa
 test('portfolio reads use only published public portfolio records', async () => {
   const client = createMockClient({
     portfolio_projects: [
-      { id: 'public-id', slug: 'public-work', title: 'Public work', category: 'Software', status: 'published', categories: ['Software'], technologies: [], image_paths: ['portfolio/work.webp'], featured: true, sort_order: 0 },
-      { id: 'draft-id', slug: 'draft-work', title: 'Draft work', category: 'Software', status: 'draft', categories: ['Software'], technologies: [], image_paths: [], featured: false, sort_order: 1 },
+      { id: 'public-id', slug: 'public-work', title: 'Public work', category: 'Engineering Main Project', status: 'published', categories: ['Software', 'Android', 'Engineering Main Project'], technologies: [], image_paths: ['portfolio/work.webp'], featured: true, completed_at: null, sort_order: 0 },
+      { id: 'future-id', slug: 'future-work', title: 'Future work', category: 'AI / ML', status: 'published', categories: ['AI / ML', 'Business Project'], technologies: [], image_paths: [], featured: false, completed_at: null, sort_order: 1 },
+      { id: 'completed-id', slug: 'completed-work', title: 'Completed work', category: 'IoT', status: 'published', categories: ['IoT'], technologies: [], image_paths: [], featured: false, completed_at: '2026-01-01', sort_order: 2 },
+      { id: 'draft-id', slug: 'draft-work', title: 'Draft work', category: 'Software', status: 'draft', categories: ['Software'], technologies: [], image_paths: [], featured: false, completed_at: null, sort_order: 3 },
     ],
   })
-  const api = createPublicContentApi(client, (path) => `https://media.example/${path}`)
+  const api = createPublicContentApi(
+    client,
+    (path) => `https://media.example/${path}`,
+    [{ title: 'Public work', status: 'Completed' }]
+  )
 
   const projects = await api.fetchPublishedProjects()
 
-  assert.equal(projects.length, 1)
+  assert.equal(projects.length, 3)
   assert.equal(projects[0].slug, 'public-work')
   assert.equal(projects[0].image, 'https://media.example/portfolio/work.webp')
+  assert.deepEqual(projects[0].categories, ['Software', 'Android App'])
+  assert.equal(projects[0].classification, 'Engineering Main Project')
+  assert.equal(projects[0].status, 'Completed')
+  assert.deepEqual(projects[1].categories, ['AI / ML'])
+  assert.equal(projects[1].classification, 'Business Project')
+  assert.equal(projects[1].status, 'Published')
+  assert.equal(projects[2].status, 'Completed')
   assert.equal(client.queries[0].table, 'portfolio_projects')
   assert.equal(client.queries[0].filters.length, 1)
+  assert.match(client.queries[0].selection, /completed_at/)
 })
 
 test('public offer and announcement reads exclude drafts', async () => {

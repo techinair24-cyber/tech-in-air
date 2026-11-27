@@ -1,6 +1,15 @@
 import { mapBusinessService } from './publicContentModel.mjs'
+import {
+  getProjectClassification,
+  isProjectClassification,
+  normalizeProjectCategories,
+} from './projectModel.mjs'
 
-export function createPublicContentApi(client, getPublicMediaUrl = () => '') {
+export function createPublicContentApi(
+  client,
+  getPublicMediaUrl = () => '',
+  localProjects = []
+) {
   return {
     async fetchPublishedPage(slug) {
       if (!client || !slug) return null
@@ -87,7 +96,7 @@ export function createPublicContentApi(client, getPublicMediaUrl = () => '') {
       if (!client) return null
       const { data, error } = await client
         .from('portfolio_projects')
-        .select('id, slug, title, category, categories, description, technologies, image_paths, sort_order, featured')
+        .select('id, slug, title, category, categories, description, technologies, image_paths, sort_order, featured, completed_at')
         .eq('status', 'published')
         .order('sort_order', { ascending: true })
       if (error) throw error
@@ -96,19 +105,32 @@ export function createPublicContentApi(client, getPublicMediaUrl = () => '') {
         const imagePath = Array.isArray(project.image_paths)
           ? project.image_paths.find((path) => typeof path === 'string')
           : null
+        const projectClassification = getProjectClassification(project)
+        const categories = normalizeProjectCategories([
+          ...(Array.isArray(project.categories) ? project.categories : []),
+          project.category,
+        ]).filter((category) => !isProjectClassification(category))
+        const localProject = localProjects.find(
+          (item) => item.title.trim().toLowerCase() === project.title.trim().toLowerCase()
+        )
+        const completed =
+          Boolean(project.completed_at) ||
+          localProject?.status?.toLowerCase() === 'completed'
+        const primaryCategory = normalizeProjectCategories([project.category])[0]
         return {
           id: project.slug,
           slug: project.slug,
           title: project.title,
-          category: project.category,
-          categories: Array.isArray(project.categories) && project.categories.length
-            ? project.categories
-            : [project.category],
+          category: primaryCategory && !isProjectClassification(primaryCategory)
+            ? primaryCategory
+            : categories[0] || '',
+          categories,
+          classification: projectClassification,
           description: project.description,
           technologies: Array.isArray(project.technologies) ? project.technologies : [],
           image: getPublicMediaUrl(imagePath),
           featured: project.featured === true,
-          status: 'Published',
+          status: completed ? 'Completed' : 'Published',
         }
       })
     },
